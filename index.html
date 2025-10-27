@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harod's Tech - Gestión Completa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --netflix: #e50914;
+            --disney: #113ccf;
+            --hbo: #9467fe;
+            --prime: #00a8e1;
+            --crunchyroll: #f47521;
+            --spotify: #1db954;
+            --light: #ecf0f1;
+            --dark: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .login-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        
+        .login-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .login-section input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .login-section button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-section button:hover {
+            background-color: var(--primary);
+        }
+        
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .welcome-message {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logout-btn {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--secondary);
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .client-form, .stock-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .clients-list, .stock-list {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .client-item, .stock-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .client-item:last-child, .stock-item:last-child {
+            border-bottom: none;
+        }
+        
+        .client-info, .stock-info {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .client-name, .stock-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .client-details, .stock-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .client-actions, .stock-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .status-overdue {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            color: var(--warning);
+            font-weight: bold;
+        }
+        
+        .status-paid {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            padding: 10px 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stock-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            border-top: 5px solid;
+        }
+        
+        .stock-card.netflix {
+            border-color: var(--netflix);
+        }
+        
+        .stock-card.disney {
+            border-color: var(--disney);
+        }
+        
+        .stock-card.hbo {
+            border-color: var(--hbo);
+        }
+        
+        .stock-card.prime {
+            border-color: var(--prime);
+        }
+        
+        .stock-card.crunchyroll {
+            border-color: var(--crunchyroll);
+        }
+        
+        .stock-card.spotify {
+            border-color: var(--spotify);
+        }
+        
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stock-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .stock-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .stock-email {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .stock-profiles {
+            margin-bottom: 15px;
+        }
+        
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stock-actions-card {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .stock-actions-card button {
+            flex: 1;
+        }
+        
+        .low-stock {
+            color: var(--danger);
+        }
+        
+        .medium-stock {
+            color: var(--warning);
+        }
+        
+        .high-stock {
+            color: var(--success);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary);
+        }
+
+        .error-message {
+            background-color: #fee;
+            color: var(--danger);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--danger);
+        }
+
+        .success-message {
+            background-color: #efe;
+            color: var(--success);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--success);
+        }
+
+        .backup-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .client-item, .stock-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .client-actions, .stock-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .client-actions button, .stock-actions button {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .logout-btn {
+                margin-top: 10px;
+            }
+            
+            .stock-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Harod's Tech</div>
+            <div class="tagline">Gestión de Clientes y Stock</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Sección de Login -->
+        <div id="loginSection" class="login-section">
+            <h2>Acceso Administrativo</h2>
+            <p>Solo el propietario puede acceder a esta área</p>
+            <input type="password" id="password" placeholder="Contraseña de acceso">
+            <button id="loginBtn">Ingresar</button>
+        </div>
+        
+        <!-- Dashboard (oculto inicialmente) -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <div class="welcome-message">Bienvenido a Harod's Tech</div>
+                <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="clients">Lista de Clientes</div>
+                <div class="tab" data-tab="addClient">Agregar Cliente</div>
+                <div class="tab" data-tab="stock">Stock de Servicios</div>
+                <div class="tab" data-tab="addStock">Agregar Stock</div>
+                <div class="tab" data-tab="backup">Respaldo</div>
+            </div>
+
+            <!-- Mensajes de estado -->
+            <div id="messageContainer"></div>
+            
+            <!-- Contenido de la pestaña Lista de Clientes -->
+            <div id="clientsTab" class="tab-content active">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Buscar cliente...">
+                    <button id="searchBtn">Buscar</button>
+                    <button id="refreshClientsBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+                
+                <div class="clients-list" id="clientsList">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando clientes...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de la pestaña Agregar Cliente -->
+            <div id="addClientTab" class="tab-content">
+                <div class="client-form">
+                    <h3>Agregar Nuevo Cliente</h3>
+                    <form id="addClientForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientName">Nombre del Cliente</label>
+                                <input type="text" id="clientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clientPhone">Número de Teléfono</label>
+                                <input type="tel" id="clientPhone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceType">Servicio Contratado</label>
+                                <select id="serviceType" required>
+                                    <option value="">Selecciona un servicio</option>
+                                    <!-- Las opciones se cargarán dinámicamente -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileAssigned">Perfil Asignado</label>
+                                <select id="profileAssigned" required>
+                                    <option value="">Primero selecciona un servicio</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="purchaseDate">Fecha de Compra</label>
+                                <input type="date" id="purchaseDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentDeadline">Fecha Límite de Pago</label>
+                                <input type="date" id="paymentDeadline" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginDetails">Detalles de Acceso (usuario/contraseña)</label>
+                            <textarea id="loginDetails" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paymentStatus">Estado de Pago</label>
+                            <select id="paymentStatus">
+                                <option value="pending">Pendiente</option>
+                                <option value="paid">Pagado</option>
+                                <option value="overdue">Vencido</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="clientNotes">Notas (opcional)</label>
+                            <textarea id="clientNotes" rows="2" placeholder="Notas adicionales sobre el cliente..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Agregar Cliente
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Contenido de la pestaña Stock de Servicios -->
+            <div id="stockTab" class="tab-content">
+                <div class="search-bar">
+                    <input type="text" id="stockSearchInput" placeholder="Buscar servicio...">
+                    <button id="stockSearchBtn">Buscar</button>
+                    <button id="refreshStockBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+                
+                <div class="stock-grid" id="stockGrid">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando stock...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de la pestaña Agregar Stock -->
+            <div id="addStockTab" class="tab-content">
+                <div class="stock-form">
+                    <h3>Agregar Nuevo Stock</h3>
+                    <form id="addStockForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceName">Servicio</label>
+                                <select id="serviceName" required>
+                                    <option value="">Selecciona un servicio</option>
+                                    <option value="Netflix">Netflix</option>
+                                    <option value="Disney+">Disney+</option>
+                                    <option value="HBO Max">HBO Max</option>
+                                    <option value="Prime Video">Prime Video</option>
+                                    <option value="Crunchyroll">Crunchyroll</option>
+                                    <option value="Spotify">Spotify</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="stockQuantity">Cupos Disponibles</label>
+                                <input type="number" id="stockQuantity" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="totalCapacity">Capacidad Total</label>
+                                <input type="number" id="totalCapacity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="servicePrice">Precio del Servicio ($)</label>
+                                <input type="number" id="servicePrice" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="accountEmail">Correo de la Cuenta</label>
+                            <input type="email" id="accountEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="accountPassword">Contraseña de la Cuenta</label>
+                            <input type="text" id="accountPassword" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profilesAvailable">Perfiles Disponibles (separados por coma)</label>
+                            <input type="text" id="profilesAvailable" placeholder="Ej: Perfil 1, Perfil 2, Perfil 3" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Agregar Stock
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contenido de la pestaña Respaldo -->
+            <div id="backupTab" class="tab-content">
+                <div class="backup-section">
+                    <h3>Respaldo de Datos</h3>
+                    <p>Gestiona tus archivos de datos y realiza respaldos.</p>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button id="exportDataBtn" class="btn btn-success">
+                                <i class="fas fa-download"></i> Exportar Todos los Datos
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button id="importDataBtn" class="btn btn-warning">
+                                <i class="fas fa-upload"></i> Importar Datos
+                            </button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button id="backupClientsBtn" class="btn btn-primary">
+                                <i class="fas fa-file-export"></i> Respaldar Clientes
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <button id="backupStockBtn" class="btn btn-primary">
+                                <i class="fas fa-file-export"></i> Respaldar Stock
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h4>Archivos de Datos</h4>
+                        <div id="fileList">
+                            <div class="loading">Cargando archivos...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración
+        const ACCESS_PASSWORD = "HarodTech2023";
+        const DATA_FILES = {
+            clients: 'harods_tech_clientes.txt',
+            stock: 'harods_tech_stock.txt',
+            backup: 'harods_tech_respaldo_'
+        };
+
+        // Elementos del DOM
+        const loginSection = document.getElementById('loginSection');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const passwordInput = document.getElementById('password');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const clientsList = document.getElementById('clientsList');
+        const addClientForm = document.getElementById('addClientForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const stockGrid = document.getElementById('stockGrid');
+        const addStockForm = document.getElementById('addStockForm');
+        const stockSearchInput = document.getElementById('stockSearchInput');
+        const stockSearchBtn = document.getElementById('stockSearchBtn');
+        const refreshClientsBtn = document.getElementById('refreshClientsBtn');
+        const refreshStockBtn = document.getElementById('refreshStockBtn');
+        const serviceTypeSelect = document.getElementById('serviceType');
+        const profileAssignedSelect = document.getElementById('profileAssigned');
+        const messageContainer = document.getElementById('messageContainer');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataBtn = document.getElementById('importDataBtn');
+        const importFile = document.getElementById('importFile');
+        const backupClientsBtn = document.getElementById('backupClientsBtn');
+        const backupStockBtn = document.getElementById('backupStockBtn');
+        const fileList = document.getElementById('fileList');
+
+        // Estado de la aplicación
+        let clients = [];
+        let stock = [];
+
+        // Utilidades
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.innerHTML = `
+                <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                ${message}
+            `;
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Sistema de Archivos (simulado con localStorage)
+        class FileSystem {
+            static saveToFile(filename, data) {
+                try {
+                    // En un entorno real, aquí enviarías los datos a un servidor
+                    // Para esta demo, usamos localStorage
+                    const fileData = {
+                        content: data,
+                        timestamp: new Date().toISOString(),
+                        size: JSON.stringify(data).length
+                    };
+                    localStorage.setItem(filename, JSON.stringify(fileData));
+                    return true;
+                } catch (error) {
+                    console.error('Error guardando archivo:', error);
+                    return false;
+                }
+            }
+
+            static loadFromFile(filename) {
+                try {
+                    const fileData = localStorage.getItem(filename);
+                    if (!fileData) return null;
+                    
+                    const parsed = JSON.parse(fileData);
+                    return parsed.content;
+                } catch (error) {
+                    console.error('Error cargando archivo:', error);
+                    return null;
+                }
+            }
+
+            static downloadFile(filename, content, type = 'text/plain') {
+                const blob = new Blob([content], { type });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            static listFiles() {
+                const files = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('harods_tech_')) {
+                        try {
+                            const fileData = JSON.parse(localStorage.getItem(key));
+                            files.push({
+                                name: key,
+                                timestamp: fileData.timestamp,
+                                size: fileData.size
+                            });
+                        } catch (e) {
+                            // Ignorar elementos que no son archivos válidos
+                        }
+                    }
+                }
+                return files.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            }
+        }
+
+        // Funciones para Clientes
+        async function loadClients() {
+            try {
+                clientsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando clientes...</div>';
+                
+                const data = FileSystem.loadFromFile(DATA_FILES.clients);
+                clients = data || [];
+                
+                renderClients();
+                updateServiceOptions();
+            } catch (error) {
+                showMessage('Error cargando clientes: ' + error.message, 'error');
+                clientsList.innerHTML = '<div class="error-message">Error al cargar los clientes</div>';
+            }
+        }
+
+        async function saveClients() {
+            const success = FileSystem.saveToFile(DATA_FILES.clients, clients);
+            if (!success) {
+                showMessage('Error guardando clientes', 'error');
+            }
+            return success;
+        }
+
+        async function addClient(clientData) {
+            try {
+                const newClient = {
+                    id: generateId(),
+                    ...clientData,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                clients.push(newClient);
+                const success = await saveClients();
+                
+                if (success) {
+                    showMessage('Cliente agregado exitosamente');
+                    await loadClients();
+                    return newClient;
+                } else {
+                    throw new Error('Error guardando cliente');
+                }
+            } catch (error) {
+                throw new Error('Error agregando cliente: ' + error.message);
+            }
+        }
+
+        async function updateClient(clientId, clientData) {
+            try {
+                const index = clients.findIndex(c => c.id === clientId);
+                if (index === -1) throw new Error('Cliente no encontrado');
+                
+                clients[index] = {
+                    ...clients[index],
+                    ...clientData,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                const success = await saveClients();
+                if (success) {
+                    showMessage('Cliente actualizado exitosamente');
+                    await loadClients();
+                    return clients[index];
+                } else {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error actualizando cliente: ' + error.message);
+            }
+        }
+
+        async function deleteClient(clientId) {
+            try {
+                clients = clients.filter(c => c.id !== clientId);
+                const success = await saveClients();
+                
+                if (success) {
+                    showMessage('Cliente eliminado exitosamente');
+                    await loadClients();
+                } else {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error eliminando cliente: ' + error.message);
+            }
+        }
+
+        // Funciones para Stock
+        async function loadStock() {
+            try {
+                stockGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando stock...</div>';
+                
+                const data = FileSystem.loadFromFile(DATA_FILES.stock);
+                stock = data || [];
+                
+                renderStock();
+                updateServiceOptions();
+            } catch (error) {
+                showMessage('Error cargando stock: ' + error.message, 'error');
+                stockGrid.innerHTML = '<div class="error-message">Error al cargar el stock</div>';
+            }
+        }
+
+        async function saveStock() {
+            const success = FileSystem.saveToFile(DATA_FILES.stock, stock);
+            if (!success) {
+                showMessage('Error guardando stock', 'error');
+            }
+            return success;
+        }
+
+        async function addStock(stockData) {
+            try {
+                const newStock = {
+                    id: generateId(),
+                    ...stockData,
+                    profiles: stockData.profiles.split(',').map(p => p.trim()),
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                stock.push(newStock);
+                const success = await saveStock();
+                
+                if (success) {
+                    showMessage('Stock agregado exitosamente');
+                    await loadStock();
+                    return newStock;
+                } else {
+                    throw new Error('Error guardando stock');
+                }
+            } catch (error) {
+                throw new Error('Error agregando stock: ' + error.message);
+            }
+        }
+
+        async function assignProfile(stockId, profileName) {
+            try {
+                const stockItem = stock.find(s => s.id === stockId);
+                if (!stockItem) throw new Error('Stock no encontrado');
+                
+                const profileIndex = stockItem.profiles.indexOf(profileName);
+                if (profileIndex === -1) throw new Error('Perfil no disponible');
+                
+                // Remover perfil y reducir cantidad
+                stockItem.profiles.splice(profileIndex, 1);
+                stockItem.quantity -= 1;
+                stockItem.updatedAt = new Date().toISOString();
+                
+                const success = await saveStock();
+                if (success) {
+                    showMessage('Perfil asignado exitosamente');
+                    await loadStock();
+                } else {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error asignando perfil: ' + error.message);
+            }
+        }
+
+        async function releaseProfile(serviceName, profileName) {
+            try {
+                const stockItem = stock.find(s => s.service === serviceName);
+                if (!stockItem) throw new Error('Servicio no encontrado');
+                
+                // Agregar perfil y aumentar cantidad
+                stockItem.profiles.push(profileName);
+                stockItem.quantity += 1;
+                stockItem.updatedAt = new Date().toISOString();
+                
+                const success = await saveStock();
+                if (!success) {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error liberando perfil: ' + error.message);
+            }
+        }
+
+        // Funciones de Renderizado
+        function renderClients() {
+            clientsList.innerHTML = '';
+            
+            if (clients.length === 0) {
+                clientsList.innerHTML = '<div class="client-item">No se encontraron clientes</div>';
+                return;
+            }
+            
+            clients.forEach(client => {
+                const clientItem = document.createElement('div');
+                clientItem.className = 'client-item';
+                
+                const statusClass = `status-${client.status}`;
+                const statusText = client.status === 'paid' ? 'Pagado' : 
+                                 client.status === 'overdue' ? 'Vencido' : 'Pendiente';
+                
+                clientItem.innerHTML = `
+                    <div class="client-info">
+                        <div class="client-name">${client.name}</div>
+                        <div class="client-details">
+                            <div><strong>Teléfono:</strong> ${client.phone}</div>
+                            <div><strong>Servicio:</strong> ${client.service} - ${client.profile}</div>
+                            <div><strong>Compra:</strong> ${formatDate(client.purchaseDate)}</div>
+                            <div><strong>Vence:</strong> ${formatDate(client.paymentDeadline)}</div>
+                            <div><strong>Acceso:</strong> ${client.loginDetails}</div>
+                            <div class="${statusClass}"><strong>Estado:</strong> ${statusText}</div>
+                            ${client.notes ? `<div><strong>Notas:</strong> ${client.notes}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="client-actions">
+                        <button class="btn btn-success" onclick="handleSendReminder('${client.id}')">
+                            <i class="fas fa-bell"></i> Recordatorio
+                        </button>
+                        <button class="btn btn-warning" onclick="handleMarkAsPaid('${client.id}')">
+                            <i class="fas fa-check-circle"></i> Pagado
+                        </button>
+                        <button class="btn btn-danger" onclick="handleCancelSubscription('${client.id}')">
+                            <i class="fas fa-times-circle"></i> Cancelar
+                        </button>
+                    </div>
+                `;
+                
+                clientsList.appendChild(clientItem);
+            });
+        }
+
+        function renderStock() {
+            stockGrid.innerHTML = '';
+            
+            if (stock.length === 0) {
+                stockGrid.innerHTML = '<div class="stock-item">No se encontraron servicios en stock</div>';
+                return;
+            }
+            
+            stock.forEach(item => {
+                const stockCard = document.createElement('div');
+                stockCard.className = `stock-card ${item.service.toLowerCase().replace('+', '').replace(' ', '')}`;
+                
+                let stockClass = '';
+                if (item.quantity === 0) {
+                    stockClass = 'low-stock';
+                } else if (item.quantity <= item.total * 0.3) {
+                    stockClass = 'low-stock';
+                } else if (item.quantity <= item.total * 0.6) {
+                    stockClass = 'medium-stock';
+                } else {
+                    stockClass = 'high-stock';
+                }
+                
+                stockCard.innerHTML = `
+                    <div class="stock-header">
+                        <div class="stock-title">${item.service}</div>
+                        <div class="stock-count ${stockClass}">${item.quantity}/${item.total}</div>
+                    </div>
+                    <div class="stock-email">${item.email}</div>
+                    <div class="stock-profiles">
+                        <div><strong>Perfiles disponibles (${item.profiles.length}):</strong></div>
+                        ${item.profiles.map(profile => `
+                            <div class="profile-item">
+                                <span>${profile}</span>
+                                <span>
+                                    <button class="btn btn-primary btn-sm" onclick="handleAssignProfile('${item.id}', '${profile}')">
+                                        <i class="fas fa-user-plus"></i> Asignar
+                                    </button>
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="stock-actions-card">
+                        <button class="btn btn-warning" onclick="handleEditStock('${item.id}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn btn-danger" onclick="handleDeleteStock('${item.id}')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                `;
+                
+                stockGrid.appendChild(stockCard);
+            });
+        }
+
+        function updateServiceOptions() {
+            serviceTypeSelect.innerHTML = '<option value="">Selecciona un servicio</option>';
+            profileAssignedSelect.innerHTML = '<option value="">Primero selecciona un servicio</option>';
+            
+            stock.forEach(item => {
+                if (item.quantity > 0) {
+                    const option = document.createElement('option');
+                    option.value = item.service;
+                    option.textContent = `${item.service} (${item.quantity} disponibles)`;
+                    serviceTypeSelect.appendChild(option);
+                }
+            });
+        }
+
+        function updateProfileOptions(service) {
+            profileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
+            
+            const serviceStock = stock.find(s => s.service === service);
+            if (serviceStock && serviceStock.profiles.length > 0) {
+                serviceStock.profiles.forEach(profile => {
+                    const option = document.createElement('option');
+                    option.value = profile;
+                    option.textContent = profile;
+                    profileAssignedSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Funciones de Respaldo
+        function exportAllData() {
+            const data = {
+                clients: clients,
+                stock: stock,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const content = JSON.stringify(data, null, 2);
+            const filename = `harods_tech_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+            
+            FileSystem.downloadFile(filename, content, 'application/json');
+            showMessage('Datos exportados exitosamente');
+        }
+
+        function importData(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.clients && data.stock) {
+                        clients = data.clients;
+                        stock = data.stock;
+                        
+                        saveClients();
+                        saveStock();
+                        
+                        loadClients();
+                        loadStock();
+                        
+                        showMessage('Datos importados exitosamente');
+                    } else {
+                        showMessage('Archivo de respaldo inválido', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Error importando datos: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function backupClients() {
+            const content = JSON.stringify(clients, null, 2);
+            const filename = `clientes_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+            FileSystem.downloadFile(filename, content, 'application/json');
+            showMessage('Clientes respaldados exitosamente');
+        }
+
+        function backupStock() {
+            const content = JSON.stringify(stock, null, 2);
+            const filename = `stock_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+            FileSystem.downloadFile(filename, content, 'application/json');
+            showMessage('Stock respaldado exitosamente');
+        }
+
+        function renderFileList() {
+            const files = FileSystem.listFiles();
+            fileList.innerHTML = '';
+            
+            if (files.length === 0) {
+                fileList.innerHTML = '<div class="client-item">No hay archivos de datos</div>';
+                return;
+            }
+            
+            files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'client-item';
+                fileItem.innerHTML = `
+                    <div class="client-info">
+                        <div class="client-name">${file.name}</div>
+                        <div class="client-details">
+                            <div><strong>Fecha:</strong> ${new Date(file.timestamp).toLocaleString()}</div>
+                            <div><strong>Tamaño:</strong> ${file.size} bytes</div>
+                        </div>
+                    </div>
+                    <div class="client-actions">
+                        <button class="btn btn-primary" onclick="downloadFile('${file.name}')">
+                            <i class="fas fa-download"></i> Descargar
+                        </button>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function downloadFile(filename) {
+            const content = localStorage.getItem(filename);
+            if (content) {
+                FileSystem.downloadFile(filename, content, 'application/json');
+            }
+        }
+
+        // Manejadores de Eventos
+        async function handleSendReminder(clientId) {
+            try {
+                const client = clients.find(c => c.id === clientId);
+                const message = `Hola ${client.name}, este es un recordatorio de que tu pago para ${client.service} vence el ${formatDate(client.paymentDeadline)}. - Harod's Tech`;
+                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                showMessage('Recordatorio enviado por WhatsApp');
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        async function handleMarkAsPaid(clientId) {
+            try {
+                await updateClient(clientId, { status: 'paid' });
+                
+                const client = clients.find(c => c.id === clientId);
+                const message = `Hola ${client.name}, hemos registrado tu pago para ${client.service}. ¡Gracias! - Harod's Tech`;
+                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        async function handleCancelSubscription(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            
+            if (!confirm(`¿Estás seguro de cancelar la suscripción de ${client.name}?`)) {
+                return;
+            }
+            
+            try {
+                // Liberar el perfil en el stock
+                await releaseProfile(client.service, client.profile);
+                
+                // Eliminar el cliente
+                await deleteClient(clientId);
+                
+                const message = `Hola ${client.name}, tu suscripción para ${client.service} ha sido cancelada. - Harod's Tech`;
+                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        async function handleAssignProfile(stockId, profileName) {
+            try {
+                await assignProfile(stockId, profileName);
+                
+                // Cambiar a la pestaña de agregar cliente
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                document.querySelector('[data-tab="addClient"]').classList.add('active');
+                document.getElementById('addClientTab').classList.add('active');
+                
+                // Rellenar automáticamente el servicio y perfil
+                const stockItem = stock.find(s => s.id === stockId);
+                if (stockItem) {
+                    document.getElementById('serviceType').value = stockItem.service;
+                    document.getElementById('profileAssigned').value = profileName;
+                }
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fechas por defecto
+            const today = new Date().toISOString().split('T')[0];
+            const nextMonth = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
+            
+            document.getElementById('purchaseDate').value = today;
+            document.getElementById('paymentDeadline').value = nextMonthFormatted;
+            
+            // Cargar datos iniciales
+            loadClients();
+            loadStock();
+            renderFileList();
+        });
+
+        // Event Listeners
+        loginBtn.addEventListener('click', function() {
+            if (passwordInput.value === ACCESS_PASSWORD) {
+                loginSection.style.display = 'none';
+                dashboard.style.display = 'block';
+                showMessage('Sesión iniciada correctamente');
+            } else {
+                alert('Contraseña incorrecta. Solo el propietario puede acceder.');
+                passwordInput.value = '';
+            }
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            dashboard.style.display = 'none';
+            loginSection.style.display = 'block';
+            passwordInput.value = '';
+            showMessage('Sesión cerrada correctamente');
+        });
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(tabId + 'Tab').classList.add('active');
+                
+                if (tabId === 'backup') {
+                    renderFileList();
+                }
+            });
+        });
+
+        addClientForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const clientData = {
+                name: document.getElementById('clientName').value,
+                phone: document.getElementById('clientPhone').value,
+                service: document.getElementById('serviceType').value,
+                profile: document.getElementById('profileAssigned').value,
+                purchaseDate: document.getElementById('purchaseDate').value,
+                paymentDeadline: document.getElementById('paymentDeadline').value,
+                loginDetails: document.getElementById('loginDetails').value,
+                status: document.getElementById('paymentStatus').value,
+                notes: document.getElementById('clientNotes').value
+            };
+            
+            try {
+                await addClient(clientData);
+                addClientForm.reset();
+                
+                // Restablecer fechas
+                const today = new Date().toISOString().split('T')[0];
+                const nextMonth = new Date();
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
+                
+                document.getElementById('purchaseDate').value = today;
+                document.getElementById('paymentDeadline').value = nextMonthFormatted;
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+
+        addStockForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const stockData = {
+                service: document.getElementById('serviceName').value,
+                quantity: parseInt(document.getElementById('stockQuantity').value),
+                total: parseInt(document.getElementById('totalCapacity').value),
+                email: document.getElementById('accountEmail').value,
+                password: document.getElementById('accountPassword').value,
+                profiles: document.getElementById('profilesAvailable').value,
+                price: parseFloat(document.getElementById('servicePrice').value)
+            };
+            
+            try {
+                await addStock(stockData);
+                addStockForm.reset();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+
+        serviceTypeSelect.addEventListener('change', function() {
+            updateProfileOptions(this.value);
+        });
+
+        refreshClientsBtn.addEventListener('click', loadClients);
+        refreshStockBtn.addEventListener('click', loadStock);
+
+        searchBtn.addEventListener('click', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredClients = clients.filter(client => 
+                client.name.toLowerCase().includes(searchTerm) || 
+                client.phone.includes(searchTerm) ||
+                client.service.toLowerCase().includes(searchTerm)
+            );
+            
+            clients = filteredClients;
+            renderClients();
+            
+            if (searchTerm) {
+                showMessage(`${filteredClients.length} clientes encontrados`);
+            } else {
+                loadClients(); // Recargar todos
+            }
+        });
+
+        stockSearchBtn.addEventListener('click', function() {
+            const searchTerm = stockSearchInput.value.toLowerCase();
+            const filteredStock = stock.filter(item => 
+                item.service.toLowerCase().includes(searchTerm) ||
+                item.email.toLowerCase().includes(searchTerm)
+            );
+            
+            stock = filteredStock;
+            renderStock();
+            
+            if (searchTerm) {
+                showMessage(`${filteredStock.length} servicios encontrados`);
+            } else {
+                loadStock(); // Recargar todos
+            }
+        });
+
+        // Eventos de respaldo
+        exportDataBtn.addEventListener('click', exportAllData);
+        
+        importDataBtn.addEventListener('click', function() {
+            importFile.click();
+        });
+        
+        importFile.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                importData(e.target.files[0]);
+            }
+        });
+        
+        backupClientsBtn.addEventListener('click', backupClients);
+        backupStockBtn.addEventListener('click', backupStock);
+
+        // Funciones globales para los botones
+        window.handleSendReminder = handleSendReminder;
+        window.handleMarkAsPaid = handleMarkAsPaid;
+        window.handleCancelSubscription = handleCancelSubscription;
+        window.handleAssignProfile = handleAssignProfile;
+        window.downloadFile = downloadFile;
+    </script>
+</body>
+  </html>
