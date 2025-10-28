@@ -20,6 +20,9 @@
             --spotify: #1db954;
             --light: #ecf0f1;
             --dark: #34495e;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
         * {
@@ -33,6 +36,7 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
@@ -47,14 +51,49 @@
             padding: 20px 0;
             text-align: center;
             border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .logo {
             font-size: 2.5rem;
             font-weight: bold;
             margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: white;
+            transition: var(--transition);
+        }
+        
+        .logo:hover::after {
+            width: 100%;
         }
         
         .tagline {
@@ -66,10 +105,20 @@
             background-color: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             max-width: 400px;
             margin: 50px auto;
             text-align: center;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .login-section h2 {
@@ -84,6 +133,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .login-section input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
         }
         
         .login-section button {
@@ -95,15 +151,56 @@
             border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-section button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .login-section button:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
         }
         
         .login-section button:hover {
             background-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .dashboard {
             display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
         }
         
         .dashboard-header {
@@ -126,11 +223,13 @@
             padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
         }
         
         .logout-btn:hover {
             background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .tabs {
@@ -138,13 +237,16 @@
             margin-bottom: 20px;
             border-bottom: 1px solid #ddd;
             flex-wrap: wrap;
+            overflow-x: auto;
         }
         
         .tab {
             padding: 10px 20px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
         }
         
         .tab.active {
@@ -153,20 +255,46 @@
             font-weight: bold;
         }
         
+        .tab:hover:not(.active) {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
         .tab-content {
             display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
         }
         
         .tab-content.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInContent 0.4s forwards;
+        }
+        
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .client-form, .stock-form {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        .client-form:hover, .stock-form:hover {
+            box-shadow: var(--shadow-hover);
         }
         
         .form-group {
@@ -185,6 +313,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
         }
         
         .form-row {
@@ -202,7 +337,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 5px;
@@ -215,6 +350,8 @@
         
         .btn-primary:hover {
             background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .btn-success {
@@ -224,6 +361,8 @@
         
         .btn-success:hover {
             background-color: #219653;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .btn-warning {
@@ -233,6 +372,8 @@
         
         .btn-warning:hover {
             background-color: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .btn-danger {
@@ -242,12 +383,14 @@
         
         .btn-danger:hover {
             background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .clients-list, .stock-list {
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             overflow: hidden;
         }
         
@@ -258,6 +401,11 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            transition: var(--transition);
+        }
+        
+        .client-item:hover, .stock-item:hover {
+            background-color: rgba(52, 152, 219, 0.05);
         }
         
         .client-item:last-child, .stock-item:last-child {
@@ -313,6 +461,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .search-bar input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
         }
         
         .search-bar button {
@@ -322,6 +477,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-bar button:hover {
+            background-color: #2c3e50;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         
         .stock-grid {
@@ -334,10 +496,17 @@
         .stock-card {
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             padding: 20px;
             position: relative;
             border-top: 5px solid;
+            transition: var(--transition);
+            transform: translateY(0);
+        }
+        
+        .stock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
         
         .stock-card.netflix {
@@ -436,6 +605,13 @@
             border-radius: 5px;
             margin-bottom: 15px;
             border-left: 4px solid var(--danger);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
 
         .success-message {
@@ -445,14 +621,133 @@
             border-radius: 5px;
             margin-bottom: 15px;
             border-left: 4px solid var(--success);
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .backup-section {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             margin-top: 20px;
+        }
+
+        .edit-stock-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .edit-stock-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            animation: zoomIn 0.3s forwards;
+        }
+
+        @keyframes zoomIn {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .mobile-tabs {
+            display: none;
+            flex-direction: column;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .mobile-tab {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-tab:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-tab.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .mobile-tab:hover:not(.active) {
+            background-color: rgba(52, 152, 219, 0.1);
         }
         
         @media (max-width: 768px) {
@@ -488,12 +783,78 @@
             .stock-grid {
                 grid-template-columns: 1fr;
             }
+
+            .tabs {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .mobile-tabs {
+                display: flex;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .stock-actions-card {
+                flex-direction: column;
+            }
+
+            .edit-stock-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 15px 0;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .login-section {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .client-form, .stock-form {
+                padding: 15px;
+            }
+            
+            .client-item, .stock-item {
+                padding: 10px;
+            }
+            
+            .stock-card {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="logo">Harod's Tech</div>
             <div class="tagline">Gestión de Clientes y Stock</div>
         </div>
@@ -515,6 +876,16 @@
                 <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
             </div>
             
+            <!-- Menú móvil -->
+            <div class="mobile-tabs" id="mobileTabs">
+                <div class="mobile-tab active" data-tab="clients">Lista de Clientes</div>
+                <div class="mobile-tab" data-tab="addClient">Agregar Cliente</div>
+                <div class="mobile-tab" data-tab="stock">Stock de Servicios</div>
+                <div class="mobile-tab" data-tab="addStock">Agregar Stock</div>
+                <div class="mobile-tab" data-tab="backup">Respaldo</div>
+            </div>
+            
+            <!-- Menú de escritorio -->
             <div class="tabs">
                 <div class="tab active" data-tab="clients">Lista de Clientes</div>
                 <div class="tab" data-tab="addClient">Agregar Cliente</div>
@@ -561,16 +932,16 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="serviceType">Servicio Contratado</label>
+                                <label for="serviceType">Cuenta de Servicio</label>
                                 <select id="serviceType" required>
-                                    <option value="">Selecciona un servicio</option>
+                                    <option value="">Selecciona una cuenta</option>
                                     <!-- Las opciones se cargarán dinámicamente -->
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="profileAssigned">Perfil Asignado</label>
                                 <select id="profileAssigned" required>
-                                    <option value="">Primero selecciona un servicio</option>
+                                    <option value="">Primero selecciona una cuenta</option>
                                 </select>
                             </div>
                         </div>
@@ -632,7 +1003,7 @@
             <!-- Contenido de la pestaña Agregar Stock -->
             <div id="addStockTab" class="tab-content">
                 <div class="stock-form">
-                    <h3>Agregar Nuevo Stock</h3>
+                    <h3>Agregar Nueva Cuenta</h3>
                     <form id="addStockForm">
                         <div class="form-row">
                             <div class="form-group">
@@ -648,16 +1019,23 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="stockQuantity">Cupos Disponibles</label>
-                                <input type="number" id="stockQuantity" min="1" required>
+                                <label for="accountName">Nombre de la Cuenta</label>
+                                <input type="text" id="accountName" placeholder="Ej: Netflix Principal, Netflix Secundario" required>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
+                                <label for="stockQuantity">Cupos Disponibles</label>
+                                <input type="number" id="stockQuantity" min="1" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="totalCapacity">Capacidad Total</label>
                                 <input type="number" id="totalCapacity" min="1" required>
                             </div>
+                        </div>
+
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="servicePrice">Precio del Servicio ($)</label>
                                 <input type="number" id="servicePrice" min="0" step="0.01" required>
@@ -680,7 +1058,7 @@
                         </div>
                         
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Agregar Stock
+                            <i class="fas fa-plus"></i> Agregar Cuenta
                         </button>
                     </form>
                 </div>
@@ -730,13 +1108,64 @@
         </div>
     </div>
 
+    <!-- Modal para editar stock -->
+    <div id="editStockModal" class="edit-stock-modal">
+        <div class="edit-stock-content">
+            <div class="modal-header">
+                <h3>Editar Cuenta</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editStockForm">
+                <input type="hidden" id="editStockId">
+                <div class="form-group">
+                    <label for="editServiceName">Servicio</label>
+                    <input type="text" id="editServiceName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editAccountName">Nombre de la Cuenta</label>
+                    <input type="text" id="editAccountName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editStockQuantity">Cupos Disponibles</label>
+                        <input type="number" id="editStockQuantity" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTotalCapacity">Capacidad Total</label>
+                        <input type="number" id="editTotalCapacity" min="1" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editAccountEmail">Correo de la Cuenta</label>
+                    <input type="email" id="editAccountEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAccountPassword">Contraseña de la Cuenta</label>
+                    <input type="text" id="editAccountPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProfilesAvailable">Perfiles Disponibles (separados por coma)</label>
+                    <input type="text" id="editProfilesAvailable" required>
+                </div>
+                <div class="form-group">
+                    <label for="editServicePrice">Precio del Servicio ($)</label>
+                    <input type="number" id="editServicePrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" id="cancelEditBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Configuración
         const ACCESS_PASSWORD = "HarodTech2023";
+        const SESSION_KEY = "harods_tech_session";
         const DATA_FILES = {
-            clients: 'harods_tech_clientes.txt',
-            stock: 'harods_tech_stock.txt',
-            backup: 'harods_tech_respaldo_'
+            clients: 'harods_tech_clientes',
+            stock: 'harods_tech_stock'
         };
 
         // Elementos del DOM
@@ -746,6 +1175,7 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const passwordInput = document.getElementById('password');
         const tabs = document.querySelectorAll('.tab');
+        const mobileTabs = document.querySelectorAll('.mobile-tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const clientsList = document.getElementById('clientsList');
         const addClientForm = document.getElementById('addClientForm');
@@ -766,10 +1196,36 @@
         const backupClientsBtn = document.getElementById('backupClientsBtn');
         const backupStockBtn = document.getElementById('backupStockBtn');
         const fileList = document.getElementById('fileList');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileTabsContainer = document.getElementById('mobileTabs');
+        
+        // Elementos del modal de edición
+        const editStockModal = document.getElementById('editStockModal');
+        const editStockForm = document.getElementById('editStockForm');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
 
         // Estado de la aplicación
         let clients = [];
         let stock = [];
+        let currentEditingStock = null;
+        let originalClients = [];
+        let originalStock = [];
+
+        // Sistema de Sesión
+        class SessionManager {
+            static isLoggedIn() {
+                return localStorage.getItem(SESSION_KEY) === 'true';
+            }
+
+            static login() {
+                localStorage.setItem(SESSION_KEY, 'true');
+            }
+
+            static logout() {
+                localStorage.removeItem(SESSION_KEY);
+            }
+        }
 
         // Utilidades
         function showMessage(message, type = 'success') {
@@ -800,8 +1256,6 @@
         class FileSystem {
             static saveToFile(filename, data) {
                 try {
-                    // En un entorno real, aquí enviarías los datos a un servidor
-                    // Para esta demo, usamos localStorage
                     const fileData = {
                         content: data,
                         timestamp: new Date().toISOString(),
@@ -868,6 +1322,7 @@
                 
                 const data = FileSystem.loadFromFile(DATA_FILES.clients);
                 clients = data || [];
+                originalClients = [...clients];
                 
                 renderClients();
                 updateServiceOptions();
@@ -956,6 +1411,7 @@
                 
                 const data = FileSystem.loadFromFile(DATA_FILES.stock);
                 stock = data || [];
+                originalStock = [...stock];
                 
                 renderStock();
                 updateServiceOptions();
@@ -975,6 +1431,7 @@
 
         async function addStock(stockData) {
             try {
+                // Crear nueva cuenta
                 const newStock = {
                     id: generateId(),
                     ...stockData,
@@ -982,14 +1439,14 @@
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 };
-                
                 stock.push(newStock);
+                
                 const success = await saveStock();
                 
                 if (success) {
-                    showMessage('Stock agregado exitosamente');
+                    showMessage('Cuenta agregada exitosamente');
                     await loadStock();
-                    return newStock;
+                    return stock;
                 } else {
                     throw new Error('Error guardando stock');
                 }
@@ -998,10 +1455,51 @@
             }
         }
 
+        async function updateStock(stockId, stockData) {
+            try {
+                const index = stock.findIndex(s => s.id === stockId);
+                if (index === -1) throw new Error('Stock no encontrado');
+                
+                stock[index] = {
+                    ...stock[index],
+                    ...stockData,
+                    profiles: stockData.profiles.split(',').map(p => p.trim()),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                const success = await saveStock();
+                if (success) {
+                    showMessage('Cuenta actualizada exitosamente');
+                    await loadStock();
+                    return stock[index];
+                } else {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error actualizando stock: ' + error.message);
+            }
+        }
+
+        async function deleteStock(stockId) {
+            try {
+                stock = stock.filter(s => s.id !== stockId);
+                const success = await saveStock();
+                
+                if (success) {
+                    showMessage('Cuenta eliminada exitosamente');
+                    await loadStock();
+                } else {
+                    throw new Error('Error guardando cambios');
+                }
+            } catch (error) {
+                throw new Error('Error eliminando stock: ' + error.message);
+            }
+        }
+
         async function assignProfile(stockId, profileName) {
             try {
                 const stockItem = stock.find(s => s.id === stockId);
-                if (!stockItem) throw new Error('Stock no encontrado');
+                if (!stockItem) throw new Error('Cuenta no encontrada');
                 
                 const profileIndex = stockItem.profiles.indexOf(profileName);
                 if (profileIndex === -1) throw new Error('Perfil no disponible');
@@ -1023,10 +1521,10 @@
             }
         }
 
-        async function releaseProfile(serviceName, profileName) {
+        async function releaseProfile(stockId, profileName) {
             try {
-                const stockItem = stock.find(s => s.service === serviceName);
-                if (!stockItem) throw new Error('Servicio no encontrado');
+                const stockItem = stock.find(s => s.id === stockId);
+                if (!stockItem) throw new Error('Cuenta no encontrada');
                 
                 // Agregar perfil y aumentar cantidad
                 stockItem.profiles.push(profileName);
@@ -1064,7 +1562,7 @@
                         <div class="client-name">${client.name}</div>
                         <div class="client-details">
                             <div><strong>Teléfono:</strong> ${client.phone}</div>
-                            <div><strong>Servicio:</strong> ${client.service} - ${client.profile}</div>
+                            <div><strong>Cuenta:</strong> ${client.accountName} - ${client.profile}</div>
                             <div><strong>Compra:</strong> ${formatDate(client.purchaseDate)}</div>
                             <div><strong>Vence:</strong> ${formatDate(client.paymentDeadline)}</div>
                             <div><strong>Acceso:</strong> ${client.loginDetails}</div>
@@ -1093,7 +1591,7 @@
             stockGrid.innerHTML = '';
             
             if (stock.length === 0) {
-                stockGrid.innerHTML = '<div class="stock-item">No se encontraron servicios en stock</div>';
+                stockGrid.innerHTML = '<div class="stock-item">No se encontraron cuentas en stock</div>';
                 return;
             }
             
@@ -1114,10 +1612,14 @@
                 
                 stockCard.innerHTML = `
                     <div class="stock-header">
-                        <div class="stock-title">${item.service}</div>
+                        <div class="stock-title">${item.accountName || item.service}</div>
                         <div class="stock-count ${stockClass}">${item.quantity}/${item.total}</div>
                     </div>
-                    <div class="stock-email">${item.email}</div>
+                    <div class="stock-details">
+                        <div><strong>Servicio:</strong> ${item.service}</div>
+                        <div><strong>Email:</strong> ${item.email}</div>
+                        <div><strong>Precio:</strong> $${item.price}</div>
+                    </div>
                     <div class="stock-profiles">
                         <div><strong>Perfiles disponibles (${item.profiles.length}):</strong></div>
                         ${item.profiles.map(profile => `
@@ -1146,31 +1648,61 @@
         }
 
         function updateServiceOptions() {
-            serviceTypeSelect.innerHTML = '<option value="">Selecciona un servicio</option>';
-            profileAssignedSelect.innerHTML = '<option value="">Primero selecciona un servicio</option>';
+            serviceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
+            profileAssignedSelect.innerHTML = '<option value="">Primero selecciona una cuenta</option>';
             
             stock.forEach(item => {
                 if (item.quantity > 0) {
                     const option = document.createElement('option');
-                    option.value = item.service;
-                    option.textContent = `${item.service} (${item.quantity} disponibles)`;
+                    option.value = item.id;
+                    option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
                     serviceTypeSelect.appendChild(option);
                 }
             });
         }
 
-        function updateProfileOptions(service) {
+        function updateProfileOptions(stockId) {
             profileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
             
-            const serviceStock = stock.find(s => s.service === service);
-            if (serviceStock && serviceStock.profiles.length > 0) {
-                serviceStock.profiles.forEach(profile => {
+            const stockItem = stock.find(s => s.id === stockId);
+            if (stockItem && stockItem.profiles.length > 0) {
+                stockItem.profiles.forEach(profile => {
                     const option = document.createElement('option');
                     option.value = profile;
                     option.textContent = profile;
                     profileAssignedSelect.appendChild(option);
                 });
             }
+        }
+
+        // Funciones del Modal de Edición
+        function openEditStockModal(stockId) {
+            const stockItem = stock.find(s => s.id === stockId);
+            if (!stockItem) {
+                showMessage('Cuenta no encontrada', 'error');
+                return;
+            }
+
+            currentEditingStock = stockItem;
+            
+            // Llenar el formulario con los datos actuales
+            document.getElementById('editStockId').value = stockItem.id;
+            document.getElementById('editServiceName').value = stockItem.service;
+            document.getElementById('editAccountName').value = stockItem.accountName || stockItem.service;
+            document.getElementById('editStockQuantity').value = stockItem.quantity;
+            document.getElementById('editTotalCapacity').value = stockItem.total;
+            document.getElementById('editAccountEmail').value = stockItem.email;
+            document.getElementById('editAccountPassword').value = stockItem.password;
+            document.getElementById('editProfilesAvailable').value = stockItem.profiles.join(', ');
+            document.getElementById('editServicePrice').value = stockItem.price;
+            
+            editStockModal.style.display = 'flex';
+        }
+
+        function closeEditStockModal() {
+            editStockModal.style.display = 'none';
+            currentEditingStock = null;
+            editStockForm.reset();
         }
 
         // Funciones de Respaldo
@@ -1267,6 +1799,34 @@
             }
         }
 
+        // Funciones de búsqueda
+        function searchClients(term) {
+            if (!term) {
+                clients = [...originalClients];
+            } else {
+                clients = originalClients.filter(client => 
+                    client.name.toLowerCase().includes(term) || 
+                    client.phone.includes(term) ||
+                    (client.accountName && client.accountName.toLowerCase().includes(term)) ||
+                    client.service.toLowerCase().includes(term)
+                );
+            }
+            renderClients();
+        }
+
+        function searchStock(term) {
+            if (!term) {
+                stock = [...originalStock];
+            } else {
+                stock = originalStock.filter(item => 
+                    (item.accountName && item.accountName.toLowerCase().includes(term)) ||
+                    item.service.toLowerCase().includes(term) ||
+                    item.email.toLowerCase().includes(term)
+                );
+            }
+            renderStock();
+        }
+
         // Manejadores de Eventos
         async function handleSendReminder(clientId) {
             try {
@@ -1304,7 +1864,7 @@
             
             try {
                 // Liberar el perfil en el stock
-                await releaseProfile(client.service, client.profile);
+                await releaseProfile(client.stockId, client.profile);
                 
                 // Eliminar el cliente
                 await deleteClient(clientId);
@@ -1323,16 +1883,17 @@
                 await assignProfile(stockId, profileName);
                 
                 // Cambiar a la pestaña de agregar cliente
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(tc => tc.classList.remove('active'));
-                document.querySelector('[data-tab="addClient"]').classList.add('active');
-                document.getElementById('addClientTab').classList.add('active');
+                switchTab('addClient');
                 
-                // Rellenar automáticamente el servicio y perfil
+                // Rellenar automáticamente la cuenta y perfil
                 const stockItem = stock.find(s => s.id === stockId);
                 if (stockItem) {
-                    document.getElementById('serviceType').value = stockItem.service;
+                    document.getElementById('serviceType').value = stockId;
+                    updateProfileOptions(stockId);
                     document.getElementById('profileAssigned').value = profileName;
+                    
+                    // Llenar automáticamente los detalles de acceso
+                    document.getElementById('loginDetails').value = `Email: ${stockItem.email}\nContraseña: ${stockItem.password}`;
                 }
                 
             } catch (error) {
@@ -1340,8 +1901,57 @@
             }
         }
 
+        async function handleEditStock(stockId) {
+            openEditStockModal(stockId);
+        }
+
+        async function handleDeleteStock(stockId) {
+            const stockItem = stock.find(s => s.id === stockId);
+            if (!stockItem) return;
+            
+            if (!confirm(`¿Estás seguro de eliminar la cuenta ${stockItem.accountName || stockItem.service}?`)) {
+                return;
+            }
+            
+            try {
+                await deleteStock(stockId);
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        // Función para cambiar pestañas
+        function switchTab(tabId) {
+            tabs.forEach(t => t.classList.remove('active'));
+            mobileTabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            
+            if (tabId === 'backup') {
+                renderFileList();
+            }
+            
+            // Ocultar menú móvil después de seleccionar una pestaña
+            if (window.innerWidth <= 768) {
+                mobileTabsContainer.style.display = 'none';
+            }
+        }
+
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay sesión activa
+            if (SessionManager.isLoggedIn()) {
+                loginSection.style.display = 'none';
+                dashboard.style.display = 'block';
+                showMessage('Sesión recuperada correctamente');
+            } else {
+                loginSection.style.display = 'block';
+                dashboard.style.display = 'none';
+            }
+
             // Establecer fechas por defecto
             const today = new Date().toISOString().split('T')[0];
             const nextMonth = new Date();
@@ -1360,16 +1970,18 @@
         // Event Listeners
         loginBtn.addEventListener('click', function() {
             if (passwordInput.value === ACCESS_PASSWORD) {
+                SessionManager.login();
                 loginSection.style.display = 'none';
                 dashboard.style.display = 'block';
                 showMessage('Sesión iniciada correctamente');
             } else {
-                alert('Contraseña incorrecta. Solo el propietario puede acceder.');
+                showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
                 passwordInput.value = '';
             }
         });
 
         logoutBtn.addEventListener('click', function() {
+            SessionManager.logout();
             dashboard.style.display = 'none';
             loginSection.style.display = 'block';
             passwordInput.value = '';
@@ -1379,28 +1991,43 @@
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const tabId = this.getAttribute('data-tab');
-                
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(tc => tc.classList.remove('active'));
-                
-                this.classList.add('active');
-                document.getElementById(tabId + 'Tab').classList.add('active');
-                
-                if (tabId === 'backup') {
-                    renderFileList();
-                }
+                switchTab(tabId);
             });
+        });
+
+        mobileTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        mobileMenuBtn.addEventListener('click', function() {
+            if (mobileTabsContainer.style.display === 'flex') {
+                mobileTabsContainer.style.display = 'none';
+            } else {
+                mobileTabsContainer.style.display = 'flex';
+            }
         });
 
         addClientForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
+            const stockId = document.getElementById('serviceType').value;
+            const stockItem = stock.find(s => s.id === stockId);
+            
+            if (!stockItem) {
+                showMessage('Por favor selecciona una cuenta válida', 'error');
+                return;
+            }
+            
             const clientData = {
                 name: document.getElementById('clientName').value,
                 phone: document.getElementById('clientPhone').value,
-                service: document.getElementById('serviceType').value,
+                service: stockItem.service,
+                accountName: stockItem.accountName || stockItem.service,
                 profile: document.getElementById('profileAssigned').value,
+                stockId: stockId,
                 purchaseDate: document.getElementById('purchaseDate').value,
                 paymentDeadline: document.getElementById('paymentDeadline').value,
                 loginDetails: document.getElementById('loginDetails').value,
@@ -1431,6 +2058,7 @@
             
             const stockData = {
                 service: document.getElementById('serviceName').value,
+                accountName: document.getElementById('accountName').value,
                 quantity: parseInt(document.getElementById('stockQuantity').value),
                 total: parseInt(document.getElementById('totalCapacity').value),
                 email: document.getElementById('accountEmail').value,
@@ -1447,6 +2075,39 @@
             }
         });
 
+        // Eventos del modal de edición
+        editStockForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const stockData = {
+                service: document.getElementById('editServiceName').value,
+                accountName: document.getElementById('editAccountName').value,
+                quantity: parseInt(document.getElementById('editStockQuantity').value),
+                total: parseInt(document.getElementById('editTotalCapacity').value),
+                email: document.getElementById('editAccountEmail').value,
+                password: document.getElementById('editAccountPassword').value,
+                profiles: document.getElementById('editProfilesAvailable').value,
+                price: parseFloat(document.getElementById('editServicePrice').value)
+            };
+            
+            try {
+                await updateStock(currentEditingStock.id, stockData);
+                closeEditStockModal();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+
+        closeModalBtn.addEventListener('click', closeEditStockModal);
+        cancelEditBtn.addEventListener('click', closeEditStockModal);
+
+        // Cerrar modal al hacer clic fuera
+        editStockModal.addEventListener('click', function(e) {
+            if (e.target === editStockModal) {
+                closeEditStockModal();
+            }
+        });
+
         serviceTypeSelect.addEventListener('change', function() {
             updateProfileOptions(this.value);
         });
@@ -1456,36 +2117,34 @@
 
         searchBtn.addEventListener('click', function() {
             const searchTerm = searchInput.value.toLowerCase();
-            const filteredClients = clients.filter(client => 
-                client.name.toLowerCase().includes(searchTerm) || 
-                client.phone.includes(searchTerm) ||
-                client.service.toLowerCase().includes(searchTerm)
-            );
-            
-            clients = filteredClients;
-            renderClients();
+            searchClients(searchTerm);
             
             if (searchTerm) {
-                showMessage(`${filteredClients.length} clientes encontrados`);
-            } else {
-                loadClients(); // Recargar todos
+                showMessage(`${clients.length} clientes encontrados`);
             }
         });
 
         stockSearchBtn.addEventListener('click', function() {
             const searchTerm = stockSearchInput.value.toLowerCase();
-            const filteredStock = stock.filter(item => 
-                item.service.toLowerCase().includes(searchTerm) ||
-                item.email.toLowerCase().includes(searchTerm)
-            );
-            
-            stock = filteredStock;
-            renderStock();
+            searchStock(searchTerm);
             
             if (searchTerm) {
-                showMessage(`${filteredStock.length} servicios encontrados`);
-            } else {
-                loadStock(); // Recargar todos
+                showMessage(`${stock.length} cuentas encontradas`);
+            }
+        });
+
+        // Búsqueda en tiempo real
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            if (searchTerm.length === 0 || searchTerm.length > 2) {
+                searchClients(searchTerm);
+            }
+        });
+
+        stockSearchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            if (searchTerm.length === 0 || searchTerm.length > 2) {
+                searchStock(searchTerm);
             }
         });
 
@@ -1510,7 +2169,9 @@
         window.handleMarkAsPaid = handleMarkAsPaid;
         window.handleCancelSubscription = handleCancelSubscription;
         window.handleAssignProfile = handleAssignProfile;
+        window.handleEditStock = handleEditStock;
+        window.handleDeleteStock = handleDeleteStock;
         window.downloadFile = downloadFile;
     </script>
 </body>
-  </html>
+</html>
