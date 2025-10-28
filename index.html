@@ -643,7 +643,7 @@
             margin-top: 20px;
         }
 
-        .edit-stock-modal {
+        .edit-stock-modal, .edit-client-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -657,7 +657,7 @@
             animation: fadeIn 0.3s;
         }
 
-        .edit-stock-content {
+        .edit-stock-content, .edit-client-content {
             background-color: white;
             padding: 30px;
             border-radius: 10px;
@@ -749,6 +749,26 @@
         .mobile-tab:hover:not(.active) {
             background-color: rgba(52, 152, 219, 0.1);
         }
+
+        .phone-prefix {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-prefix span {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            border-right: none;
+            font-weight: bold;
+        }
+
+        .phone-prefix input {
+            border-radius: 0 5px 5px 0;
+            flex: 1;
+        }
         
         @media (max-width: 768px) {
             .form-row {
@@ -807,7 +827,7 @@
                 flex-direction: column;
             }
 
-            .edit-stock-content {
+            .edit-stock-content, .edit-client-content {
                 width: 95%;
                 padding: 20px;
             }
@@ -926,7 +946,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="clientPhone">Número de Teléfono</label>
-                                <input type="tel" id="clientPhone" required>
+                                <div class="phone-prefix">
+                                    <span>+504</span>
+                                    <input type="tel" id="clientPhone" placeholder="XXXXXXXX" maxlength="8" required>
+                                </div>
                             </div>
                         </div>
                         
@@ -1159,6 +1182,83 @@
         </div>
     </div>
 
+    <!-- Modal para editar cliente -->
+    <div id="editClientModal" class="edit-client-modal">
+        <div class="edit-client-content">
+            <div class="modal-header">
+                <h3>Editar Cliente</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editClientForm">
+                <input type="hidden" id="editClientId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editClientName">Nombre del Cliente</label>
+                        <input type="text" id="editClientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editClientPhone">Número de Teléfono</label>
+                        <div class="phone-prefix">
+                            <span>+504</span>
+                            <input type="tel" id="editClientPhone" placeholder="XXXXXXXX" maxlength="8" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editServiceType">Cuenta de Servicio</label>
+                        <select id="editServiceType" required>
+                            <option value="">Selecciona una cuenta</option>
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProfileAssigned">Perfil Asignado</label>
+                        <select id="editProfileAssigned" required>
+                            <option value="">Primero selecciona una cuenta</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editPurchaseDate">Fecha de Compra</label>
+                        <input type="date" id="editPurchaseDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPaymentDeadline">Fecha Límite de Pago</label>
+                        <input type="date" id="editPaymentDeadline" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editLoginDetails">Detalles de Acceso (usuario/contraseña)</label>
+                    <textarea id="editLoginDetails" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPaymentStatus">Estado de Pago</label>
+                    <select id="editPaymentStatus">
+                        <option value="pending">Pendiente</option>
+                        <option value="paid">Pagado</option>
+                        <option value="overdue">Vencido</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editClientNotes">Notas (opcional)</label>
+                    <textarea id="editClientNotes" rows="2" placeholder="Notas adicionales sobre el cliente..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" id="cancelEditClientBtn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Configuración
         const ACCESS_PASSWORD = "HarodTech2023";
@@ -1202,13 +1302,19 @@
         // Elementos del modal de edición
         const editStockModal = document.getElementById('editStockModal');
         const editStockForm = document.getElementById('editStockForm');
-        const closeModalBtn = document.querySelector('.close-modal');
+        const closeModalBtn = document.querySelectorAll('.close-modal');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+        // Elementos del modal de edición de cliente
+        const editClientModal = document.getElementById('editClientModal');
+        const editClientForm = document.getElementById('editClientForm');
+        const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
 
         // Estado de la aplicación
         let clients = [];
         let stock = [];
         let currentEditingStock = null;
+        let currentEditingClient = null;
         let originalClients = [];
         let originalStock = [];
 
@@ -1250,6 +1356,23 @@
 
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatPhoneNumber(phone) {
+            // Si el número ya tiene el prefijo, lo mantenemos
+            if (phone.startsWith('+504')) {
+                return phone;
+            }
+            // Si solo tiene los 8 dígitos, agregamos el prefijo
+            if (phone.length === 8 && /^\d+$/.test(phone)) {
+                return `+504${phone}`;
+            }
+            return phone;
+        }
+
+        function getPhoneWithoutPrefix(phone) {
+            // Remover el prefijo +504 si está presente
+            return phone.replace(/^\+504/, '');
         }
 
         // Sistema de Archivos (simulado con localStorage)
@@ -1345,6 +1468,7 @@
                 const newClient = {
                     id: generateId(),
                     ...clientData,
+                    phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 };
@@ -1372,6 +1496,7 @@
                 clients[index] = {
                     ...clients[index],
                     ...clientData,
+                    phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
                     updatedAt: new Date().toISOString()
                 };
                 
@@ -1571,10 +1696,13 @@
                         </div>
                     </div>
                     <div class="client-actions">
+                        <button class="btn btn-warning" onclick="handleEditClient('${client.id}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
                         <button class="btn btn-success" onclick="handleSendReminder('${client.id}')">
                             <i class="fas fa-bell"></i> Recordatorio
                         </button>
-                        <button class="btn btn-warning" onclick="handleMarkAsPaid('${client.id}')">
+                        <button class="btn btn-primary" onclick="handleMarkAsPaid('${client.id}')">
                             <i class="fas fa-check-circle"></i> Pagado
                         </button>
                         <button class="btn btn-danger" onclick="handleCancelSubscription('${client.id}')">
@@ -1675,6 +1803,33 @@
             }
         }
 
+        function updateEditServiceOptions() {
+            const editServiceTypeSelect = document.getElementById('editServiceType');
+            editServiceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
+            
+            stock.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
+                editServiceTypeSelect.appendChild(option);
+            });
+        }
+
+        function updateEditProfileOptions(stockId) {
+            const editProfileAssignedSelect = document.getElementById('editProfileAssigned');
+            editProfileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
+            
+            const stockItem = stock.find(s => s.id === stockId);
+            if (stockItem && stockItem.profiles.length > 0) {
+                stockItem.profiles.forEach(profile => {
+                    const option = document.createElement('option');
+                    option.value = profile;
+                    option.textContent = profile;
+                    editProfileAssignedSelect.appendChild(option);
+                });
+            }
+        }
+
         // Funciones del Modal de Edición
         function openEditStockModal(stockId) {
             const stockItem = stock.find(s => s.id === stockId);
@@ -1703,6 +1858,50 @@
             editStockModal.style.display = 'none';
             currentEditingStock = null;
             editStockForm.reset();
+        }
+
+        function openEditClientModal(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) {
+                showMessage('Cliente no encontrado', 'error');
+                return;
+            }
+
+            currentEditingClient = client;
+            
+            // Actualizar opciones de servicios
+            updateEditServiceOptions();
+            
+            // Llenar el formulario con los datos actuales
+            document.getElementById('editClientId').value = client.id;
+            document.getElementById('editClientName').value = client.name;
+            document.getElementById('editClientPhone').value = getPhoneWithoutPrefix(client.phone);
+            document.getElementById('editPurchaseDate').value = client.purchaseDate;
+            document.getElementById('editPaymentDeadline').value = client.paymentDeadline;
+            document.getElementById('editLoginDetails').value = client.loginDetails;
+            document.getElementById('editPaymentStatus').value = client.status;
+            document.getElementById('editClientNotes').value = client.notes || '';
+            
+            // Establecer la cuenta de servicio y perfil actual
+            setTimeout(() => {
+                if (client.stockId) {
+                    document.getElementById('editServiceType').value = client.stockId;
+                    updateEditProfileOptions(client.stockId);
+                    
+                    // Establecer el perfil actual después de cargar las opciones
+                    setTimeout(() => {
+                        document.getElementById('editProfileAssigned').value = client.profile;
+                    }, 100);
+                }
+            }, 100);
+            
+            editClientModal.style.display = 'flex';
+        }
+
+        function closeEditClientModal() {
+            editClientModal.style.display = 'none';
+            currentEditingClient = null;
+            editClientForm.reset();
         }
 
         // Funciones de Respaldo
@@ -1905,6 +2104,10 @@
             openEditStockModal(stockId);
         }
 
+        async function handleEditClient(clientId) {
+            openEditClientModal(clientId);
+        }
+
         async function handleDeleteStock(stockId) {
             const stockItem = stock.find(s => s.id === stockId);
             if (!stockItem) return;
@@ -2098,8 +2301,48 @@
             }
         });
 
-        closeModalBtn.addEventListener('click', closeEditStockModal);
+        editClientForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const stockId = document.getElementById('editServiceType').value;
+            const stockItem = stock.find(s => s.id === stockId);
+            
+            if (!stockItem) {
+                showMessage('Por favor selecciona una cuenta válida', 'error');
+                return;
+            }
+            
+            const clientData = {
+                name: document.getElementById('editClientName').value,
+                phone: document.getElementById('editClientPhone').value,
+                service: stockItem.service,
+                accountName: stockItem.accountName || stockItem.service,
+                profile: document.getElementById('editProfileAssigned').value,
+                stockId: stockId,
+                purchaseDate: document.getElementById('editPurchaseDate').value,
+                paymentDeadline: document.getElementById('editPaymentDeadline').value,
+                loginDetails: document.getElementById('editLoginDetails').value,
+                status: document.getElementById('editPaymentStatus').value,
+                notes: document.getElementById('editClientNotes').value
+            };
+            
+            try {
+                await updateClient(currentEditingClient.id, clientData);
+                closeEditClientModal();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+
+        closeModalBtn.forEach(btn => {
+            btn.addEventListener('click', function() {
+                closeEditStockModal();
+                closeEditClientModal();
+            });
+        });
+
         cancelEditBtn.addEventListener('click', closeEditStockModal);
+        cancelEditClientBtn.addEventListener('click', closeEditClientModal);
 
         // Cerrar modal al hacer clic fuera
         editStockModal.addEventListener('click', function(e) {
@@ -2108,8 +2351,18 @@
             }
         });
 
+        editClientModal.addEventListener('click', function(e) {
+            if (e.target === editClientModal) {
+                closeEditClientModal();
+            }
+        });
+
         serviceTypeSelect.addEventListener('change', function() {
             updateProfileOptions(this.value);
+        });
+
+        document.getElementById('editServiceType').addEventListener('change', function() {
+            updateEditProfileOptions(this.value);
         });
 
         refreshClientsBtn.addEventListener('click', loadClients);
@@ -2170,8 +2423,9 @@
         window.handleCancelSubscription = handleCancelSubscription;
         window.handleAssignProfile = handleAssignProfile;
         window.handleEditStock = handleEditStock;
+        window.handleEditClient = handleEditClient;
         window.handleDeleteStock = handleDeleteStock;
         window.downloadFile = downloadFile;
     </script>
 </body>
-</html>
+    </html>
