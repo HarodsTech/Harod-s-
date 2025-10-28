@@ -79,6 +79,20 @@
             margin-bottom: 10px;
             position: relative;
             display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid white;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink 1s infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink {
+            0%, 50% { border-color: transparent }
+            51%, 100% { border-color: white }
         }
         
         .logo::after {
@@ -99,6 +113,171 @@
         .tagline {
             font-size: 1.2rem;
             opacity: 0.9;
+        }
+        
+        /* Fondo animado con partículas */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #f5f7fa, #e4e7ec);
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        /* Selector de temas */
+        .theme-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .theme-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .theme-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 10px;
+            min-width: 150px;
+        }
+        
+        .theme-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px 0;
+            transition: var(--transition);
+        }
+        
+        .theme-option:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        /* Widgets */
+        .widgets {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .weather-widget, .clock-widget {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 150px;
+        }
+        
+        .weather-widget i {
+            font-size: 1.5rem;
+            color: var(--warning);
+        }
+        
+        .clock-widget {
+            flex-direction: column;
+            text-align: center;
+            gap: 5px;
+        }
+        
+        #currentTime {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        #currentDate {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        /* Tarjetas de estadísticas */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
+        /* Reproductor de música */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
         }
         
         .login-section {
@@ -385,6 +564,23 @@
             background-color: #c0392b;
             transform: translateY(-2px);
             box-shadow: var(--shadow-hover);
+        }
+        
+        /* Efecto de neón para botones importantes */
+        .btn-neon {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            text-shadow: 0 0 5px currentColor;
+            box-shadow: 0 0 10px var(--secondary), inset 0 0 10px var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-neon:hover {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 0 20px var(--secondary), 0 0 40px var(--secondary);
+            transform: translateY(-2px);
         }
         
         .clients-list, .stock-list {
@@ -831,6 +1027,20 @@
                 width: 95%;
                 padding: 20px;
             }
+            
+            .widgets {
+                flex-direction: column;
+            }
+            
+            .theme-selector {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .music-player {
+                bottom: 10px;
+                left: 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -866,10 +1076,52 @@
             .stock-card {
                 padding: 15px;
             }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Fondo animado con partículas -->
+    <div class="animated-bg" id="animatedBg"></div>
+    
+    <!-- Selector de temas -->
+    <div class="theme-selector">
+        <button class="theme-btn" id="themeBtn">
+            <i class="fas fa-palette"></i>
+        </button>
+        <div class="theme-options" id="themeOptions">
+            <div class="theme-option" data-theme="default">Tema Azul</div>
+            <div class="theme-option" data-theme="dark">Tema Oscuro</div>
+            <div class="theme-option" data-theme="green">Tema Verde</div>
+            <div class="theme-option" data-theme="purple">Tema Púrpura</div>
+        </div>
+    </div>
+    
+    <!-- Reproductor de música -->
+    <div class="music-player">
+        <button id="musicToggle" class="btn btn-primary">
+            <i class="fas fa-music"></i>
+            <span>Música: OFF</span>
+        </button>
+        <audio id="backgroundMusic" loop>
+            <!-- En un entorno real, aquí iría la fuente del archivo de música -->
+        </audio>
+    </div>
+    
+    <!-- Elementos de audio para efectos de sonido -->
+    <audio id="clickSound" preload="auto">
+        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
+    </audio>
+    <audio id="successSound" preload="auto">
+        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
+    </audio>
+    <audio id="errorSound" preload="auto">
+        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
+    </audio>
+    
     <header>
         <div class="container">
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -894,6 +1146,40 @@
             <div class="dashboard-header">
                 <div class="welcome-message">Bienvenido a Harod's Tech</div>
                 <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
+            </div>
+            
+            <!-- Widgets -->
+            <div class="widgets">
+                <div class="weather-widget">
+                    <i class="fas fa-sun"></i>
+                    <div>
+                        <div id="temperature">--°C</div>
+                        <div id="location">Tegucigalpa</div>
+                    </div>
+                </div>
+                <div class="clock-widget">
+                    <div id="currentTime">--:--:--</div>
+                    <div id="currentDate">-- --- ----</div>
+                </div>
+            </div>
+            
+            <!-- Tarjetas de estadísticas -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-number" id="totalClients">0</div>
+                    <div class="stat-label">Clientes Activos</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-boxes"></i>
+                    <div class="stat-number" id="totalStock">0</div>
+                    <div class="stat-label">Cuentas en Stock</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-number" id="pendingPayments">0</div>
+                    <div class="stat-label">Pagos Pendientes</div>
+                </div>
             </div>
             
             <!-- Menú móvil -->
@@ -999,7 +1285,7 @@
                             <textarea id="clientNotes" rows="2" placeholder="Notas adicionales sobre el cliente..."></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary btn-neon">
                             <i class="fas fa-plus"></i> Agregar Cliente
                         </button>
                     </form>
@@ -1080,7 +1366,7 @@
                             <input type="text" id="profilesAvailable" placeholder="Ej: Perfil 1, Perfil 2, Perfil 3" required>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary btn-neon">
                             <i class="fas fa-plus"></i> Agregar Cuenta
                         </button>
                     </form>
@@ -1309,6 +1595,18 @@
         const editClientModal = document.getElementById('editClientModal');
         const editClientForm = document.getElementById('editClientForm');
         const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
+        
+        // Nuevos elementos para las mejoras
+        const themeBtn = document.getElementById('themeBtn');
+        const themeOptions = document.getElementById('themeOptions');
+        const animatedBg = document.getElementById('animatedBg');
+        const musicToggle = document.getElementById('musicToggle');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const currentTimeElement = document.getElementById('currentTime');
+        const currentDateElement = document.getElementById('currentDate');
+        const totalClientsElement = document.getElementById('totalClients');
+        const totalStockElement = document.getElementById('totalStock');
+        const pendingPaymentsElement = document.getElementById('pendingPayments');
 
         // Estado de la aplicación
         let clients = [];
@@ -1449,6 +1747,7 @@
                 
                 renderClients();
                 updateServiceOptions();
+                updateStats();
             } catch (error) {
                 showMessage('Error cargando clientes: ' + error.message, 'error');
                 clientsList.innerHTML = '<div class="error-message">Error al cargar los clientes</div>';
@@ -1478,6 +1777,7 @@
                 
                 if (success) {
                     showMessage('Cliente agregado exitosamente');
+                    playSound('successSound');
                     await loadClients();
                     return newClient;
                 } else {
@@ -1503,6 +1803,7 @@
                 const success = await saveClients();
                 if (success) {
                     showMessage('Cliente actualizado exitosamente');
+                    playSound('successSound');
                     await loadClients();
                     return clients[index];
                 } else {
@@ -1520,6 +1821,7 @@
                 
                 if (success) {
                     showMessage('Cliente eliminado exitosamente');
+                    playSound('successSound');
                     await loadClients();
                 } else {
                     throw new Error('Error guardando cambios');
@@ -1540,6 +1842,7 @@
                 
                 renderStock();
                 updateServiceOptions();
+                updateStats();
             } catch (error) {
                 showMessage('Error cargando stock: ' + error.message, 'error');
                 stockGrid.innerHTML = '<div class="error-message">Error al cargar el stock</div>';
@@ -1570,6 +1873,7 @@
                 
                 if (success) {
                     showMessage('Cuenta agregada exitosamente');
+                    playSound('successSound');
                     await loadStock();
                     return stock;
                 } else {
@@ -1595,6 +1899,7 @@
                 const success = await saveStock();
                 if (success) {
                     showMessage('Cuenta actualizada exitosamente');
+                    playSound('successSound');
                     await loadStock();
                     return stock[index];
                 } else {
@@ -1612,6 +1917,7 @@
                 
                 if (success) {
                     showMessage('Cuenta eliminada exitosamente');
+                    playSound('successSound');
                     await loadStock();
                 } else {
                     throw new Error('Error guardando cambios');
@@ -1637,6 +1943,7 @@
                 const success = await saveStock();
                 if (success) {
                     showMessage('Perfil asignado exitosamente');
+                    playSound('successSound');
                     await loadStock();
                 } else {
                     throw new Error('Error guardando cambios');
@@ -1918,6 +2225,7 @@
             
             FileSystem.downloadFile(filename, content, 'application/json');
             showMessage('Datos exportados exitosamente');
+            playSound('successSound');
         }
 
         function importData(file) {
@@ -1937,11 +2245,14 @@
                         loadStock();
                         
                         showMessage('Datos importados exitosamente');
+                        playSound('successSound');
                     } else {
                         showMessage('Archivo de respaldo inválido', 'error');
+                        playSound('errorSound');
                     }
                 } catch (error) {
                     showMessage('Error importando datos: ' + error.message, 'error');
+                    playSound('errorSound');
                 }
             };
             reader.readAsText(file);
@@ -1952,6 +2263,7 @@
             const filename = `clientes_respaldo_${new Date().toISOString().split('T')[0]}.json`;
             FileSystem.downloadFile(filename, content, 'application/json');
             showMessage('Clientes respaldados exitosamente');
+            playSound('successSound');
         }
 
         function backupStock() {
@@ -1959,6 +2271,7 @@
             const filename = `stock_respaldo_${new Date().toISOString().split('T')[0]}.json`;
             FileSystem.downloadFile(filename, content, 'application/json');
             showMessage('Stock respaldado exitosamente');
+            playSound('successSound');
         }
 
         function renderFileList() {
@@ -1995,6 +2308,7 @@
             const content = localStorage.getItem(filename);
             if (content) {
                 FileSystem.downloadFile(filename, content, 'application/json');
+                playSound('successSound');
             }
         }
 
@@ -2035,8 +2349,10 @@
                 window.open(whatsappUrl, '_blank');
                 
                 showMessage('Recordatorio enviado por WhatsApp');
+                playSound('successSound');
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         }
 
@@ -2051,6 +2367,7 @@
                 
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         }
 
@@ -2074,6 +2391,7 @@
                 
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         }
 
@@ -2097,6 +2415,7 @@
                 
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         }
 
@@ -2120,6 +2439,7 @@
                 await deleteStock(stockId);
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         }
 
@@ -2141,6 +2461,144 @@
             if (window.innerWidth <= 768) {
                 mobileTabsContainer.style.display = 'none';
             }
+        }
+
+        // Funciones para las nuevas mejoras
+        function initThemeSelector() {
+            const themes = {
+                'default': { 
+                    primary: '#2c3e50', 
+                    secondary: '#3498db',
+                    dark: '#34495e',
+                    light: '#ecf0f1'
+                },
+                'dark': { 
+                    primary: '#1a1a1a', 
+                    secondary: '#9b59b6',
+                    dark: '#ecf0f1',
+                    light: '#2c3e50'
+                },
+                'green': { 
+                    primary: '#27ae60', 
+                    secondary: '#2ecc71',
+                    dark: '#34495e',
+                    light: '#ecf0f1'
+                },
+                'purple': { 
+                    primary: '#8e44ad', 
+                    secondary: '#9b59b6',
+                    dark: '#34495e',
+                    light: '#ecf0f1'
+                }
+            };
+
+            const themeBtns = document.querySelectorAll('.theme-option');
+            themeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const theme = this.dataset.theme;
+                    applyTheme(themes[theme]);
+                    themeOptions.style.display = 'none';
+                });
+            });
+            
+            // Aplicar tema guardado si existe
+            const savedTheme = localStorage.getItem('harods_tech_theme');
+            if (savedTheme && themes[savedTheme]) {
+                applyTheme(themes[savedTheme]);
+            }
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--secondary', theme.secondary);
+            document.documentElement.style.setProperty('--dark', theme.dark);
+            document.documentElement.style.setProperty('--light', theme.light);
+            
+            // Guardar tema en localStorage
+            localStorage.setItem('harods_tech_theme', 
+                Object.keys(themes).find(key => 
+                    themes[key].primary === theme.primary && 
+                    themes[key].secondary === theme.secondary
+                ) || 'default'
+            );
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 100 + 50 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                animatedBg.appendChild(particle);
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+            currentTimeElement.textContent = now.toLocaleTimeString('es-HN');
+            currentDateElement.textContent = now.toLocaleDateString('es-HN', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function updateStats() {
+            totalClientsElement.textContent = clients.length;
+            totalStockElement.textContent = stock.length;
+            pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
+        }
+
+        function initMusicPlayer() {
+            musicToggle.addEventListener('click', function() {
+                if (backgroundMusic.paused) {
+                    // En un entorno real, aquí se cargaría la música
+                    // backgroundMusic.src = 'background-music.mp3';
+                    // backgroundMusic.play().catch(e => console.log('Error reproduciendo música:', e));
+                    this.innerHTML = '<i class="fas fa-music"></i> Música: ON';
+                    showMessage('Funcionalidad de música activada (en un entorno real se reproduciría música)');
+                } else {
+                    backgroundMusic.pause();
+                    this.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
+                }
+            });
+        }
+
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Audio error:', e));
+            }
+        }
+
+        function initDarkMode() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            if (prefersDark.matches && !localStorage.getItem('harods_tech_theme')) {
+                applyTheme({
+                    primary: '#1a1a1a',
+                    secondary: '#9b59b6',
+                    dark: '#ecf0f1',
+                    light: '#2c3e50'
+                });
+            }
+            
+            prefersDark.addListener((e) => {
+                if (e.matches && !localStorage.getItem('harods_tech_theme')) {
+                    applyTheme({
+                        primary: '#1a1a1a',
+                        secondary: '#9b59b6',
+                        dark: '#ecf0f1',
+                        light: '#2c3e50'
+                    });
+                }
+            });
         }
 
         // Inicialización
@@ -2168,6 +2626,20 @@
             loadClients();
             loadStock();
             renderFileList();
+            
+            // Inicializar nuevas funcionalidades
+            initThemeSelector();
+            createParticles();
+            setInterval(updateClock, 1000);
+            updateClock();
+            setInterval(updateStats, 5000);
+            initMusicPlayer();
+            initDarkMode();
+            
+            // Agregar efectos de sonido a botones importantes
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => playSound('clickSound'));
+            });
         });
 
         // Event Listeners
@@ -2177,8 +2649,10 @@
                 loginSection.style.display = 'none';
                 dashboard.style.display = 'block';
                 showMessage('Sesión iniciada correctamente');
+                playSound('successSound');
             } else {
                 showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
+                playSound('errorSound');
                 passwordInput.value = '';
             }
         });
@@ -2189,6 +2663,7 @@
             loginSection.style.display = 'block';
             passwordInput.value = '';
             showMessage('Sesión cerrada correctamente');
+            playSound('successSound');
         });
 
         tabs.forEach(tab => {
@@ -2213,6 +2688,21 @@
             }
         });
 
+        themeBtn.addEventListener('click', function() {
+            if (themeOptions.style.display === 'block') {
+                themeOptions.style.display = 'none';
+            } else {
+                themeOptions.style.display = 'block';
+            }
+        });
+
+        // Cerrar selector de temas al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!themeBtn.contains(e.target) && !themeOptions.contains(e.target)) {
+                themeOptions.style.display = 'none';
+            }
+        });
+
         addClientForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -2221,6 +2711,7 @@
             
             if (!stockItem) {
                 showMessage('Por favor selecciona una cuenta válida', 'error');
+                playSound('errorSound');
                 return;
             }
             
@@ -2253,6 +2744,7 @@
                 
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         });
 
@@ -2275,6 +2767,7 @@
                 addStockForm.reset();
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         });
 
@@ -2298,6 +2791,7 @@
                 closeEditStockModal();
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         });
 
@@ -2309,6 +2803,7 @@
             
             if (!stockItem) {
                 showMessage('Por favor selecciona una cuenta válida', 'error');
+                playSound('errorSound');
                 return;
             }
             
@@ -2331,6 +2826,7 @@
                 closeEditClientModal();
             } catch (error) {
                 showMessage(error.message, 'error');
+                playSound('errorSound');
             }
         });
 
