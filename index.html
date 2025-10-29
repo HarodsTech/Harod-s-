@@ -2603,24 +2603,83 @@
             pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
         }
 
-function initSimpleSpotify() {
+function initSpotifyPlayer() {
     const spotifyToggle = document.getElementById('spotifyToggle');
     const spotifyStatus = document.getElementById('spotifyStatus');
-    const spotifyWidget = document.getElementById('spotifyWidget');
+    const spotifyPlayer = document.getElementById('spotifyPlayer');
+    const spotifyEmbed = document.getElementById('spotifyEmbed');
+    const playPause = document.getElementById('playPause');
+    const prevTrack = document.getElementById('prevTrack');
+    const nextTrack = document.getElementById('nextTrack');
+
+    // Lista de playlists o canciones de Spotify (puedes cambiar estos IDs por los tuyos)
+    const spotifyPlaylists = [
+        '37i9dQZF1DXcBWIGoYBM5M', // Today's Top Hits
+        '37i9dQZEVXbMDoHDwVN2tF', // Top 50 Global
+        '37i9dQZF1EIgG2NEOhqsD7', // Relaxing Music
+        '4cOdK2wGLETKBW3PvgPWqT'  // Canción específica
+    ];
+
+    let currentPlaylistIndex = 0;
+    let isPlaying = false;
 
     spotifyToggle.addEventListener('click', function() {
-        if (spotifyWidget.style.display === 'none') {
-            spotifyWidget.style.display = 'block';
-            spotifyStatus.textContent = 'Mi Música: ON';
-            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Mi Música: ON';
-            showMessage('Reproductor de música activado 🎵');
+        if (spotifyPlayer.style.display === 'none') {
+            // Mostrar el reproductor de Spotify
+            spotifyPlayer.style.display = 'block';
+            spotifyStatus.textContent = 'Spotify: ON';
+            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Spotify: ON';
+            
+            // Cargar la primera playlist
+            loadSpotifyPlaylist(spotifyPlaylists[currentPlaylistIndex]);
+            showMessage('Reproductor de Spotify activado 🎵');
         } else {
-            spotifyWidget.style.display = 'none';
-            spotifyStatus.textContent = 'Mi Música: OFF';
-            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Mi Música: OFF';
-            showMessage('Reproductor de música desactivado');
+            // Ocultar el reproductor
+            spotifyPlayer.style.display = 'none';
+            spotifyStatus.textContent = 'Spotify: OFF';
+            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Spotify: OFF';
+            showMessage('Reproductor de Spotify desactivado');
         }
     });
+
+    function loadSpotifyPlaylist(uri) {
+        // Determinar si es playlist o canción
+        const isPlaylist = uri.length > 20; // Los IDs de playlists son más largos
+        const embedUrl = isPlaylist 
+            ? `https://open.spotify.com/embed/playlist/${uri}`
+            : `https://open.spotify.com/embed/track/${uri}`;
+        
+        spotifyEmbed.src = embedUrl;
+        isPlaying = true;
+        updatePlayPauseButton();
+    }
+
+    function updatePlayPauseButton() {
+        playPause.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+    }
+
+    playPause.addEventListener('click', function() {
+        // Nota: No podemos controlar directamente el iframe de Spotify por políticas de seguridad
+        // Esto es principalmente visual
+        isPlaying = !isPlaying;
+        updatePlayPauseButton();
+        showMessage(isPlaying ? 'Reproduciendo' : 'Pausado');
+    });
+
+    prevTrack.addEventListener('click', function() {
+        currentPlaylistIndex = (currentPlaylistIndex - 1 + spotifyPlaylists.length) % spotifyPlaylists.length;
+        loadSpotifyPlaylist(spotifyPlaylists[currentPlaylistIndex]);
+        showMessage('Canción anterior');
+    });
+
+    nextTrack.addEventListener('click', function() {
+        currentPlaylistIndex = (currentPlaylistIndex + 1) % spotifyPlaylists.length;
+        loadSpotifyPlaylist(spotifyPlaylists[currentPlaylistIndex]);
+        showMessage('Siguiente canción');
+    });
+
+    // Cargar playlist inicial
+    loadSpotifyPlaylist(spotifyPlaylists[currentPlaylistIndex]);
 }
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
@@ -2686,7 +2745,7 @@ function initSimpleSpotify() {
             setInterval(updateClock, 1000);
             updateClock();
             setInterval(updateStats, 5000);
-            initMusicPlayer();
+initSpotifyPlayer();
             initDarkMode();
             
             // Agregar efectos de sonido a botones importantes
