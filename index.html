@@ -2012,21 +2012,30 @@ let isMobileMenuOpen = false;
         }
 
         function formatPhoneNumber(phone) {
-            // Si el número ya tiene el prefijo, lo mantenemos
-            if (phone.startsWith('+504')) {
-                return phone;
-            }
-            // Si solo tiene los 8 dígitos, agregamos el prefijo
-            if (phone.length === 8 && /^\d+$/.test(phone)) {
-                return `+504${phone}`;
-            }
-            return phone;
-        }
+
+    if (!phone) {
+        return '+504';
+    }
+    
+    if (phone.startsWith('+504')) {
+        return phone;
+    }
+   
+    if (phone.length === 8 && /^\d+$/.test(phone)) {
+        return `+504${phone}`;
+    }
+    return phone;
+}
 
         function getPhoneWithoutPrefix(phone) {
-            // Remover el prefijo +504 si está presente
-            return phone.replace(/^\+504/, '');
-        }
+ 
+    if (!phone) {
+        return '';
+    }
+    
+    // Remover el prefijo +504 si está presente
+    return phone.replace(/^\+504/, '');
+}
 
         // Sistema de Archivos (simulado con localStorage)
         class FileSystem {
@@ -2150,36 +2159,36 @@ let isMobileMenuOpen = false;
         }
 
         async function updateClient(clientId, clientData) {
-            try {
-                const index = clients.findIndex(c => c.id === clientId);
-                if (index === -1) throw new Error('Cliente no encontrado');
-                
-                // Verificar si el teléfono ya existe en otro cliente
-                const existingClient = clients.find(c => c.id !== clientId && c.phone === formatPhoneNumber(clientData.phone));
-                if (existingClient) {
-                    throw new Error('Ya existe otro cliente con este número de teléfono');
-                }
-                
-                clients[index] = {
-                    ...clients[index],
-                    ...clientData,
-                    phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
-                    updatedAt: new Date().toISOString()
-                };
-                
-                const success = await saveClients();
-                if (success) {
-                    showMessage('Cliente actualizado exitosamente');
-                    playSound('successSound');
-                    await loadClients();
-                    return clients[index];
-                } else {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error actualizando cliente: ' + error.message);
-            }
+    try {
+        const index = clients.findIndex(c => c.id === clientId);
+        if (index === -1) throw new Error('Cliente no encontrado');
+        
+        // Verificar si el teléfono ya existe en otro cliente
+        const existingClient = clients.find(c => c.id !== clientId && c.phone === formatPhoneNumber(clientData.phone));
+        if (existingClient) {
+            throw new Error('Ya existe otro cliente con este número de teléfono');
         }
+        
+        clients[index] = {
+            ...clients[index],
+            ...clientData,
+            phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
+            updatedAt: new Date().toISOString()
+        };
+        
+        const success = await saveClients();
+        if (success) {
+            showMessage('Cliente actualizado exitosamente');
+            playSound('successSound');
+            await loadClients();
+            return clients[index];
+        } else {
+            throw new Error('Error guardando cambios');
+        }
+    } catch (error) {
+        throw new Error('Error actualizando cliente: ' + error.message);
+    }
+}
 
         async function deleteClient(clientId) {
             try {
@@ -3085,20 +3094,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        async function handleMarkAsPaid(clientId) {
-            try {
-                await updateClient(clientId, { status: 'paid' });
-                
-                const client = clients.find(c => c.id === clientId);
-                const message = `Hola ${client.name}, hemos registrado tu pago para ${client.service}. ¡Gracias! - Harod's Tech`;
-                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-                
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
+       async function handleMarkAsPaid(clientId) {
+    try {
+        // Solo actualizar el estado a 'paid', mantener los demás datos intactos
+        const client = clients.find(c => c.id === clientId);
+        if (!client) {
+            throw new Error('Cliente no encontrado');
         }
+        
+        await updateClient(clientId, { 
+            ...client, // Mantener todos los datos existentes
+            status: 'paid' // Solo cambiar el estado
+        });
+        
+        const message = `Hola ${client.name}, hemos registrado tu pago para ${client.service}. ¡Gracias! - Harod's Tech`;
+        const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+        
+    } catch (error) {
+        showMessage(error.message, 'error');
+        playSound('errorSound');
+    }
+}
 
         async function handleCancelSubscription(clientId) {
             const client = clients.find(c => c.id === clientId);
