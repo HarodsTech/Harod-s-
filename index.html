@@ -1101,12 +1101,12 @@
     </div>
     
     <!-- Reproductor de música -->
-    <div class="music-player">
-        <button id="musicToggle" class="btn btn-primary">
-            <i class="fas fa-music"></i>
-            <span>Música: OFF</span>
-        </button>
-        <audio id="backgroundMusic" loop>
+<div class="music-player">
+    <button id="musicToggle" class="btn btn-primary">
+        <i class="fas fa-music"></i>
+        <span id="musicStatus">Música: OFF</span>
+    </button>
+    <audio id="backgroundMusic" loop>
             <source src="sounds/background.mp3" type="audio/mpeg">
         </audio>
     </div>
@@ -2555,19 +2555,64 @@
         }
 
         function initMusicPlayer() {
-            musicToggle.addEventListener('click', function() {
-                if (backgroundMusic.paused) {
-                    // En un entorno real, aquí se cargaría la música
-                    // backgroundMusic.src = 'background-music.mp3';
-                    // backgroundMusic.play().catch(e => console.log('Error reproduciendo música:', e));
-                    this.innerHTML = '<i class="fas fa-music"></i> Música: ON';
-                    showMessage('Funcionalidad de música activada (en un entorno real se reproduciría música)');
-                } else {
-                    backgroundMusic.pause();
-                    this.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
-                }
+    const musicToggle = document.getElementById('musicToggle');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const musicStatus = document.getElementById('musicStatus');
+    
+    // Crear un elemento de audio con una fuente de música online de ejemplo
+    // Esta es una música libre de derechos para pruebas
+    const audioSource = document.createElement('source');
+    audioSource.src = 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3';
+    audioSource.type = 'audio/mpeg';
+    backgroundMusic.appendChild(audioSource);
+    
+    musicToggle.addEventListener('click', function() {
+        if (backgroundMusic.paused) {
+            // Intentar reproducir la música
+            backgroundMusic.play().then(() => {
+                musicStatus.textContent = 'Música: ON';
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Música: ON';
+                showMessage('Música activada');
+            }).catch(error => {
+                console.log('Error reproduciendo música:', error);
+                showMessage('No se pudo reproducir la música. Haz clic en la página primero.', 'error');
+                
+                // Solicitar interacción del usuario
+                document.body.addEventListener('click', function enableMusic() {
+                    backgroundMusic.play().then(() => {
+                        musicStatus.textContent = 'Música: ON';
+                        musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Música: ON';
+                        showMessage('Música activada');
+                    }).catch(e => {
+                        showMessage('Error al reproducir música: ' + e.message, 'error');
+                    });
+                    document.body.removeEventListener('click', enableMusic);
+                }, { once: true });
             });
+        } else {
+            backgroundMusic.pause();
+            musicStatus.textContent = 'Música: OFF';
+            musicToggle.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
+            showMessage('Música pausada');
         }
+    });
+    
+    // Control de volumen
+    backgroundMusic.volume = 0.3; // 30% de volumen para que no sea molesto
+    
+    // Manejar errores de audio
+    backgroundMusic.addEventListener('error', function(e) {
+        console.error('Error de audio:', e);
+        showMessage('Error cargando la música', 'error');
+    });
+    
+    // Actualizar estado cuando la música termine
+    backgroundMusic.addEventListener('ended', function() {
+        // Como está en loop, normalmente no debería terminar
+        musicStatus.textContent = 'Música: OFF';
+        musicToggle.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
+    });
+}
 
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
