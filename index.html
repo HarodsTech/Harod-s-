@@ -852,7 +852,55 @@
             align-items: center;
             animation: fadeIn 0.3s;
         }
+.music-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(29, 185, 84, 0.2);
+}
 
+.music-player .btn {
+    background: linear-gradient(135deg, #1db954, #1ed760);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.music-player .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+    background: linear-gradient(135deg, #1ed760, #1db954);
+}
+
+.spotify-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.spotify-controls .btn-sm {
+    padding: 8px 12px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efecto cuando Spotify está activo */
+.spotify-active .music-player {
+    border-color: #1db954;
+    box-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
         .edit-stock-content, .edit-client-content {
             background-color: white;
             padding: 30px;
@@ -1101,26 +1149,27 @@
     </div>
     
     <!-- Reproductor de música -->
+<!-- Reproductor de Spotify -->
 <div class="music-player">
-    <button id="musicToggle" class="btn btn-primary">
-        <i class="fas fa-music"></i>
-        <span id="musicStatus">Música: OFF</span>
+    <button id="spotifyToggle" class="btn btn-primary">
+        <i class="fab fa-spotify"></i>
+        <span id="spotifyStatus">Spotify: OFF</span>
     </button>
-    <audio id="backgroundMusic" loop>
-            <source src="sounds/background.mp3" type="audio/mpeg">
-        </audio>
+    <div id="spotifyPlayer" style="display: none; margin-top: 10px;">
+        <iframe id="spotifyEmbed" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+        <div class="spotify-controls" style="margin-top: 10px;">
+            <button id="prevTrack" class="btn btn-warning btn-sm">
+                <i class="fas fa-backward"></i>
+            </button>
+            <button id="playPause" class="btn btn-success btn-sm">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="nextTrack" class="btn btn-warning btn-sm">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
     </div>
-    
-    <!-- Elementos de audio para efectos de sonido -->
-<audio id="clickSound" src="sounds/click.mp3" preload="auto"></audio>
-        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
-    </audio>
-<audio id="successSound" src="sounds/success.mp3" preload="auto"></audio>
-        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
-    </audio>
-<audio id="errorSound" src="sounds/error.mp3" preload="auto"></audio>
-        <!-- En un entorno real, aquí iría la fuente del archivo de sonido -->
-    </audio>
+</div>
     
     <header>
         <div class="container">
@@ -2554,66 +2603,25 @@
             pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
         }
 
-        function initMusicPlayer() {
-    const musicToggle = document.getElementById('musicToggle');
-    const backgroundMusic = document.getElementById('backgroundMusic');
-    const musicStatus = document.getElementById('musicStatus');
-    
-    // Crear un elemento de audio con una fuente de música online de ejemplo
-    // Esta es una música libre de derechos para pruebas
-    const audioSource = document.createElement('source');
-    audioSource.src = 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3';
-    audioSource.type = 'audio/mpeg';
-    backgroundMusic.appendChild(audioSource);
-    
-    musicToggle.addEventListener('click', function() {
-        if (backgroundMusic.paused) {
-            // Intentar reproducir la música
-            backgroundMusic.play().then(() => {
-                musicStatus.textContent = 'Música: ON';
-                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Música: ON';
-                showMessage('Música activada');
-            }).catch(error => {
-                console.log('Error reproduciendo música:', error);
-                showMessage('No se pudo reproducir la música. Haz clic en la página primero.', 'error');
-                
-                // Solicitar interacción del usuario
-                document.body.addEventListener('click', function enableMusic() {
-                    backgroundMusic.play().then(() => {
-                        musicStatus.textContent = 'Música: ON';
-                        musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Música: ON';
-                        showMessage('Música activada');
-                    }).catch(e => {
-                        showMessage('Error al reproducir música: ' + e.message, 'error');
-                    });
-                    document.body.removeEventListener('click', enableMusic);
-                }, { once: true });
-            });
+function initSimpleSpotify() {
+    const spotifyToggle = document.getElementById('spotifyToggle');
+    const spotifyStatus = document.getElementById('spotifyStatus');
+    const spotifyWidget = document.getElementById('spotifyWidget');
+
+    spotifyToggle.addEventListener('click', function() {
+        if (spotifyWidget.style.display === 'none') {
+            spotifyWidget.style.display = 'block';
+            spotifyStatus.textContent = 'Mi Música: ON';
+            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Mi Música: ON';
+            showMessage('Reproductor de música activado 🎵');
         } else {
-            backgroundMusic.pause();
-            musicStatus.textContent = 'Música: OFF';
-            musicToggle.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
-            showMessage('Música pausada');
+            spotifyWidget.style.display = 'none';
+            spotifyStatus.textContent = 'Mi Música: OFF';
+            spotifyToggle.innerHTML = '<i class="fab fa-spotify"></i> Mi Música: OFF';
+            showMessage('Reproductor de música desactivado');
         }
     });
-    
-    // Control de volumen
-    backgroundMusic.volume = 0.3; // 30% de volumen para que no sea molesto
-    
-    // Manejar errores de audio
-    backgroundMusic.addEventListener('error', function(e) {
-        console.error('Error de audio:', e);
-        showMessage('Error cargando la música', 'error');
-    });
-    
-    // Actualizar estado cuando la música termine
-    backgroundMusic.addEventListener('ended', function() {
-        // Como está en loop, normalmente no debería terminar
-        musicStatus.textContent = 'Música: OFF';
-        musicToggle.innerHTML = '<i class="fas fa-music"></i> Música: OFF';
-    });
 }
-
         function playSound(soundId) {
             const sound = document.getElementById(soundId);
             if (sound) {
