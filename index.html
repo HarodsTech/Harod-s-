@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Configuración básica y charset -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harod's Tech - Gestión Completa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Meta información esencial -->
+    <title>Harod's Tech - Gestión de Clientes y Stock</title>
+    <meta name="description" content="Sistema de gestión integral para administrar clientes y stock de servicios streaming. Harod's Tech ofrece control completo de cuentas Netflix, Disney+, HBO Max y más.">
+    <meta name="keywords" content="gestión clientes, stock streaming, netflix, disney plus, hbo max, prime video, crunchyroll, spotify, administración cuentas">
+    <meta name="author" content="Harod's Tech">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Meta tags para redes sociales -->
+    <meta property="og:title" content="Harod's Tech - Gestión Completa">
+    <meta property="og:description" content="Sistema profesional para gestión de clientes y stock de servicios streaming">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://harodtech.netlify.app">
+    <meta property="og:image" content="https://harodtech.netlify.app/icon-192x192.png">
+    <meta property="og:site_name" content="Harod's Tech">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Harod's Tech - Gestión Completa">
+    <meta name="twitter:description" content="Sistema profesional para gestión de clientes y stock de servicios streaming">
+    <meta name="twitter:image" content="https://harodtech.netlify.app/icon-192x192.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#bb86fc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Harod's Tech">
+    
+    <!-- Iconos para PWA -->
+    <link rel="icon" type="image/png" href="icon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="icon-64x64.png" sizes="64x64">
+    <link rel="icon" type="image/png" href="icon-128x128.png" sizes="128x128">
+    <link rel="icon" type="image/png" href="icon-256x256.png" sizes="256x256">
+    <link rel="apple-touch-icon" href="icon-180x180.png">
+    
+    <!-- Safari pinned tab -->
+    <link rel="mask-icon" href="icon.svg" color="#bb86fc">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#121212">
+    <meta name="msapplication-TileImage" content="icon-144x144.png">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- Preconnects para mejor performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <!-- CSS y Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+        <style>
 :root {
     --primary: #bb86fc;
     --secondary: #03dac6;
