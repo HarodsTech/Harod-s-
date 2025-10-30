@@ -1264,6 +1264,61 @@ header::before {
         margin: 10px;
     }
 }
+/* Menú móvil */
+.mobile-menu-btn {
+    display: none;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    font-size: 1.5rem;
+    color: var(--bg-primary);
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    transition: var(--transition);
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.mobile-menu-btn:hover {
+    transform: scale(1.1);
+}
+
+.mobile-tabs {
+    display: none;
+    flex-direction: column;
+    background: var(--bg-card);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+.mobile-tabs.show {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .mobile-tabs {
+        display: none;
+    }
+    
+    .tabs {
+        display: none;
+    }
+}
 </style>
 </head>
 <body>
@@ -1739,1911 +1794,1141 @@ header::before {
         </div>
     </div>
 
-    <script>
-        // Configuración
-        const ACCESS_PASSWORD = "HarodTech2023";
-        const SESSION_KEY = "harods_tech_session";
-        const DATA_FILES = {
-            clients: 'harods_tech_clientes',
-            stock: 'harods_tech_stock'
-        };
+   <script>
+    // Configuración
+    const ACCESS_PASSWORD = "HarodTech2023";
+    const SESSION_KEY = "harods_tech_session";
+    const DATA_FILES = {
+        clients: 'harods_tech_clientes',
+        stock: 'harods_tech_stock'
+    };
 
-        // Elementos del DOM
-        const loginSection = document.getElementById('loginSection');
-        const dashboard = document.getElementById('dashboard');
-        const loginBtn = document.getElementById('loginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const passwordInput = document.getElementById('password');
-        const tabs = document.querySelectorAll('.tab');
- 
-        const tabContents = document.querySelectorAll('.tab-content');
-        const clientsList = document.getElementById('clientsList');
-        const addClientForm = document.getElementById('addClientForm');
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const stockGrid = document.getElementById('stockGrid');
-        const addStockForm = document.getElementById('addStockForm');
-        const stockSearchInput = document.getElementById('stockSearchInput');
-        const stockSearchBtn = document.getElementById('stockSearchBtn');
-        const refreshClientsBtn = document.getElementById('refreshClientsBtn');
-        const refreshStockBtn = document.getElementById('refreshStockBtn');
-        const serviceTypeSelect = document.getElementById('serviceType');
-        const profileAssignedSelect = document.getElementById('profileAssigned');
-        const messageContainer = document.getElementById('messageContainer');
-        const exportDataBtn = document.getElementById('exportDataBtn');
-        const importDataBtn = document.getElementById('importDataBtn');
-        const importFile = document.getElementById('importFile');
-        const backupClientsBtn = document.getElementById('backupClientsBtn');
-        const backupStockBtn = document.getElementById('backupStockBtn');
-        const fileList = document.getElementById('fileList');
-        
-        // Elementos del modal de edición
-        const editStockModal = document.getElementById('editStockModal');
-        const editStockForm = document.getElementById('editStockForm');
-        const closeModalBtn = document.querySelectorAll('.close-modal');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-
-        // Elementos del modal de edición de cliente
-        const editClientModal = document.getElementById('editClientModal');
-        const editClientForm = document.getElementById('editClientForm');
-        const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
-        
-        // Nuevos elementos para las mejoras
-        const themeBtn = document.getElementById('themeBtn');
-        const themeOptions = document.getElementById('themeOptions');
-        const animatedBg = document.getElementById('animatedBg');
-        const musicToggle = document.getElementById('musicToggle');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const musicStatus = document.getElementById('musicStatus');
-        const musicIcon = document.getElementById('musicIcon');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const currentTimeElement = document.getElementById('currentTime');
-        const currentDateElement = document.getElementById('currentDate');
-        const totalClientsElement = document.getElementById('totalClients');
-        const totalStockElement = document.getElementById('totalStock');
-        const pendingPaymentsElement = document.getElementById('pendingPayments');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileTabsContainer = document.getElementById('mobileTabs');
-const mobileTabs = document.querySelectorAll('.mobile-tab');
-
-        // Estado de la aplicación
-        let clients = [];
-        let stock = [];
-        let currentEditingStock = null;
-        let currentEditingClient = null;
-        let originalClients = [];
-        let originalStock = [];
-        let isMusicPlaying = false;
-let isMobileMenuOpen = false;
-        // Sistema de Sesión
-        class SessionManager {
-            static isLoggedIn() {
-                return localStorage.getItem(SESSION_KEY) === 'true';
-            }
-
-            static login() {
-                localStorage.setItem(SESSION_KEY, 'true');
-            }
-
-            static logout() {
-                localStorage.removeItem(SESSION_KEY);
-            }
-        }
-
-        // Utilidades
-        function showMessage(message, type = 'success') {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
-            messageDiv.innerHTML = `
-                <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
-                ${message}
-            `;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageDiv);
-            
-            setTimeout(() => {
-                messageDiv.remove();
-            }, 5000);
-        }
-
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('es-ES', options);
-        }
-
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-
-        function formatPhoneNumber(phone) {
-
-    if (!phone) {
-        return '+504';
-    }
+    // Elementos del DOM
+    const loginSection = document.getElementById('loginSection');
+    const dashboard = document.getElementById('dashboard');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const passwordInput = document.getElementById('password');
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const clientsList = document.getElementById('clientsList');
+    const addClientForm = document.getElementById('addClientForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const stockGrid = document.getElementById('stockGrid');
+    const addStockForm = document.getElementById('addStockForm');
+    const stockSearchInput = document.getElementById('stockSearchInput');
+    const stockSearchBtn = document.getElementById('stockSearchBtn');
+    const refreshClientsBtn = document.getElementById('refreshClientsBtn');
+    const refreshStockBtn = document.getElementById('refreshStockBtn');
+    const serviceTypeSelect = document.getElementById('serviceType');
+    const profileAssignedSelect = document.getElementById('profileAssigned');
+    const messageContainer = document.getElementById('messageContainer');
+    const exportDataBtn = document.getElementById('exportDataBtn');
+    const importDataBtn = document.getElementById('importDataBtn');
+    const importFile = document.getElementById('importFile');
+    const backupClientsBtn = document.getElementById('backupClientsBtn');
+    const backupStockBtn = document.getElementById('backupStockBtn');
+    const fileList = document.getElementById('fileList');
     
-    if (phone.startsWith('+504')) {
+    // Elementos del modal de edición
+    const editStockModal = document.getElementById('editStockModal');
+    const editStockForm = document.getElementById('editStockForm');
+    const closeModalBtn = document.querySelectorAll('.close-modal');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+    // Elementos del modal de edición de cliente
+    const editClientModal = document.getElementById('editClientModal');
+    const editClientForm = document.getElementById('editClientForm');
+    const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
+    
+    // Nuevos elementos para las mejoras
+    const themeBtn = document.getElementById('themeBtn');
+    const themeOptions = document.getElementById('themeOptions');
+    const animatedBg = document.getElementById('animatedBg');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileTabsContainer = document.getElementById('mobileTabs');
+    const mobileTabs = document.querySelectorAll('.mobile-tab');
+    const currentTimeElement = document.getElementById('currentTime');
+    const currentDateElement = document.getElementById('currentDate');
+    const totalClientsElement = document.getElementById('totalClients');
+    const totalStockElement = document.getElementById('totalStock');
+    const pendingPaymentsElement = document.getElementById('pendingPayments');
+
+    // Estado de la aplicación
+    let clients = [];
+    let stock = [];
+    let currentEditingStock = null;
+    let currentEditingClient = null;
+    let originalClients = [];
+    let originalStock = [];
+    let isMobileMenuOpen = false;
+
+    // Sistema de Sesión
+    class SessionManager {
+        static isLoggedIn() {
+            return localStorage.getItem(SESSION_KEY) === 'true';
+        }
+
+        static login() {
+            localStorage.setItem(SESSION_KEY, 'true');
+        }
+
+        static logout() {
+            localStorage.removeItem(SESSION_KEY);
+        }
+    }
+
+    // Utilidades
+    function showMessage(message, type = 'success') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+        messageDiv.innerHTML = `
+            <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+            ${message}
+        `;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+    }
+
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('es-ES', options);
+    }
+
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function formatPhoneNumber(phone) {
+        if (!phone) {
+            return '+504';
+        }
+        
+        if (phone.startsWith('+504')) {
+            return phone;
+        }
+        
+        if (phone.length === 8 && /^\d+$/.test(phone)) {
+            return `+504${phone}`;
+        }
         return phone;
     }
-   
-    if (phone.length === 8 && /^\d+$/.test(phone)) {
-        return `+504${phone}`;
+
+    function getPhoneWithoutPrefix(phone) {
+        if (!phone) {
+            return '';
+        }
+        
+        return phone.replace(/^\+504/, '');
     }
-    return phone;
-}
 
-        function getPhoneWithoutPrefix(phone) {
- 
-    if (!phone) {
-        return '';
-    }
-    
-    // Remover el prefijo +504 si está presente
-    return phone.replace(/^\+504/, '');
-}
-
-        // Sistema de Archivos (simulado con localStorage)
-        class FileSystem {
-            static saveToFile(filename, data) {
-                try {
-                    const fileData = {
-                        content: data,
-                        timestamp: new Date().toISOString(),
-                        size: JSON.stringify(data).length
-                    };
-                    localStorage.setItem(filename, JSON.stringify(fileData));
-                    return true;
-                } catch (error) {
-                    console.error('Error guardando archivo:', error);
-                    return false;
-                }
+    // Sistema de Archivos (simulado con localStorage)
+    class FileSystem {
+        static saveToFile(filename, data) {
+            try {
+                const fileData = {
+                    content: data,
+                    timestamp: new Date().toISOString(),
+                    size: JSON.stringify(data).length
+                };
+                localStorage.setItem(filename, JSON.stringify(fileData));
+                return true;
+            } catch (error) {
+                console.error('Error guardando archivo:', error);
+                return false;
             }
+        }
 
-            static loadFromFile(filename) {
-                try {
-                    const fileData = localStorage.getItem(filename);
-                    if (!fileData) return null;
-                    
-                    const parsed = JSON.parse(fileData);
-                    return parsed.content;
-                } catch (error) {
-                    console.error('Error cargando archivo:', error);
-                    return null;
-                }
+        static loadFromFile(filename) {
+            try {
+                const fileData = localStorage.getItem(filename);
+                if (!fileData) return null;
+                
+                const parsed = JSON.parse(fileData);
+                return parsed.content;
+            } catch (error) {
+                console.error('Error cargando archivo:', error);
+                return null;
             }
+        }
 
-            static downloadFile(filename, content, type = 'text/plain') {
-                const blob = new Blob([content], { type });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
+        static downloadFile(filename, content, type = 'text/plain') {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
 
-            static listFiles() {
-                const files = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('harods_tech_')) {
-                        try {
-                            const fileData = JSON.parse(localStorage.getItem(key));
-                            files.push({
-                                name: key,
-                                timestamp: fileData.timestamp,
-                                size: fileData.size
-                            });
-                        } catch (e) {
-                            // Ignorar elementos que no son archivos válidos
-                        }
+        static listFiles() {
+            const files = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('harods_tech_')) {
+                    try {
+                        const fileData = JSON.parse(localStorage.getItem(key));
+                        files.push({
+                            name: key,
+                            timestamp: fileData.timestamp,
+                            size: fileData.size
+                        });
+                    } catch (e) {
+                        // Ignorar elementos que no son archivos válidos
                     }
                 }
-                return files.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             }
+            return files.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
-
-        // Funciones para Clientes
-        async function loadClients() {
-            try {
-                clientsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando clientes...</div>';
-                
-                const data = FileSystem.loadFromFile(DATA_FILES.clients);
-                clients = data || [];
-                originalClients = [...clients];
-                
-                renderClients();
-                updateServiceOptions();
-                updateStats();
-            } catch (error) {
-                showMessage('Error cargando clientes: ' + error.message, 'error');
-                clientsList.innerHTML = '<div class="error-message">Error al cargar los clientes</div>';
-            }
-        }
-
-        async function saveClients() {
-            const success = FileSystem.saveToFile(DATA_FILES.clients, clients);
-            if (!success) {
-                showMessage('Error guardando clientes', 'error');
-            }
-            return success;
-        }
-
-        async function addClient(clientData) {
-            try {
-                // Verificar si ya existe un cliente con el mismo teléfono
-                const existingClient = clients.find(c => c.phone === formatPhoneNumber(clientData.phone));
-                if (existingClient) {
-                    throw new Error('Ya existe un cliente con este número de teléfono');
-                }
-
-                const newClient = {
-                    id: generateId(),
-                    ...clientData,
-                    phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                };
-                
-                clients.push(newClient);
-                const success = await saveClients();
-                
-                if (success) {
-                    showMessage('Cliente agregado exitosamente');
-                    playSound('successSound');
-                    await loadClients();
-                    return newClient;
-                } else {
-                    throw new Error('Error guardando cliente');
-                }
-            } catch (error) {
-                throw new Error('Error agregando cliente: ' + error.message);
-            }
-        }
-
-        async function updateClient(clientId, clientData) {
-    try {
-        const index = clients.findIndex(c => c.id === clientId);
-        if (index === -1) throw new Error('Cliente no encontrado');
-        
-        // Verificar si el teléfono ya existe en otro cliente
-        const existingClient = clients.find(c => c.id !== clientId && c.phone === formatPhoneNumber(clientData.phone));
-        if (existingClient) {
-            throw new Error('Ya existe otro cliente con este número de teléfono');
-        }
-        
-        clients[index] = {
-            ...clients[index],
-            ...clientData,
-            phone: formatPhoneNumber(clientData.phone), // Formatear teléfono
-            updatedAt: new Date().toISOString()
-        };
-        
-        const success = await saveClients();
-        if (success) {
-            showMessage('Cliente actualizado exitosamente');
-            playSound('successSound');
-            await loadClients();
-            return clients[index];
-        } else {
-            throw new Error('Error guardando cambios');
-        }
-    } catch (error) {
-        throw new Error('Error actualizando cliente: ' + error.message);
     }
-}
 
-        async function deleteClient(clientId) {
-            try {
-                clients = clients.filter(c => c.id !== clientId);
-                const success = await saveClients();
-                
-                if (success) {
-                    showMessage('Cliente eliminado exitosamente');
-                    playSound('successSound');
-                    await loadClients();
-                } else {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error eliminando cliente: ' + error.message);
-            }
-        }
-
-        // Funciones para Stock
-        async function loadStock() {
-            try {
-                stockGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando stock...</div>';
-                
-                const data = FileSystem.loadFromFile(DATA_FILES.stock);
-                stock = data || [];
-                originalStock = [...stock];
-                
-                renderStock();
-                updateServiceOptions();
-                updateStats();
-            } catch (error) {
-                showMessage('Error cargando stock: ' + error.message, 'error');
-                stockGrid.innerHTML = '<div class="error-message">Error al cargar el stock</div>';
-            }
-        }
-
-        async function saveStock() {
-            const success = FileSystem.saveToFile(DATA_FILES.stock, stock);
-            if (!success) {
-                showMessage('Error guardando stock', 'error');
-            }
-            return success;
-        }
-
-        async function addStock(stockData) {
-            try {
-                // Verificar si ya existe una cuenta con el mismo nombre
-                const existingStock = stock.find(s => s.accountName === stockData.accountName && s.service === stockData.service);
-                if (existingStock) {
-                    throw new Error('Ya existe una cuenta con este nombre para este servicio');
-                }
-
-                // Crear nueva cuenta
-                const newStock = {
-                    id: generateId(),
-                    ...stockData,
-                    profiles: stockData.profiles.split(',').map(p => p.trim()),
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                };
-                stock.push(newStock);
-                
-                const success = await saveStock();
-                
-                if (success) {
-                    showMessage('Cuenta agregada exitosamente');
-                    playSound('successSound');
-                    await loadStock();
-                    return stock;
-                } else {
-                    throw new Error('Error guardando stock');
-                }
-            } catch (error) {
-                throw new Error('Error agregando stock: ' + error.message);
-            }
-        }
-
-        async function updateStock(stockId, stockData) {
-            try {
-                const index = stock.findIndex(s => s.id === stockId);
-                if (index === -1) throw new Error('Stock no encontrado');
-                
-                // Verificar si el nombre ya existe en otra cuenta
-                const existingStock = stock.find(s => s.id !== stockId && s.accountName === stockData.accountName && s.service === stockData.service);
-                if (existingStock) {
-                    throw new Error('Ya existe otra cuenta con este nombre para este servicio');
-                }
-                
-                stock[index] = {
-                    ...stock[index],
-                    ...stockData,
-                    profiles: stockData.profiles.split(',').map(p => p.trim()),
-                    updatedAt: new Date().toISOString()
-                };
-                
-                const success = await saveStock();
-                if (success) {
-                    showMessage('Cuenta actualizada exitosamente');
-                    playSound('successSound');
-                    await loadStock();
-                    return stock[index];
-                } else {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error actualizando stock: ' + error.message);
-            }
-        }
-
-        async function deleteStock(stockId) {
-            try {
-                // Verificar si hay clientes usando esta cuenta
-                const clientsUsingStock = clients.filter(c => c.stockId === stockId);
-                if (clientsUsingStock.length > 0) {
-                    throw new Error(`No se puede eliminar esta cuenta porque ${clientsUsingStock.length} cliente(s) la están usando`);
-                }
-
-                stock = stock.filter(s => s.id !== stockId);
-                const success = await saveStock();
-                
-                if (success) {
-                    showMessage('Cuenta eliminada exitosamente');
-                    playSound('successSound');
-                    await loadStock();
-                } else {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error eliminando stock: ' + error.message);
-            }
-        }
-
-        async function assignProfile(stockId, profileName) {
-            try {
-                const stockItem = stock.find(s => s.id === stockId);
-                if (!stockItem) throw new Error('Cuenta no encontrada');
-                
-                const profileIndex = stockItem.profiles.indexOf(profileName);
-                if (profileIndex === -1) throw new Error('Perfil no disponible');
-                
-                // Remover perfil y reducir cantidad
-                stockItem.profiles.splice(profileIndex, 1);
-                stockItem.quantity -= 1;
-                stockItem.updatedAt = new Date().toISOString();
-                
-                const success = await saveStock();
-                if (success) {
-                    showMessage('Perfil asignado exitosamente');
-                    playSound('successSound');
-                    await loadStock();
-                } else {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error asignando perfil: ' + error.message);
-            }
-        }
-
-        async function releaseProfile(stockId, profileName) {
-            try {
-                const stockItem = stock.find(s => s.id === stockId);
-                if (!stockItem) throw new Error('Cuenta no encontrada');
-                
-                // Agregar perfil y aumentar cantidad
-                stockItem.profiles.push(profileName);
-                stockItem.quantity += 1;
-                stockItem.updatedAt = new Date().toISOString();
-                
-                const success = await saveStock();
-                if (!success) {
-                    throw new Error('Error guardando cambios');
-                }
-            } catch (error) {
-                throw new Error('Error liberando perfil: ' + error.message);
-            }
-        }
-
-        // Funciones de Renderizado
-        function renderClients() {
-            clientsList.innerHTML = '';
+    // Funciones para Clientes
+    async function loadClients() {
+        try {
+            clientsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando clientes...</div>';
             
-            if (clients.length === 0) {
-                clientsList.innerHTML = '<div class="client-item">No se encontraron clientes</div>';
-                return;
+            const data = FileSystem.loadFromFile(DATA_FILES.clients);
+            clients = data || [];
+            originalClients = [...clients];
+            
+            renderClients();
+            updateServiceOptions();
+            updateStats();
+        } catch (error) {
+            showMessage('Error cargando clientes: ' + error.message, 'error');
+            clientsList.innerHTML = '<div class="error-message">Error al cargar los clientes</div>';
+        }
+    }
+
+    async function saveClients() {
+        const success = FileSystem.saveToFile(DATA_FILES.clients, clients);
+        if (!success) {
+            showMessage('Error guardando clientes', 'error');
+        }
+        return success;
+    }
+
+    async function addClient(clientData) {
+        try {
+            // Verificar si ya existe un cliente con el mismo teléfono
+            const existingClient = clients.find(c => c.phone === formatPhoneNumber(clientData.phone));
+            if (existingClient) {
+                throw new Error('Ya existe un cliente con este número de teléfono');
+            }
+
+            const newClient = {
+                id: generateId(),
+                ...clientData,
+                phone: formatPhoneNumber(clientData.phone),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            clients.push(newClient);
+            const success = await saveClients();
+            
+            if (success) {
+                showMessage('Cliente agregado exitosamente');
+                await loadClients();
+                return newClient;
+            } else {
+                throw new Error('Error guardando cliente');
+            }
+        } catch (error) {
+            throw new Error('Error agregando cliente: ' + error.message);
+        }
+    }
+
+    async function updateClient(clientId, clientData) {
+        try {
+            const index = clients.findIndex(c => c.id === clientId);
+            if (index === -1) throw new Error('Cliente no encontrado');
+            
+            // Verificar si el teléfono ya existe en otro cliente
+            const existingClient = clients.find(c => c.id !== clientId && c.phone === formatPhoneNumber(clientData.phone));
+            if (existingClient) {
+                throw new Error('Ya existe otro cliente con este número de teléfono');
             }
             
-            clients.forEach(client => {
-                const clientItem = document.createElement('div');
-                clientItem.className = 'client-item';
-                
-                const statusClass = `status-${client.status}`;
-                const statusText = client.status === 'paid' ? 'Pagado' : 
-                                 client.status === 'overdue' ? 'Vencido' : 'Pendiente';
-                
-                clientItem.innerHTML = `
-                    <div class="client-info">
-                        <div class="client-name">${client.name}</div>
-                        <div class="client-details">
-                            <div><strong>Teléfono:</strong> ${client.phone}</div>
-                            <div><strong>Cuenta:</strong> ${client.accountName} - ${client.profile}</div>
-                            <div><strong>Compra:</strong> ${formatDate(client.purchaseDate)}</div>
-                            <div><strong>Vence:</strong> ${formatDate(client.paymentDeadline)}</div>
-                            <div><strong>Acceso:</strong> ${client.loginDetails}</div>
-                            <div class="${statusClass}"><strong>Estado:</strong> ${statusText}</div>
-                            ${client.notes ? `<div><strong>Notas:</strong> ${client.notes}</div>` : ''}
-                        </div>
-                    </div>
-                    <div class="client-actions">
-                        <button class="btn btn-warning" onclick="handleEditClient('${client.id}')">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button class="btn btn-success" onclick="handleSendReminder('${client.id}')">
-                            <i class="fas fa-bell"></i> Recordatorio
-                        </button>
-                        <button class="btn btn-primary" onclick="handleMarkAsPaid('${client.id}')">
-                            <i class="fas fa-check-circle"></i> Pagado
-                        </button>
-                        <button class="btn btn-danger" onclick="handleCancelSubscription('${client.id}')">
-                            <i class="fas fa-times-circle"></i> Cancelar
-                        </button>
-                    </div>
-                `;
-                
-                clientsList.appendChild(clientItem);
-            });
-        }
-
-        function renderStock() {
-            stockGrid.innerHTML = '';
+            clients[index] = {
+                ...clients[index],
+                ...clientData,
+                phone: formatPhoneNumber(clientData.phone),
+                updatedAt: new Date().toISOString()
+            };
             
-            if (stock.length === 0) {
-                stockGrid.innerHTML = '<div class="stock-item">No se encontraron cuentas en stock</div>';
-                return;
+            const success = await saveClients();
+            if (success) {
+                showMessage('Cliente actualizado exitosamente');
+                await loadClients();
+                return clients[index];
+            } else {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error actualizando cliente: ' + error.message);
+        }
+    }
+
+    async function deleteClient(clientId) {
+        try {
+            clients = clients.filter(c => c.id !== clientId);
+            const success = await saveClients();
+            
+            if (success) {
+                showMessage('Cliente eliminado exitosamente');
+                await loadClients();
+            } else {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error eliminando cliente: ' + error.message);
+        }
+    }
+
+    // Funciones para Stock
+    async function loadStock() {
+        try {
+            stockGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando stock...</div>';
+            
+            const data = FileSystem.loadFromFile(DATA_FILES.stock);
+            stock = data || [];
+            originalStock = [...stock];
+            
+            renderStock();
+            updateServiceOptions();
+            updateStats();
+        } catch (error) {
+            showMessage('Error cargando stock: ' + error.message, 'error');
+            stockGrid.innerHTML = '<div class="error-message">Error al cargar el stock</div>';
+        }
+    }
+
+    async function saveStock() {
+        const success = FileSystem.saveToFile(DATA_FILES.stock, stock);
+        if (!success) {
+            showMessage('Error guardando stock', 'error');
+        }
+        return success;
+    }
+
+    async function addStock(stockData) {
+        try {
+            // Verificar si ya existe una cuenta con el mismo nombre
+            const existingStock = stock.find(s => s.accountName === stockData.accountName && s.service === stockData.service);
+            if (existingStock) {
+                throw new Error('Ya existe una cuenta con este nombre para este servicio');
+            }
+
+            const newStock = {
+                id: generateId(),
+                ...stockData,
+                profiles: stockData.profiles.split(',').map(p => p.trim()),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            stock.push(newStock);
+            
+            const success = await saveStock();
+            
+            if (success) {
+                showMessage('Cuenta agregada exitosamente');
+                await loadStock();
+                return stock;
+            } else {
+                throw new Error('Error guardando stock');
+            }
+        } catch (error) {
+            throw new Error('Error agregando stock: ' + error.message);
+        }
+    }
+
+    async function updateStock(stockId, stockData) {
+        try {
+            const index = stock.findIndex(s => s.id === stockId);
+            if (index === -1) throw new Error('Stock no encontrado');
+            
+            // Verificar si el nombre ya existe en otra cuenta
+            const existingStock = stock.find(s => s.id !== stockId && s.accountName === stockData.accountName && s.service === stockData.service);
+            if (existingStock) {
+                throw new Error('Ya existe otra cuenta con este nombre para este servicio');
             }
             
-            stock.forEach(item => {
-                const stockCard = document.createElement('div');
-                stockCard.className = `stock-card ${item.service.toLowerCase().replace('+', '').replace(' ', '')}`;
-                
-                let stockClass = '';
-                if (item.quantity === 0) {
-                    stockClass = 'low-stock';
-                } else if (item.quantity <= item.total * 0.3) {
-                    stockClass = 'low-stock';
-                } else if (item.quantity <= item.total * 0.6) {
-                    stockClass = 'medium-stock';
-                } else {
-                    stockClass = 'high-stock';
-                }
-                
-                stockCard.innerHTML = `
-                    <div class="stock-header">
-                        <div class="stock-title">${item.accountName || item.service}</div>
-                        <div class="stock-count ${stockClass}">${item.quantity}/${item.total}</div>
-                    </div>
-                    <div class="stock-details">
-                        <div><strong>Servicio:</strong> ${item.service}</div>
-                        <div><strong>Email:</strong> ${item.email}</div>
-                        <div><strong>Precio:</strong> $${item.price}</div>
-                    </div>
-                    <div class="stock-profiles">
-                        <div><strong>Perfiles disponibles (${item.profiles.length}):</strong></div>
-                        ${item.profiles.map(profile => `
-                            <div class="profile-item">
-                                <span>${profile}</span>
-                                <span>
-                                    <button class="btn btn-primary btn-sm" onclick="handleAssignProfile('${item.id}', '${profile}')">
-                                        <i class="fas fa-user-plus"></i> Asignar
-                                    </button>
-                                </span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="stock-actions-card">
-                        <button class="btn btn-warning" onclick="handleEditStock('${item.id}')">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button class="btn btn-danger" onclick="handleDeleteStock('${item.id}')">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                    </div>
-                `;
-                
-                stockGrid.appendChild(stockCard);
-            });
-        }
-
-        function updateServiceOptions() {
-            serviceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
-            profileAssignedSelect.innerHTML = '<option value="">Primero selecciona una cuenta</option>';
+            stock[index] = {
+                ...stock[index],
+                ...stockData,
+                profiles: stockData.profiles.split(',').map(p => p.trim()),
+                updatedAt: new Date().toISOString()
+            };
             
-            stock.forEach(item => {
-                if (item.quantity > 0) {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
-                    serviceTypeSelect.appendChild(option);
-                }
-            });
+            const success = await saveStock();
+            if (success) {
+                showMessage('Cuenta actualizada exitosamente');
+                await loadStock();
+                return stock[index];
+            } else {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error actualizando stock: ' + error.message);
         }
+    }
 
-        function updateProfileOptions(stockId) {
-            profileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
+    async function deleteStock(stockId) {
+        try {
+            // Verificar si hay clientes usando esta cuenta
+            const clientsUsingStock = clients.filter(c => c.stockId === stockId);
+            if (clientsUsingStock.length > 0) {
+                throw new Error(`No se puede eliminar esta cuenta porque ${clientsUsingStock.length} cliente(s) la están usando`);
+            }
+
+            stock = stock.filter(s => s.id !== stockId);
+            const success = await saveStock();
             
+            if (success) {
+                showMessage('Cuenta eliminada exitosamente');
+                await loadStock();
+            } else {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error eliminando stock: ' + error.message);
+        }
+    }
+
+    async function assignProfile(stockId, profileName) {
+        try {
             const stockItem = stock.find(s => s.id === stockId);
-            if (stockItem && stockItem.profiles.length > 0) {
-                stockItem.profiles.forEach(profile => {
-                    const option = document.createElement('option');
-                    option.value = profile;
-                    option.textContent = profile;
-                    profileAssignedSelect.appendChild(option);
-                });
-            }
-        }
-
-        function updateEditServiceOptions() {
-            const editServiceTypeSelect = document.getElementById('editServiceType');
-            editServiceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
+            if (!stockItem) throw new Error('Cuenta no encontrada');
             
-            stock.forEach(item => {
+            const profileIndex = stockItem.profiles.indexOf(profileName);
+            if (profileIndex === -1) throw new Error('Perfil no disponible');
+            
+            // Remover perfil y reducir cantidad
+            stockItem.profiles.splice(profileIndex, 1);
+            stockItem.quantity -= 1;
+            stockItem.updatedAt = new Date().toISOString();
+            
+            const success = await saveStock();
+            if (success) {
+                showMessage('Perfil asignado exitosamente');
+                await loadStock();
+            } else {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error asignando perfil: ' + error.message);
+        }
+    }
+
+    async function releaseProfile(stockId, profileName) {
+        try {
+            const stockItem = stock.find(s => s.id === stockId);
+            if (!stockItem) throw new Error('Cuenta no encontrada');
+            
+            // Agregar perfil y aumentar cantidad
+            stockItem.profiles.push(profileName);
+            stockItem.quantity += 1;
+            stockItem.updatedAt = new Date().toISOString();
+            
+            const success = await saveStock();
+            if (!success) {
+                throw new Error('Error guardando cambios');
+            }
+        } catch (error) {
+            throw new Error('Error liberando perfil: ' + error.message);
+        }
+    }
+
+    // Funciones de Renderizado
+    function renderClients() {
+        clientsList.innerHTML = '';
+        
+        if (clients.length === 0) {
+            clientsList.innerHTML = '<div class="client-item">No se encontraron clientes</div>';
+            return;
+        }
+        
+        clients.forEach(client => {
+            const clientItem = document.createElement('div');
+            clientItem.className = 'client-item';
+            
+            const statusClass = `status-${client.status}`;
+            const statusText = client.status === 'paid' ? 'Pagado' : 
+                             client.status === 'overdue' ? 'Vencido' : 'Pendiente';
+            
+            clientItem.innerHTML = `
+                <div class="client-info">
+                    <div class="client-name">${client.name}</div>
+                    <div class="client-details">
+                        <div><strong>Teléfono:</strong> ${client.phone}</div>
+                        <div><strong>Cuenta:</strong> ${client.accountName} - ${client.profile}</div>
+                        <div><strong>Compra:</strong> ${formatDate(client.purchaseDate)}</div>
+                        <div><strong>Vence:</strong> ${formatDate(client.paymentDeadline)}</div>
+                        <div><strong>Acceso:</strong> ${client.loginDetails}</div>
+                        <div class="${statusClass}"><strong>Estado:</strong> ${statusText}</div>
+                        ${client.notes ? `<div><strong>Notas:</strong> ${client.notes}</div>` : ''}
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="btn btn-warning" onclick="handleEditClient('${client.id}')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-success" onclick="handleSendReminder('${client.id}')">
+                        <i class="fas fa-bell"></i> Recordatorio
+                    </button>
+                    <button class="btn btn-primary" onclick="handleMarkAsPaid('${client.id}')">
+                        <i class="fas fa-check-circle"></i> Pagado
+                    </button>
+                    <button class="btn btn-danger" onclick="handleCancelSubscription('${client.id}')">
+                        <i class="fas fa-times-circle"></i> Cancelar
+                    </button>
+                </div>
+            `;
+            
+            clientsList.appendChild(clientItem);
+        });
+    }
+
+    function renderStock() {
+        stockGrid.innerHTML = '';
+        
+        if (stock.length === 0) {
+            stockGrid.innerHTML = '<div class="stock-item">No se encontraron cuentas en stock</div>';
+            return;
+        }
+        
+        stock.forEach(item => {
+            const stockCard = document.createElement('div');
+            stockCard.className = `stock-card ${item.service.toLowerCase().replace('+', '').replace(' ', '')}`;
+            
+            let stockClass = '';
+            if (item.quantity === 0) {
+                stockClass = 'low-stock';
+            } else if (item.quantity <= item.total * 0.3) {
+                stockClass = 'low-stock';
+            } else if (item.quantity <= item.total * 0.6) {
+                stockClass = 'medium-stock';
+            } else {
+                stockClass = 'high-stock';
+            }
+            
+            stockCard.innerHTML = `
+                <div class="stock-header">
+                    <div class="stock-title">${item.accountName || item.service}</div>
+                    <div class="stock-count ${stockClass}">${item.quantity}/${item.total}</div>
+                </div>
+                <div class="stock-details">
+                    <div><strong>Servicio:</strong> ${item.service}</div>
+                    <div><strong>Email:</strong> ${item.email}</div>
+                    <div><strong>Precio:</strong> $${item.price}</div>
+                </div>
+                <div class="stock-profiles">
+                    <div><strong>Perfiles disponibles (${item.profiles.length}):</strong></div>
+                    ${item.profiles.map(profile => `
+                        <div class="profile-item">
+                            <span>${profile}</span>
+                            <span>
+                                <button class="btn btn-primary btn-sm" onclick="handleAssignProfile('${item.id}', '${profile}')">
+                                    <i class="fas fa-user-plus"></i> Asignar
+                                </button>
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="stock-actions-card">
+                    <button class="btn btn-warning" onclick="handleEditStock('${item.id}')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="handleDeleteStock('${item.id}')">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            `;
+            
+            stockGrid.appendChild(stockCard);
+        });
+    }
+
+    function updateServiceOptions() {
+        serviceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
+        profileAssignedSelect.innerHTML = '<option value="">Primero selecciona una cuenta</option>';
+        
+        stock.forEach(item => {
+            if (item.quantity > 0) {
                 const option = document.createElement('option');
                 option.value = item.id;
                 option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
-                editServiceTypeSelect.appendChild(option);
+                serviceTypeSelect.appendChild(option);
+            }
+        });
+    }
+
+    function updateProfileOptions(stockId) {
+        profileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
+        
+        const stockItem = stock.find(s => s.id === stockId);
+        if (stockItem && stockItem.profiles.length > 0) {
+            stockItem.profiles.forEach(profile => {
+                const option = document.createElement('option');
+                option.value = profile;
+                option.textContent = profile;
+                profileAssignedSelect.appendChild(option);
             });
         }
-
-        function updateEditProfileOptions(stockId) {
-            const editProfileAssignedSelect = document.getElementById('editProfileAssigned');
-            editProfileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
-            
-            const stockItem = stock.find(s => s.id === stockId);
-            if (stockItem && stockItem.profiles.length > 0) {
-                stockItem.profiles.forEach(profile => {
-                    const option = document.createElement('option');
-                    option.value = profile;
-                    option.textContent = profile;
-                    editProfileAssignedSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Funciones del Modal de Edición
-        function openEditStockModal(stockId) {
-            const stockItem = stock.find(s => s.id === stockId);
-            if (!stockItem) {
-                showMessage('Cuenta no encontrada', 'error');
-                return;
-            }
-
-            currentEditingStock = stockItem;
-            
-            // Llenar el formulario con los datos actuales
-            document.getElementById('editStockId').value = stockItem.id;
-            document.getElementById('editServiceName').value = stockItem.service;
-            document.getElementById('editAccountName').value = stockItem.accountName || stockItem.service;
-            document.getElementById('editStockQuantity').value = stockItem.quantity;
-            document.getElementById('editTotalCapacity').value = stockItem.total;
-            document.getElementById('editAccountEmail').value = stockItem.email;
-            document.getElementById('editAccountPassword').value = stockItem.password;
-            document.getElementById('editProfilesAvailable').value = stockItem.profiles.join(', ');
-            document.getElementById('editServicePrice').value = stockItem.price;
-            
-            editStockModal.style.display = 'flex';
-        }
-
-        function closeEditStockModal() {
-            editStockModal.style.display = 'none';
-            currentEditingStock = null;
-            editStockForm.reset();
-        }
-
-        function openEditClientModal(clientId) {
-            const client = clients.find(c => c.id === clientId);
-            if (!client) {
-                showMessage('Cliente no encontrada', 'error');
-                return;
-            }
-
-            currentEditingClient = client;
-            
-            // Actualizar opciones de servicios
-            updateEditServiceOptions();
-            
-            // Llenar el formulario con los datos actuales
-            document.getElementById('editClientId').value = client.id;
-            document.getElementById('editClientName').value = client.name;
-            document.getElementById('editClientPhone').value = getPhoneWithoutPrefix(client.phone);
-            document.getElementById('editPurchaseDate').value = client.purchaseDate;
-            document.getElementById('editPaymentDeadline').value = client.paymentDeadline;
-            document.getElementById('editLoginDetails').value = client.loginDetails;
-            document.getElementById('editPaymentStatus').value = client.status;
-            document.getElementById('editClientNotes').value = client.notes || '';
-            
-            // Establecer la cuenta de servicio y perfil actual
-            setTimeout(() => {
-                if (client.stockId) {
-                    document.getElementById('editServiceType').value = client.stockId;
-                    updateEditProfileOptions(client.stockId);
-                    
-                    // Establecer el perfil actual después de cargar las opciones
-                    setTimeout(() => {
-                        document.getElementById('editProfileAssigned').value = client.profile;
-                    }, 100);
-                }
-            }, 100);
-            
-            editClientModal.style.display = 'flex';
-        }
-
-        function closeEditClientModal() {
-            editClientModal.style.display = 'none';
-            currentEditingClient = null;
-            editClientForm.reset();
-        }
-
-        // Funciones de Respaldo
-        function exportAllData() {
-            const data = {
-                clients: clients,
-                stock: stock,
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-            
-            const content = JSON.stringify(data, null, 2);
-            const filename = `harods_tech_respaldo_${new Date().toISOString().split('T')[0]}.json`;
-            
-            FileSystem.downloadFile(filename, content, 'application/json');
-            showMessage('Datos exportados exitosamente');
-            playSound('successSound');
-        }
-function initMobileMenu() {
-    // Event listener para el botón del menú móvil
-    mobileMenuBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleMobileMenu();
-    });
-
-    // Event listeners para las pestañas móviles
-    mobileTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabId = this.getAttribute('data-tab');
-            switchTab(tabId);
-            closeMobileMenu();
-        });
-    });
-
-    // Cerrar menú al hacer clic fuera
-    document.addEventListener('click', function(e) {
-        if (isMobileMenuOpen && 
-            !mobileTabsContainer.contains(e.target) && 
-            !mobileMenuBtn.contains(e.target)) {
-            closeMobileMenu();
-        }
-    });
-
-    // Cerrar menú con tecla Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isMobileMenuOpen) {
-            closeMobileMenu();
-        }
-    });
-
-    // Manejar cambios de tamaño de ventana
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && isMobileMenuOpen) {
-            closeMobileMenu();
-        }
-    });
-}
-
-// Función para alternar el menú móvil
-function toggleMobileMenu() {
-    if (isMobileMenuOpen) {
-        closeMobileMenu();
-    } else {
-        openMobileMenu();
     }
-}
 
-// Función para abrir el menú móvil
-function openMobileMenu() {
-    mobileTabsContainer.classList.add('show');
-    mobileTabsContainer.style.display = 'flex';
-    isMobileMenuOpen = true;
-    
-    // Animación de entrada
-    mobileTabsContainer.style.opacity = '0';
-    mobileTabsContainer.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        mobileTabsContainer.style.opacity = '1';
-        mobileTabsContainer.style.transform = 'translateY(0)';
-        mobileTabsContainer.style.transition = 'all 0.3s ease-out';
-    }, 10);
-
-    // Cambiar ícono a "X"
-    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
-    
-    // Agregar clase activa al botón
-    mobileMenuBtn.classList.add('active');
-    
-    // Deshabilitar scroll del body
-    document.body.style.overflow = 'hidden';
-    
-    // Enfocar el primer elemento del menú para accesibilidad
-    setTimeout(() => {
-        const firstTab = mobileTabsContainer.querySelector('.mobile-tab');
-        if (firstTab) {
-            firstTab.focus();
-        }
-    }, 300);
-}
-
-// Función para cerrar el menú móvil
-function closeMobileMenu() {
-    // Animación de salida
-    mobileTabsContainer.style.opacity = '0';
-    mobileTabsContainer.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        mobileTabsContainer.classList.remove('show');
-        mobileTabsContainer.style.display = 'none';
-        mobileTabsContainer.style.opacity = '';
-        mobileTabsContainer.style.transform = '';
-        mobileTabsContainer.style.transition = '';
-        isMobileMenuOpen = false;
-    }, 300);
-
-    // Cambiar ícono a hamburguesa
-    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-    
-    // Remover clase activa del botón
-    mobileMenuBtn.classList.remove('active');
-    
-    // Restaurar scroll del body
-    document.body.style.overflow = '';
-    
-    // Enfocar el botón del menú para accesibilidad
-    mobileMenuBtn.focus();
-}
-
-// Función para actualizar la pestaña activa en el menú móvil
-function updateMobileActiveTab(tabId) {
-    mobileTabs.forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.getAttribute('data-tab') === tabId) {
-            tab.classList.add('active');
-        }
-    });
-}
-
-// Función mejorada para cambiar pestañas
-function switchTab(tabId) {
-    // Ocultar todas las pestañas
-    tabs.forEach(t => t.classList.remove('active'));
-    mobileTabs.forEach(t => t.classList.remove('active'));
-    tabContents.forEach(tc => tc.classList.remove('active'));
-    
-    // Activar pestaña seleccionada
-    const selectedTab = document.querySelector(`[data-tab="${tabId}"]`);
-    const selectedContent = document.getElementById(tabId + 'Tab');
-    
-    if (selectedTab && selectedContent) {
-        selectedTab.classList.add('active');
-        selectedContent.classList.add('active');
+    function updateEditServiceOptions() {
+        const editServiceTypeSelect = document.getElementById('editServiceType');
+        editServiceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
         
-        // Actualizar pestaña activa en móvil
-        updateMobileActiveTab(tabId);
-        
-        // Cargar contenido específico si es necesario
-        if (tabId === 'backup') {
-            renderFileList();
-        }
-        
-        // Scroll suave al contenido en móvil
-        if (window.innerWidth <= 768) {
-            setTimeout(() => {
-                selectedContent.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-            }, 100);
-        }
-        
-        // Reproducir sonido de clic
-        playSound('clickSound');
-    }
-}
-
-// Inicialización del menú móvil cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initMobileMenu();
-    
-    // Asegurar que el menú esté cerrado al cargar la página
-    closeMobileMenu();
-    
-    // Event listeners para las pestañas de escritorio
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabId = this.getAttribute('data-tab');
-            switchTab(tabId);
-        });
-    });
-});
-
-// Manejar el estado de autenticación para el menú móvil
-function handleMobileAuthState(isLoggedIn) {
-    if (isLoggedIn) {
-        // Usuario autenticado - asegurar que el menú esté disponible
-        mobileMenuBtn.style.display = 'flex';
-        if (window.innerWidth <= 768) {
-            mobileTabsContainer.style.display = 'none';
-        }
-    } else {
-        // Usuario no autenticado - ocultar menú móvil
-        mobileMenuBtn.style.display = 'none';
-        mobileTabsContainer.style.display = 'none';
-        closeMobileMenu();
-    }
-}
-
-// Función para manejar cambios de orientación en móviles
-function handleOrientationChange() {
-    if (window.innerWidth <= 768 && isMobileMenuOpen) {
-        // Ajustar el menú cuando cambia la orientación
-        setTimeout(() => {
-            if (window.innerHeight < window.innerWidth) {
-                // Landscape - limitar altura del menú
-                mobileTabsContainer.style.maxHeight = '60vh';
-                mobileTabsContainer.style.overflowY = 'auto';
-            } else {
-                // Portrait - altura automática
-                mobileTabsContainer.style.maxHeight = '';
-                mobileTabsContainer.style.overflowY = '';
-            }
-        }, 100);
-    }
-}
-
-// Event listener para cambios de orientación
-window.addEventListener('orientationchange', handleOrientationChange);
-window.addEventListener('resize', handleOrientationChange);
-
-// Mejoras de accesibilidad para el menú móvil
-function enhanceMobileAccessibility() {
-    // Navegación con teclado en el menú móvil
-    mobileTabsContainer.addEventListener('keydown', function(e) {
-        const tabsArray = Array.from(mobileTabs);
-        const currentIndex = tabsArray.indexOf(document.activeElement);
-        
-        switch(e.key) {
-            case 'ArrowDown':
-            case 'ArrowRight':
-                e.preventDefault();
-                const nextIndex = (currentIndex + 1) % tabsArray.length;
-                tabsArray[nextIndex].focus();
-                break;
-                
-            case 'ArrowUp':
-            case 'ArrowLeft':
-                e.preventDefault();
-                const prevIndex = (currentIndex - 1 + tabsArray.length) % tabsArray.length;
-                tabsArray[prevIndex].focus();
-                break;
-                
-            case 'Home':
-                e.preventDefault();
-                tabsArray[0].focus();
-                break;
-                
-            case 'End':
-                e.preventDefault();
-                tabsArray[tabsArray.length - 1].focus();
-                break;
-                
-            case 'Enter':
-            case ' ':
-                e.preventDefault();
-                document.activeElement.click();
-                break;
-        }
-    });
-    
-    // ARIA attributes para mejor accesibilidad
-    mobileMenuBtn.setAttribute('aria-label', 'Menú de navegación');
-    mobileMenuBtn.setAttribute('aria-expanded', 'false');
-    mobileMenuBtn.setAttribute('aria-controls', 'mobileTabs');
-    
-    mobileTabsContainer.setAttribute('aria-label', 'Navegación móvil');
-    mobileTabsContainer.setAttribute('role', 'menu');
-    
-    mobileTabs.forEach((tab, index) => {
-        tab.setAttribute('role', 'menuitem');
-        tab.setAttribute('tabindex', '-1');
-        tab.setAttribute('aria-label', `Ir a ${tab.textContent}`);
-    });
-}
-
-// Actualizar atributos ARIA cuando el menú se abre/cierra
-function updateAriaAttributes(isOpen) {
-    mobileMenuBtn.setAttribute('aria-expanded', isOpen.toString());
-    
-    if (isOpen) {
-        mobileTabsContainer.setAttribute('aria-hidden', 'false');
-        mobileTabs.forEach(tab => {
-            tab.setAttribute('tabindex', '0');
-        });
-    } else {
-        mobileTabsContainer.setAttribute('aria-hidden', 'true');
-        mobileTabs.forEach(tab => {
-            tab.setAttribute('tabindex', '-1');
+        stock.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
+            editServiceTypeSelect.appendChild(option);
         });
     }
-}
 
-// Modificar las funciones openMobileMenu y closeMobileMenu para incluir ARIA
-function openMobileMenu() {
-    mobileTabsContainer.classList.add('show');
-    mobileTabsContainer.style.display = 'flex';
-    isMobileMenuOpen = true;
-    
-    // Animación
-    mobileTabsContainer.style.opacity = '0';
-    mobileTabsContainer.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        mobileTabsContainer.style.opacity = '1';
-        mobileTabsContainer.style.transform = 'translateY(0)';
-        mobileTabsContainer.style.transition = 'all 0.3s ease-out';
-    }, 10);
-
-    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
-    mobileMenuBtn.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    // Actualizar ARIA
-    updateAriaAttributes(true);
-    
-    setTimeout(() => {
-        const firstTab = mobileTabsContainer.querySelector('.mobile-tab');
-        if (firstTab) {
-            firstTab.focus();
-        }
-    }, 300);
-}
-
-function closeMobileMenu() {
-    mobileTabsContainer.style.opacity = '0';
-    mobileTabsContainer.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        mobileTabsContainer.classList.remove('show');
-        mobileTabsContainer.style.display = 'none';
-        mobileTabsContainer.style.opacity = '';
-        mobileTabsContainer.style.transform = '';
-        mobileTabsContainer.style.transition = '';
-        isMobileMenuOpen = false;
-    }, 300);
-
-    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-    mobileMenuBtn.classList.remove('active');
-    document.body.style.overflow = '';
-    
-    // Actualizar ARIA
-    updateAriaAttributes(false);
-    
-    mobileMenuBtn.focus();
-}
-
-// Inicializar mejoras de accesibilidad
-document.addEventListener('DOMContentLoaded', function() {
-    initMobileMenu();
-    enhanceMobileAccessibility();
-    closeMobileMenu();
-});
-        function importData(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (data.clients && data.stock) {
-                        clients = data.clients;
-                        stock = data.stock;
-                        
-                        saveClients();
-                        saveStock();
-                        
-                        loadClients();
-                        loadStock();
-                        
-                        showMessage('Datos importados exitosamente');
-                        playSound('successSound');
-                    } else {
-                        showMessage('Archivo de respaldo inválido', 'error');
-                        playSound('errorSound');
-                    }
-                } catch (error) {
-                    showMessage('Error importando datos: ' + error.message, 'error');
-                    playSound('errorSound');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function backupClients() {
-            const content = JSON.stringify(clients, null, 2);
-            const filename = `clientes_respaldo_${new Date().toISOString().split('T')[0]}.json`;
-            FileSystem.downloadFile(filename, content, 'application/json');
-            showMessage('Clientes respaldados exitosamente');
-            playSound('successSound');
-        }
-
-        function backupStock() {
-            const content = JSON.stringify(stock, null, 2);
-            const filename = `stock_respaldo_${new Date().toISOString().split('T')[0]}.json`;
-            FileSystem.downloadFile(filename, content, 'application/json');
-            showMessage('Stock respaldado exitosamente');
-            playSound('successSound');
-        }
-
-        function renderFileList() {
-            const files = FileSystem.listFiles();
-            fileList.innerHTML = '';
-            
-            if (files.length === 0) {
-                fileList.innerHTML = '<div class="client-item">No hay archivos de datos</div>';
-                return;
-            }
-            
-            files.forEach(file => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'client-item';
-                fileItem.innerHTML = `
-                    <div class="client-info">
-                        <div class="client-name">${file.name}</div>
-                        <div class="client-details">
-                            <div><strong>Fecha:</strong> ${new Date(file.timestamp).toLocaleString()}</div>
-                            <div><strong>Tamaño:</strong> ${file.size} bytes</div>
-                        </div>
-                    </div>
-                    <div class="client-actions">
-                        <button class="btn btn-primary" onclick="downloadFile('${file.name}')">
-                            <i class="fas fa-download"></i> Descargar
-                        </button>
-                    </div>
-                `;
-                fileList.appendChild(fileItem);
+    function updateEditProfileOptions(stockId) {
+        const editProfileAssignedSelect = document.getElementById('editProfileAssigned');
+        editProfileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
+        
+        const stockItem = stock.find(s => s.id === stockId);
+        if (stockItem && stockItem.profiles.length > 0) {
+            stockItem.profiles.forEach(profile => {
+                const option = document.createElement('option');
+                option.value = profile;
+                option.textContent = profile;
+                editProfileAssignedSelect.appendChild(option);
             });
         }
+    }
 
-        function downloadFile(filename) {
-            const content = localStorage.getItem(filename);
-            if (content) {
-                FileSystem.downloadFile(filename, content, 'application/json');
-                playSound('successSound');
-            }
+    // Funciones del Modal de Edición
+    function openEditStockModal(stockId) {
+        const stockItem = stock.find(s => s.id === stockId);
+        if (!stockItem) {
+            showMessage('Cuenta no encontrada', 'error');
+            return;
         }
 
-        // Funciones de búsqueda
-        function searchClients(term) {
-            if (!term) {
-                clients = [...originalClients];
-            } else {
-                clients = originalClients.filter(client => 
-                    client.name.toLowerCase().includes(term) || 
-                    client.phone.includes(term) ||
-                    (client.accountName && client.accountName.toLowerCase().includes(term)) ||
-                    client.service.toLowerCase().includes(term)
-                );
-            }
-            renderClients();
-        }
+        currentEditingStock = stockItem;
+        
+        // Llenar el formulario con los datos actuales
+        document.getElementById('editStockId').value = stockItem.id;
+        document.getElementById('editServiceName').value = stockItem.service;
+        document.getElementById('editAccountName').value = stockItem.accountName || stockItem.service;
+        document.getElementById('editStockQuantity').value = stockItem.quantity;
+        document.getElementById('editTotalCapacity').value = stockItem.total;
+        document.getElementById('editAccountEmail').value = stockItem.email;
+        document.getElementById('editAccountPassword').value = stockItem.password;
+        document.getElementById('editProfilesAvailable').value = stockItem.profiles.join(', ');
+        document.getElementById('editServicePrice').value = stockItem.price;
+        
+        editStockModal.style.display = 'flex';
+    }
 
-        function searchStock(term) {
-            if (!term) {
-                stock = [...originalStock];
-            } else {
-                stock = originalStock.filter(item => 
-                    (item.accountName && item.accountName.toLowerCase().includes(term)) ||
-                    item.service.toLowerCase().includes(term) ||
-                    item.email.toLowerCase().includes(term)
-                );
-            }
-            renderStock();
-        }
+    function closeEditStockModal() {
+        editStockModal.style.display = 'none';
+        currentEditingStock = null;
+        editStockForm.reset();
+    }
 
-        // Manejadores de Eventos
-        async function handleSendReminder(clientId) {
-            try {
-                const client = clients.find(c => c.id === clientId);
-                const message = `Hola ${client.name}, este es un recordatorio de que tu pago para ${client.service} vence el ${formatDate(client.paymentDeadline)}. - Harod's Tech`;
-                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-                
-                showMessage('Recordatorio enviado por WhatsApp');
-                playSound('successSound');
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        }
-
-       async function handleMarkAsPaid(clientId) {
-    try {
-        // Solo actualizar el estado a 'paid', mantener los demás datos intactos
+    function openEditClientModal(clientId) {
         const client = clients.find(c => c.id === clientId);
         if (!client) {
-            throw new Error('Cliente no encontrado');
+            showMessage('Cliente no encontrada', 'error');
+            return;
         }
+
+        currentEditingClient = client;
         
-        await updateClient(clientId, { 
-            ...client, // Mantener todos los datos existentes
-            status: 'paid' // Solo cambiar el estado
-        });
+        // Actualizar opciones de servicios
+        updateEditServiceOptions();
         
-        const message = `Hola ${client.name}, hemos registrado tu pago para ${client.service}. ¡Gracias! - Harod's Tech`;
-        const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        // Llenar el formulario con los datos actuales
+        document.getElementById('editClientId').value = client.id;
+        document.getElementById('editClientName').value = client.name;
+        document.getElementById('editClientPhone').value = getPhoneWithoutPrefix(client.phone);
+        document.getElementById('editPurchaseDate').value = client.purchaseDate;
+        document.getElementById('editPaymentDeadline').value = client.paymentDeadline;
+        document.getElementById('editLoginDetails').value = client.loginDetails;
+        document.getElementById('editPaymentStatus').value = client.status;
+        document.getElementById('editClientNotes').value = client.notes || '';
         
-    } catch (error) {
-        showMessage(error.message, 'error');
-        playSound('errorSound');
+        // Establecer la cuenta de servicio y perfil actual
+        setTimeout(() => {
+            if (client.stockId) {
+                document.getElementById('editServiceType').value = client.stockId;
+                updateEditProfileOptions(client.stockId);
+                
+                // Establecer el perfil actual después de cargar las opciones
+                setTimeout(() => {
+                    document.getElementById('editProfileAssigned').value = client.profile;
+                }, 100);
+            }
+        }, 100);
+        
+        editClientModal.style.display = 'flex';
     }
-}
 
-        async function handleCancelSubscription(clientId) {
-            const client = clients.find(c => c.id === clientId);
-            
-            if (!confirm(`¿Estás seguro de cancelar la suscripción de ${client.name}?`)) {
-                return;
-            }
-            
-            try {
-                // Liberar el perfil en el stock
-                await releaseProfile(client.stockId, client.profile);
-                
-                // Eliminar el cliente
-                await deleteClient(clientId);
-                
-                const message = `Hola ${client.name}, tu suscripción para ${client.service} ha sido cancelada. - Harod's Tech`;
-                const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-                
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        }
+    function closeEditClientModal() {
+        editClientModal.style.display = 'none';
+        currentEditingClient = null;
+        editClientForm.reset();
+    }
 
-        async function handleAssignProfile(stockId, profileName) {
+    // Funciones de Respaldo
+    function exportAllData() {
+        const data = {
+            clients: clients,
+            stock: stock,
+            exportDate: new Date().toISOString(),
+            version: '1.0'
+        };
+        
+        const content = JSON.stringify(data, null, 2);
+        const filename = `harods_tech_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+        
+        FileSystem.downloadFile(filename, content, 'application/json');
+        showMessage('Datos exportados exitosamente');
+    }
+
+    function importData(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
             try {
-                await assignProfile(stockId, profileName);
+                const data = JSON.parse(e.target.result);
                 
-                // Cambiar a la pestaña de agregar cliente
-                switchTab('addClient');
-                
-                // Rellenar automáticamente la cuenta y perfil
-                const stockItem = stock.find(s => s.id === stockId);
-                if (stockItem) {
-                    document.getElementById('serviceType').value = stockId;
-                    updateProfileOptions(stockId);
-                    document.getElementById('profileAssigned').value = profileName;
+                if (data.clients && data.stock) {
+                    clients = data.clients;
+                    stock = data.stock;
                     
-                    // Llenar automáticamente los detalles de acceso
-                    document.getElementById('loginDetails').value = `Email: ${stockItem.email}\nContraseña: ${stockItem.password}`;
+                    saveClients();
+                    saveStock();
+                    
+                    loadClients();
+                    loadStock();
+                    
+                    showMessage('Datos importados exitosamente');
+                } else {
+                    showMessage('Archivo de respaldo inválido', 'error');
                 }
-                
             } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
+                showMessage('Error importando datos: ' + error.message, 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function backupClients() {
+        const content = JSON.stringify(clients, null, 2);
+        const filename = `clientes_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+        FileSystem.downloadFile(filename, content, 'application/json');
+        showMessage('Clientes respaldados exitosamente');
+    }
+
+    function backupStock() {
+        const content = JSON.stringify(stock, null, 2);
+        const filename = `stock_respaldo_${new Date().toISOString().split('T')[0]}.json`;
+        FileSystem.downloadFile(filename, content, 'application/json');
+        showMessage('Stock respaldado exitosamente');
+    }
+
+    function renderFileList() {
+        const files = FileSystem.listFiles();
+        fileList.innerHTML = '';
+        
+        if (files.length === 0) {
+            fileList.innerHTML = '<div class="client-item">No hay archivos de datos</div>';
+            return;
+        }
+        
+        files.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'client-item';
+            fileItem.innerHTML = `
+                <div class="client-info">
+                    <div class="client-name">${file.name}</div>
+                    <div class="client-details">
+                        <div><strong>Fecha:</strong> ${new Date(file.timestamp).toLocaleString()}</div>
+                        <div><strong>Tamaño:</strong> ${file.size} bytes</div>
+                    </div>
+                </div>
+                <div class="client-actions">
+                    <button class="btn btn-primary" onclick="downloadFile('${file.name}')">
+                        <i class="fas fa-download"></i> Descargar
+                    </button>
+                </div>
+            `;
+            fileList.appendChild(fileItem);
+        });
+    }
+
+    function downloadFile(filename) {
+        const content = localStorage.getItem(filename);
+        if (content) {
+            FileSystem.downloadFile(filename, content, 'application/json');
+        }
+    }
+
+    // Funciones de búsqueda
+    function searchClients(term) {
+        if (!term) {
+            clients = [...originalClients];
+        } else {
+            clients = originalClients.filter(client => 
+                client.name.toLowerCase().includes(term) || 
+                client.phone.includes(term) ||
+                (client.accountName && client.accountName.toLowerCase().includes(term)) ||
+                client.service.toLowerCase().includes(term)
+            );
+        }
+        renderClients();
+    }
+
+    function searchStock(term) {
+        if (!term) {
+            stock = [...originalStock];
+        } else {
+            stock = originalStock.filter(item => 
+                (item.accountName && item.accountName.toLowerCase().includes(term)) ||
+                item.service.toLowerCase().includes(term) ||
+                item.email.toLowerCase().includes(term)
+            );
+        }
+        renderStock();
+    }
+
+    // ========== FUNCIONES DEL MENÚ MÓVIL ==========
+    function initMobileMenu() {
+        if (!mobileMenuBtn || !mobileTabsContainer) {
+            console.log('Elementos del menú móvil no encontrados');
+            return;
+        }
+
+        // Función para abrir el menú
+        function openMobileMenu() {
+            mobileTabsContainer.style.display = 'flex';
+            isMobileMenuOpen = true;
+            mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar el menú
+        function closeMobileMenu() {
+            mobileTabsContainer.style.display = 'none';
+            isMobileMenuOpen = false;
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            document.body.style.overflow = '';
+        }
+
+        // Función para alternar el menú
+        function toggleMobileMenu() {
+            if (isMobileMenuOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
             }
         }
 
-        async function handleEditStock(stockId) {
-            openEditStockModal(stockId);
-        }
+        // Event listener para el botón del menú
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMobileMenu();
+        });
 
-        async function handleEditClient(clientId) {
-            openEditClientModal(clientId);
-        }
+        // Event listeners para las pestañas móviles
+        mobileTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+                closeMobileMenu();
+            });
+        });
 
-        async function handleDeleteStock(stockId) {
-            const stockItem = stock.find(s => s.id === stockId);
-            if (!stockItem) return;
-            
-            if (!confirm(`¿Estás seguro de eliminar la cuenta ${stockItem.accountName || stockItem.service}?`)) {
-                return;
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (isMobileMenuOpen && 
+                !mobileTabsContainer.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target)) {
+                closeMobileMenu();
             }
-            
-            try {
-                await deleteStock(stockId);
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        }
+        });
 
-        // Función para cambiar pestañas
-        function switchTab(tabId) {
-            tabs.forEach(t => t.classList.remove('active'));
-            mobileTabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(tc => tc.classList.remove('active'));
+        // Cerrar menú con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+
+        // Cerrar menú al cambiar el tamaño de la ventana
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && isMobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    }
+
+    // ========== FUNCIÓN PARA CAMBIAR PESTAÑAS ==========
+    function switchTab(tabId) {
+        // Ocultar todas las pestañas
+        tabs.forEach(t => t.classList.remove('active'));
+        mobileTabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        
+        // Activar pestaña seleccionada
+        const selectedTab = document.querySelector(`[data-tab="${tabId}"]`);
+        const selectedContent = document.getElementById(tabId + 'Tab');
+        
+        if (selectedTab && selectedContent) {
+            selectedTab.classList.add('active');
+            selectedContent.classList.add('active');
             
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            document.getElementById(tabId + 'Tab').classList.add('active');
-            
+            // Cargar contenido específico si es necesario
             if (tabId === 'backup') {
                 renderFileList();
             }
-            
-            // Ocultar menú móvil después de seleccionar una pestaña
-            if (window.innerWidth <= 768) {
-                mobileTabsContainer.style.display = 'none';
-            }
         }
+    }
 
-        // Funciones para las nuevas mejoras
-        function initThemeSelector() {
-            const themes = {
-                'default': { 
-                    primary: '#2c3e50', 
-                    secondary: '#3498db',
-                    dark: '#34495e',
-                    light: '#ecf0f1'
-                },
-                'dark': { 
-                    primary: '#1a1a1a', 
-                    secondary: '#9b59b6',
-                    dark: '#ecf0f1',
-                    light: '#2c3e50'
-                },
-                'green': { 
-                    primary: '#27ae60', 
-                    secondary: '#2ecc71',
-                    dark: '#34495e',
-                    light: '#ecf0f1'
-                },
-                'purple': { 
-                    primary: '#8e44ad', 
-                    secondary: '#9b59b6',
-                    dark: '#34495e',
-                    light: '#ecf0f1'
-                }
-            };
-
-            const themeBtns = document.querySelectorAll('.theme-option');
-            themeBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const theme = this.dataset.theme;
-                    applyTheme(themes[theme]);
-                    themeOptions.style.display = 'none';
-                });
-            });
-            
-            // Aplicar tema guardado si existe
-            const savedTheme = localStorage.getItem('harods_tech_theme');
-            if (savedTheme && themes[savedTheme]) {
-                applyTheme(themes[savedTheme]);
-            }
-        }
-
-        function applyTheme(theme) {
-            document.documentElement.style.setProperty('--primary', theme.primary);
-            document.documentElement.style.setProperty('--secondary', theme.secondary);
-            document.documentElement.style.setProperty('--dark', theme.dark);
-            document.documentElement.style.setProperty('--light', theme.light);
-            
-            // Guardar tema en localStorage
-            localStorage.setItem('harods_tech_theme', 
-                Object.keys(themes).find(key => 
-                    themes[key].primary === theme.primary && 
-                    themes[key].secondary === theme.secondary
-                ) || 'default'
-            );
-        }
-
-        function createParticles() {
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.width = Math.random() * 100 + 50 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.top = Math.random() * 100 + 'vh';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                animatedBg.appendChild(particle);
-            }
-        }
-// Funciones para el widget del tiempo
-async function loadWeatherData() {
-    try {
-        // Usamos una API gratuita para el clima
-        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=14.09&longitude=-87.22&current_weather=true&timezone=America/Tegucigalpa');
+    // ========== FUNCIONES DE LOS WIDGETS ==========
+    function updateClock() {
+        const now = new Date();
         
-        if (!response.ok) {
-            throw new Error('Error al cargar datos del clima');
-        }
+        // Formatear hora
+        const time = now.toLocaleTimeString('es-HN', { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit'
+        });
         
-        const data = await response.json();
+        // Formatear fecha
+        const date = now.toLocaleDateString('es-HN', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
         
-        if (data.current_weather) {
-            const temp = Math.round(data.current_weather.temperature);
-            const weatherCode = data.current_weather.weathercode;
-            
-            document.getElementById('temperature').textContent = `${temp}°C`;
-            updateWeatherIcon(weatherCode);
-        }
-    } catch (error) {
-        console.log('Error cargando clima:', error);
-        // Datos por defecto si falla la API
-        document.getElementById('temperature').textContent = '25°C';
-        document.getElementById('location').textContent = 'Tegucigalpa';
+        // Capitalizar primera letra
+        const formattedDate = date.charAt(0).toUpperCase() + date.slice(1);
+        
+        // Actualizar elementos en el DOM
+        if (currentTimeElement) currentTimeElement.textContent = time;
+        if (currentDateElement) currentDateElement.textContent = formattedDate;
     }
-}
 
-function updateWeatherIcon(weatherCode) {
-    const weatherIcon = document.querySelector('.weather-widget i');
-    
-    // Mapeo de códigos de clima a iconos FontAwesome
-    const weatherIcons = {
-        0: 'fa-sun', // Despejado
-        1: 'fa-sun', // Mayormente despejado
-        2: 'fa-cloud-sun', // Parcialmente nublado
-        3: 'fa-cloud', // Nublado
-        45: 'fa-smog', // Niebla
-        48: 'fa-smog', // Niebla escarchada
-        51: 'fa-cloud-rain', // Llovizna ligera
-        53: 'fa-cloud-rain', // Llovizna moderada
-        55: 'fa-cloud-rain', // Llovizna densa
-        61: 'fa-cloud-showers-heavy', // Lluvia ligera
-        63: 'fa-cloud-showers-heavy', // Lluvia moderada
-        65: 'fa-cloud-showers-heavy', // Lluvia fuerte
-        80: 'fa-cloud-rain', // Chubascos ligeros
-        81: 'fa-cloud-showers-heavy', // Chubascos moderados
-        82: 'fa-cloud-showers-heavy', // Chubascos fuertes
-        95: 'fa-bolt', // Tormenta ligera
-        96: 'fa-bolt', // Tormenta con granizo ligero
-        99: 'fa-bolt' // Tormenta con granizo fuerte
-    };
-    
-    const iconClass = weatherIcons[weatherCode] || 'fa-sun';
-    weatherIcon.className = `fas ${iconClass}`;
-    
-    // Actualizar color según el clima
-    if ([0, 1].includes(weatherCode)) {
-        weatherIcon.style.color = 'var(--warning)';
-    } else if ([2, 3].includes(weatherCode)) {
-        weatherIcon.style.color = 'var(--text-secondary)';
-    } else {
-        weatherIcon.style.color = 'var(--secondary)';
-    }
-}
-
-// Función para actualizar el reloj
-// Función para actualizar el reloj
-// Función para actualizar el reloj
-function updateClock() {
-    const now = new Date();
-    
-    // Formatear hora
-    const time = now.toLocaleTimeString('es-HN', { 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit'
-    });
-    
-    // Formatear fecha
-    const date = now.toLocaleDateString('es-HN', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
-    
-    // Capitalizar primera letra
-    const formattedDate = date.charAt(0).toUpperCase() + date.slice(1);
-    
-    // Actualizar elementos en el DOM
-    const timeElement = document.getElementById('currentTime');
-    const dateElement = document.getElementById('currentDate');
-    
-    if (timeElement) timeElement.textContent = time;
-    if (dateElement) dateElement.textContent = formattedDate;
-}
-
-// Función para el widget del clima
-function updateWeather() {
-    const now = new Date();
-    const hour = now.getHours();
-    
-    // Temperatura basada en la hora del día (simulada para Tegucigalpa)
-    let temp;
-    let weatherIcon = 'fa-sun';
-    let iconColor = 'var(--warning)';
-    
-    if (hour >= 5 && hour < 12) {
-        // Mañana (6am - 12pm)
-        temp = 22 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-sun';
-        iconColor = 'var(--warning)';
-    } else if (hour >= 12 && hour < 15) {
-        // Mediodía (12pm - 3pm)
-        temp = 28 + Math.floor(Math.random() * 4);
-        weatherIcon = 'fa-sun';
-        iconColor = 'var(--warning)';
-    } else if (hour >= 15 && hour < 18) {
-        // Tarde (3pm - 6pm)
-        temp = 26 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-cloud-sun';
-        iconColor = 'var(--text-secondary)';
-    } else if (hour >= 18 && hour < 21) {
-        // Atardecer (6pm - 9pm)
-        temp = 24 + Math.floor(Math.random() * 2);
-        weatherIcon = 'fa-cloud-moon';
-        iconColor = 'var(--secondary)';
-    } else {
-        // Noche (9pm - 5am)
-        temp = 20 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-moon';
-        iconColor = 'var(--secondary)';
-    }
-    
-    // Actualizar elementos en el DOM
-    const tempElement = document.getElementById('temperature');
-    const locationElement = document.getElementById('location');
-    const weatherIconElement = document.querySelector('.weather-widget i');
-    
-    if (tempElement) tempElement.textContent = `${temp}°C`;
-    if (locationElement) locationElement.textContent = 'Tegucigalpa';
-    if (weatherIconElement) {
-        weatherIconElement.className = `fas ${weatherIcon}`;
-        weatherIconElement.style.color = iconColor;
-    }
-}
-
-// Función para inicializar todos los widgets
-function initWidgets() {
-    console.log('Inicializando widgets...');
-    
-    // Actualizar inmediatamente
-    updateClock();
-    updateWeather();
-    
-    // Actualizar reloj cada segundo
-    setInterval(updateClock, 1000);
-    
-    // Actualizar clima cada 5 minutos
-    setInterval(updateWeather, 5 * 60 * 1000);
-    
-    console.log('Widgets inicializados correctamente');
-}
-
-// Verificar si los elementos existen antes de inicializar
-function checkWidgetElements() {
-    const timeElement = document.getElementById('currentTime');
-    const weatherElement = document.getElementById('temperature');
-    
-    if (!timeElement || !weatherElement) {
-        console.log('Elementos de widgets no encontrados, reintentando...');
-        setTimeout(checkWidgetElements, 1000);
-        return;
-    }
-    
-    console.log('Elementos de widgets encontrados, iniciando...');
-    initWidgets();
-}
-
-// Función para el widget del clima
-function updateWeather() {
-    const now = new Date();
-    const hour = now.getHours();
-    
-    // Temperatura basada en la hora del día (simulada para Tegucigalpa)
-    let temp;
-    let weatherIcon = 'fa-sun';
-    let iconColor = 'var(--warning)';
-    
-    if (hour >= 5 && hour < 12) {
-        // Mañana (6am - 12pm)
-        temp = 22 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-sun';
-        iconColor = 'var(--warning)';
-    } else if (hour >= 12 && hour < 15) {
-        // Mediodía (12pm - 3pm)
-        temp = 28 + Math.floor(Math.random() * 4);
-        weatherIcon = 'fa-sun';
-        iconColor = 'var(--warning)';
-    } else if (hour >= 15 && hour < 18) {
-        // Tarde (3pm - 6pm)
-        temp = 26 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-cloud-sun';
-        iconColor = 'var(--text-secondary)';
-    } else if (hour >= 18 && hour < 21) {
-        // Atardecer (6pm - 9pm)
-        temp = 24 + Math.floor(Math.random() * 2);
-        weatherIcon = 'fa-cloud-moon';
-        iconColor = 'var(--secondary)';
-    } else {
-        // Noche (9pm - 5am)
-        temp = 20 + Math.floor(Math.random() * 3);
-        weatherIcon = 'fa-moon';
-        iconColor = 'var(--secondary)';
-    }
-    
-    // Actualizar elementos en el DOM
-    const tempElement = document.getElementById('temperature');
-    const locationElement = document.getElementById('location');
-    const weatherIconElement = document.querySelector('.weather-widget i');
-    
-    if (tempElement) tempElement.textContent = `${temp}°C`;
-    if (locationElement) locationElement.textContent = 'Tegucigalpa';
-    if (weatherIconElement) {
-        weatherIconElement.className = `fas ${weatherIcon}`;
-        weatherIconElement.style.color = iconColor;
-    }
-}
-
-// Función para inicializar todos los widgets
-function initWidgets() {
-    console.log('Inicializando widgets...');
-    
-    // Actualizar inmediatamente
-    updateClock();
-    updateWeather();
-    
-    // Actualizar reloj cada segundo
-    setInterval(updateClock, 1000);
-    
-    // Actualizar clima cada 5 minutos
-    setInterval(updateWeather, 5 * 60 * 1000);
-    
-    console.log('Widgets inicializados correctamente');
-}
-
-// Verificar si los elementos existen antes de inicializar
-function checkWidgetElements() {
-    const timeElement = document.getElementById('currentTime');
-    const weatherElement = document.getElementById('temperature');
-    
-    if (!timeElement || !weatherElement) {
-        console.log('Elementos de widgets no encontrados, reintentando...');
-        setTimeout(checkWidgetElements, 1000);
-        return;
-    }
-    
-    console.log('Elementos de widgets encontrados, iniciando...');
-    initWidgets();
-}
-
-// Inicializar widgets
-function initWidgets() {
-    // Cargar clima inmediatamente
-    loadWeatherData();
-    
-    // Actualizar reloj inmediatamente y cada segundo
-    updateClock();
-    setInterval(updateClock, 1000);
-    
-    // Actualizar clima cada 30 minutos
-    setInterval(loadWeatherData, 30 * 60 * 1000);
-}
-
-// Versión alternativa por si la API falla (usando datos estáticos)
-function loadFallbackWeather() {
-    const now = new Date();
-    const hour = now.getHours();
-    
-    // Simular temperatura basada en la hora
-    let temp;
-    if (hour >= 6 && hour < 12) {
-        temp = 22; // Mañana
-    } else if (hour >= 12 && hour < 18) {
-        temp = 28; // Tarde
-    } else if (hour >= 18 && hour < 22) {
-        temp = 24; // Noche temprana
-    } else {
-        temp = 20; // Noche tarde
-    }
-    
-    // Simular condiciones climáticas basadas en la hora
-    const weatherIcon = document.querySelector('.weather-widget i');
-    if (hour >= 6 && hour < 18) {
-        // Día
-        if (Math.random() > 0.3) {
-            weatherIcon.className = 'fas fa-sun';
-            weatherIcon.style.color = 'var(--warning)';
+    function updateWeather() {
+        const now = new Date();
+        const hour = now.getHours();
+        
+        // Temperatura basada en la hora del día (simulada para Tegucigalpa)
+        let temp;
+        let weatherIcon = 'fa-sun';
+        let iconColor = 'var(--warning)';
+        
+        if (hour >= 5 && hour < 12) {
+            // Mañana (6am - 12pm)
+            temp = 22 + Math.floor(Math.random() * 3);
+            weatherIcon = 'fa-sun';
+            iconColor = 'var(--warning)';
+        } else if (hour >= 12 && hour < 15) {
+            // Mediodía (12pm - 3pm)
+            temp = 28 + Math.floor(Math.random() * 4);
+            weatherIcon = 'fa-sun';
+            iconColor = 'var(--warning)';
+        } else if (hour >= 15 && hour < 18) {
+            // Tarde (3pm - 6pm)
+            temp = 26 + Math.floor(Math.random() * 3);
+            weatherIcon = 'fa-cloud-sun';
+            iconColor = 'var(--text-secondary)';
+        } else if (hour >= 18 && hour < 21) {
+            // Atardecer (6pm - 9pm)
+            temp = 24 + Math.floor(Math.random() * 2);
+            weatherIcon = 'fa-cloud-moon';
+            iconColor = 'var(--secondary)';
         } else {
-            weatherIcon.className = 'fas fa-cloud-sun';
-            weatherIcon.style.color = 'var(--text-secondary)';
+            // Noche (9pm - 5am)
+            temp = 20 + Math.floor(Math.random() * 3);
+            weatherIcon = 'fa-moon';
+            iconColor = 'var(--secondary)';
         }
-    } else {
-        // Noche
-        weatherIcon.className = 'fas fa-moon';
-        weatherIcon.style.color = 'var(--secondary)';
+        
+        // Actualizar elementos en el DOM
+        const tempElement = document.getElementById('temperature');
+        const locationElement = document.getElementById('location');
+        const weatherIconElement = document.querySelector('.weather-widget i');
+        
+        if (tempElement) tempElement.textContent = `${temp}°C`;
+        if (locationElement) locationElement.textContent = 'Tegucigalpa';
+        if (weatherIconElement) {
+            weatherIconElement.className = `fas ${weatherIcon}`;
+            weatherIconElement.style.color = iconColor;
+        }
     }
-    
-    document.getElementById('temperature').textContent = `${temp}°C`;
-    document.getElementById('location').textContent = 'Tegucigalpa';
-}
-        function updateClock() {
-            const now = new Date();
-            currentTimeElement.textContent = now.toLocaleTimeString('es-HN');
-            currentDateElement.textContent = now.toLocaleDateString('es-HN', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
+
+    function initWidgets() {
+        // Actualizar inmediatamente
+        updateClock();
+        updateWeather();
+        
+        // Actualizar reloj cada segundo
+        setInterval(updateClock, 1000);
+        
+        // Actualizar clima cada 5 minutos
+        setInterval(updateWeather, 5 * 60 * 1000);
+    }
+
+    function updateStats() {
+        if (totalClientsElement) totalClientsElement.textContent = clients.length;
+        if (totalStockElement) totalStockElement.textContent = stock.length;
+        if (pendingPaymentsElement) pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
+    }
+
+    // ========== MANEJADORES DE EVENTOS ==========
+    async function handleSendReminder(clientId) {
+        try {
+            const client = clients.find(c => c.id === clientId);
+            const message = `Hola ${client.name}, este es un recordatorio de que tu pago para ${client.service} vence el ${formatDate(client.paymentDeadline)}. - Harod's Tech`;
+            const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            showMessage('Recordatorio enviado por WhatsApp');
+        } catch (error) {
+            showMessage(error.message, 'error');
         }
+    }
 
-        function updateStats() {
-            totalClientsElement.textContent = clients.length;
-            totalStockElement.textContent = stock.length;
-            pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
+    async function handleMarkAsPaid(clientId) {
+        try {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) {
+                throw new Error('Cliente no encontrado');
+            }
+            
+            await updateClient(clientId, { 
+                ...client,
+                status: 'paid'
+            });
+            
+            const message = `Hola ${client.name}, hemos registrado tu pago para ${client.service}. ¡Gracias! - Harod's Tech`;
+            const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+        } catch (error) {
+            showMessage(error.message, 'error');
         }
+    }
 
-        // Sistema de música corregido
-        function initMusicPlayer() {
-            // Configurar volumen inicial
-            backgroundMusic.volume = volumeSlider.value;
-
-            // Manejar el control de volumen
-            volumeSlider.addEventListener('input', function() {
-                backgroundMusic.volume = this.value;
-            });
-
-            // Manejar el botón de música
-            musicToggle.addEventListener('click', function() {
-                if (isMusicPlaying) {
-                    pauseBackgroundMusic();
-                } else {
-                    playBackgroundMusic();
-                }
-            });
-
-            // Manejar errores de audio
-            backgroundMusic.addEventListener('error', function(e) {
-                console.error('Error de audio:', e);
-                showMessage('Error cargando la música', 'error');
-                updateMusicUI(false);
-            });
-
-            // Actualizar UI cuando la música termina
-            backgroundMusic.addEventListener('ended', function() {
-                // Reiniciar y reproducir de nuevo cuando termine (loop)
-                backgroundMusic.currentTime = 0;
-                if (isMusicPlaying) {
-                    playBackgroundMusic();
-                }
-            });
+    async function handleCancelSubscription(clientId) {
+        const client = clients.find(c => c.id === clientId);
+        
+        if (!confirm(`¿Estás seguro de cancelar la suscripción de ${client.name}?`)) {
+            return;
         }
+        
+        try {
+            // Liberar el perfil en el stock
+            await releaseProfile(client.stockId, client.profile);
+            
+            // Eliminar el cliente
+            await deleteClient(clientId);
+            
+            const message = `Hola ${client.name}, tu suscripción para ${client.service} ha sido cancelada. - Harod's Tech`;
+            const whatsappUrl = `https://wa.me/${client.phone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
 
-        function playBackgroundMusic() {
-            backgroundMusic.play().then(() => {
-                isMusicPlaying = true;
-                updateMusicUI(true);
-                showMessage('Música activada');
-            }).catch(error => {
-                // Error en reproducción
-                console.error('Error reproduciendo música:', error);
-                isMusicPlaying = false;
-                updateMusicUI(false);
+    async function handleAssignProfile(stockId, profileName) {
+        try {
+            await assignProfile(stockId, profileName);
+            
+            // Cambiar a la pestaña de agregar cliente
+            switchTab('addClient');
+            
+            // Rellenar automáticamente la cuenta y perfil
+            const stockItem = stock.find(s => s.id === stockId);
+            if (stockItem) {
+                document.getElementById('serviceType').value = stockId;
+                updateProfileOptions(stockId);
+                document.getElementById('profileAssigned').value = profileName;
                 
-                if (error.name === 'NotAllowedError') {
-                    showMessage('Haz clic en la página primero para permitir la música', 'warning');
-                } else {
-                    showMessage('Error al reproducir música: ' + error.message, 'error');
-                }
-            });
-        }
-
-        function pauseBackgroundMusic() {
-            backgroundMusic.pause();
-            isMusicPlaying = false;
-            updateMusicUI(false);
-            showMessage('Música pausada');
-        }
-
-        function updateMusicUI(isPlaying) {
-            if (isPlaying) {
-                musicStatus.textContent = 'Música ON';
-                musicIcon.className = 'fas fa-pause';
-                musicToggle.style.background = 'rgba(46, 204, 113, 0.3)';
-            } else {
-                musicStatus.textContent = 'Música OFF';
-                musicIcon.className = 'fas fa-play';
-                musicToggle.style.background = 'transparent';
-            }
-        }
-
-        function playSound(soundId) {
-            const sound = document.getElementById(soundId);
-            if (sound) {
-                // Reiniciar el audio
-                sound.currentTime = 0;
-                
-                // Reproducir con manejo de errores
-                const playPromise = sound.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log('Error reproduciendo sonido:', error);
-                    });
-                }
-            }
-        }
-
-        function initDarkMode() {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            if (prefersDark.matches && !localStorage.getItem('harods_tech_theme')) {
-                applyTheme({
-                    primary: '#1a1a1a',
-                    secondary: '#9b59b6',
-                    dark: '#ecf0f1',
-                    light: '#2c3e50'
-                });
+                // Llenar automáticamente los detalles de acceso
+                document.getElementById('loginDetails').value = `Email: ${stockItem.email}\nContraseña: ${stockItem.password}`;
             }
             
-            prefersDark.addListener((e) => {
-                if (e.matches && !localStorage.getItem('harods_tech_theme')) {
-                    applyTheme({
-                        primary: '#1a1a1a',
-                        secondary: '#9b59b6',
-                        dark: '#ecf0f1',
-                        light: '#2c3e50'
-                    });
-                }
-            });
+        } catch (error) {
+            showMessage(error.message, 'error');
         }
+    }
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar si hay sesión activa
-            if (SessionManager.isLoggedIn()) {
-                loginSection.style.display = 'none';
-                dashboard.style.display = 'block';
-                showMessage('Sesión recuperada correctamente');
-            } else {
-                loginSection.style.display = 'block';
-                dashboard.style.display = 'none';
-            }
+    async function handleEditStock(stockId) {
+        openEditStockModal(stockId);
+    }
 
-            // Establecer fechas por defecto
-            const today = new Date().toISOString().split('T')[0];
-            const nextMonth = new Date();
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-            const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
-            
-            document.getElementById('purchaseDate').value = today;
-            document.getElementById('paymentDeadline').value = nextMonthFormatted;
-            
-            // Cargar datos iniciales
-            loadClients();
-            loadStock();
-            renderFileList();
-            
-            // Inicializar nuevas funcionalidades
-            initThemeSelector();
-            createParticles();
-            setInterval(updateClock, 1000);
-            updateClock();
-            setInterval(updateStats, 5000);
-            initMusicPlayer();
-            initDarkMode();
-            initWidgets();
-            // Agregar efectos de sonido a botones importantes
-            document.querySelectorAll('button').forEach(btn => {
-                btn.addEventListener('click', () => playSound('clickSound'));
-            });
-            
-            // Inicializar menú móvil
-            mobileMenuBtn.addEventListener('click', function() {
-                if (mobileTabsContainer.style.display === 'flex') {
-                    mobileTabsContainer.style.display = 'none';
-                } else {
-                    mobileTabsContainer.style.display = 'flex';
-                }
-            });
-        });
-setTimeout(() => {
-        checkWidgetElements();
-    }, 500);
-        // Event Listeners
-        loginBtn.addEventListener('click', function() {
-            if (passwordInput.value === ACCESS_PASSWORD) {
-                SessionManager.login();
-                loginSection.style.display = 'none';
-                dashboard.style.display = 'block';
-                showMessage('Sesión iniciada correctamente');
-                playSound('successSound');
-            } else {
-                showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
-                playSound('errorSound');
-                passwordInput.value = '';
-            }
-        });
+    async function handleEditClient(clientId) {
+        openEditClientModal(clientId);
+    }
 
-        logoutBtn.addEventListener('click', function() {
-            SessionManager.logout();
-            dashboard.style.display = 'none';
+    async function handleDeleteStock(stockId) {
+        const stockItem = stock.find(s => s.id === stockId);
+        if (!stockItem) return;
+        
+        if (!confirm(`¿Estás seguro de eliminar la cuenta ${stockItem.accountName || stockItem.service}?`)) {
+            return;
+        }
+        
+        try {
+            await deleteStock(stockId);
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+
+    // ========== INICIALIZACIÓN ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay sesión activa
+        if (SessionManager.isLoggedIn()) {
+            loginSection.style.display = 'none';
+            dashboard.style.display = 'block';
+        } else {
             loginSection.style.display = 'block';
-            passwordInput.value = '';
-            showMessage('Sesión cerrada correctamente');
-            playSound('successSound');
-        });
+            dashboard.style.display = 'none';
+        }
 
+        // Establecer fechas por defecto
+        const today = new Date().toISOString().split('T')[0];
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
+        
+        document.getElementById('purchaseDate').value = today;
+        document.getElementById('paymentDeadline').value = nextMonthFormatted;
+        
+        // Cargar datos iniciales
+        loadClients();
+        loadStock();
+        
+        // Inicializar funcionalidades
+        initMobileMenu();
+        initWidgets();
+        
+        // Event listeners para las pestañas de escritorio
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const tabId = this.getAttribute('data-tab');
@@ -3651,19 +2936,9 @@ setTimeout(() => {
             });
         });
 
-        mobileTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-                switchTab(tabId);
-            });
-        });
-
+        // Event listeners para temas
         themeBtn.addEventListener('click', function() {
-            if (themeOptions.style.display === 'block') {
-                themeOptions.style.display = 'none';
-            } else {
-                themeOptions.style.display = 'block';
-            }
+            themeOptions.style.display = themeOptions.style.display === 'block' ? 'none' : 'block';
         });
 
         // Cerrar selector de temas al hacer clic fuera
@@ -3672,226 +2947,234 @@ setTimeout(() => {
                 themeOptions.style.display = 'none';
             }
         });
+    });
 
-        addClientForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // ========== EVENT LISTENERS PRINCIPALES ==========
+    loginBtn.addEventListener('click', function() {
+        if (passwordInput.value === ACCESS_PASSWORD) {
+            SessionManager.login();
+            loginSection.style.display = 'none';
+            dashboard.style.display = 'block';
+            showMessage('Sesión iniciada correctamente');
+        } else {
+            showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
+            passwordInput.value = '';
+        }
+    });
+
+    logoutBtn.addEventListener('click', function() {
+        SessionManager.logout();
+        dashboard.style.display = 'none';
+        loginSection.style.display = 'block';
+        passwordInput.value = '';
+        showMessage('Sesión cerrada correctamente');
+    });
+
+    addClientForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const stockId = document.getElementById('serviceType').value;
+        const stockItem = stock.find(s => s.id === stockId);
+        
+        if (!stockItem) {
+            showMessage('Por favor selecciona una cuenta válida', 'error');
+            return;
+        }
+        
+        const clientData = {
+            name: document.getElementById('clientName').value,
+            phone: document.getElementById('clientPhone').value,
+            service: stockItem.service,
+            accountName: stockItem.accountName || stockItem.service,
+            profile: document.getElementById('profileAssigned').value,
+            stockId: stockId,
+            purchaseDate: document.getElementById('purchaseDate').value,
+            paymentDeadline: document.getElementById('paymentDeadline').value,
+            loginDetails: document.getElementById('loginDetails').value,
+            status: document.getElementById('paymentStatus').value,
+            notes: document.getElementById('clientNotes').value
+        };
+        
+        try {
+            await addClient(clientData);
+            addClientForm.reset();
             
-            const stockId = document.getElementById('serviceType').value;
-            const stockItem = stock.find(s => s.id === stockId);
+            // Restablecer fechas
+            const today = new Date().toISOString().split('T')[0];
+            const nextMonth = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
             
-            if (!stockItem) {
-                showMessage('Por favor selecciona una cuenta válida', 'error');
-                playSound('errorSound');
-                return;
-            }
+            document.getElementById('purchaseDate').value = today;
+            document.getElementById('paymentDeadline').value = nextMonthFormatted;
             
-            const clientData = {
-                name: document.getElementById('clientName').value,
-                phone: document.getElementById('clientPhone').value,
-                service: stockItem.service,
-                accountName: stockItem.accountName || stockItem.service,
-                profile: document.getElementById('profileAssigned').value,
-                stockId: stockId,
-                purchaseDate: document.getElementById('purchaseDate').value,
-                paymentDeadline: document.getElementById('paymentDeadline').value,
-                loginDetails: document.getElementById('loginDetails').value,
-                status: document.getElementById('paymentStatus').value,
-                notes: document.getElementById('clientNotes').value
-            };
-            
-            try {
-                await addClient(clientData);
-                addClientForm.reset();
-                
-                // Restablecer fechas
-                const today = new Date().toISOString().split('T')[0];
-                const nextMonth = new Date();
-                nextMonth.setMonth(nextMonth.getMonth() + 1);
-                const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
-                
-                document.getElementById('purchaseDate').value = today;
-                document.getElementById('paymentDeadline').value = nextMonthFormatted;
-                
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    addStockForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const stockData = {
+            service: document.getElementById('serviceName').value,
+            accountName: document.getElementById('accountName').value,
+            quantity: parseInt(document.getElementById('stockQuantity').value),
+            total: parseInt(document.getElementById('totalCapacity').value),
+            email: document.getElementById('accountEmail').value,
+            password: document.getElementById('accountPassword').value,
+            profiles: document.getElementById('profilesAvailable').value,
+            price: parseFloat(document.getElementById('servicePrice').value)
+        };
+        
+        try {
+            await addStock(stockData);
+            addStockForm.reset();
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    // Eventos del modal de edición
+    editStockForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const stockData = {
+            service: document.getElementById('editServiceName').value,
+            accountName: document.getElementById('editAccountName').value,
+            quantity: parseInt(document.getElementById('editStockQuantity').value),
+            total: parseInt(document.getElementById('editTotalCapacity').value),
+            email: document.getElementById('editAccountEmail').value,
+            password: document.getElementById('editAccountPassword').value,
+            profiles: document.getElementById('editProfilesAvailable').value,
+            price: parseFloat(document.getElementById('editServicePrice').value)
+        };
+        
+        try {
+            await updateStock(currentEditingStock.id, stockData);
+            closeEditStockModal();
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    editClientForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const stockId = document.getElementById('editServiceType').value;
+        const stockItem = stock.find(s => s.id === stockId);
+        
+        if (!stockItem) {
+            showMessage('Por favor selecciona una cuenta válida', 'error');
+            return;
+        }
+        
+        const clientData = {
+            name: document.getElementById('editClientName').value,
+            phone: document.getElementById('editClientPhone').value,
+            service: stockItem.service,
+            accountName: stockItem.accountName || stockItem.service,
+            profile: document.getElementById('editProfileAssigned').value,
+            stockId: stockId,
+            purchaseDate: document.getElementById('editPurchaseDate').value,
+            paymentDeadline: document.getElementById('editPaymentDeadline').value,
+            loginDetails: document.getElementById('editLoginDetails').value,
+            status: document.getElementById('editPaymentStatus').value,
+            notes: document.getElementById('editClientNotes').value
+        };
+        
+        try {
+            await updateClient(currentEditingClient.id, clientData);
+            closeEditClientModal();
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    });
+
+    closeModalBtn.forEach(btn => {
+        btn.addEventListener('click', function() {
+            closeEditStockModal();
+            closeEditClientModal();
         });
+    });
 
-        addStockForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const stockData = {
-                service: document.getElementById('serviceName').value,
-                accountName: document.getElementById('accountName').value,
-                quantity: parseInt(document.getElementById('stockQuantity').value),
-                total: parseInt(document.getElementById('totalCapacity').value),
-                email: document.getElementById('accountEmail').value,
-                password: document.getElementById('accountPassword').value,
-                profiles: document.getElementById('profilesAvailable').value,
-                price: parseFloat(document.getElementById('servicePrice').value)
-            };
-            
-            try {
-                await addStock(stockData);
-                addStockForm.reset();
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        });
+    cancelEditBtn.addEventListener('click', closeEditStockModal);
+    cancelEditClientBtn.addEventListener('click', closeEditClientModal);
 
-        // Eventos del modal de edición
-        editStockForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const stockData = {
-                service: document.getElementById('editServiceName').value,
-                accountName: document.getElementById('editAccountName').value,
-                quantity: parseInt(document.getElementById('editStockQuantity').value),
-                total: parseInt(document.getElementById('editTotalCapacity').value),
-                email: document.getElementById('editAccountEmail').value,
-                password: document.getElementById('editAccountPassword').value,
-                profiles: document.getElementById('editProfilesAvailable').value,
-                price: parseFloat(document.getElementById('editServicePrice').value)
-            };
-            
-            try {
-                await updateStock(currentEditingStock.id, stockData);
-                closeEditStockModal();
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        });
+    // Cerrar modal al hacer clic fuera
+    editStockModal.addEventListener('click', function(e) {
+        if (e.target === editStockModal) {
+            closeEditStockModal();
+        }
+    });
 
-        editClientForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const stockId = document.getElementById('editServiceType').value;
-            const stockItem = stock.find(s => s.id === stockId);
-            
-            if (!stockItem) {
-                showMessage('Por favor selecciona una cuenta válida', 'error');
-                playSound('errorSound');
-                return;
-            }
-            
-            const clientData = {
-                name: document.getElementById('editClientName').value,
-                phone: document.getElementById('editClientPhone').value,
-                service: stockItem.service,
-                accountName: stockItem.accountName || stockItem.service,
-                profile: document.getElementById('editProfileAssigned').value,
-                stockId: stockId,
-                purchaseDate: document.getElementById('editPurchaseDate').value,
-                paymentDeadline: document.getElementById('editPaymentDeadline').value,
-                loginDetails: document.getElementById('editLoginDetails').value,
-                status: document.getElementById('editPaymentStatus').value,
-                notes: document.getElementById('editClientNotes').value
-            };
-            
-            try {
-                await updateClient(currentEditingClient.id, clientData);
-                closeEditClientModal();
-            } catch (error) {
-                showMessage(error.message, 'error');
-                playSound('errorSound');
-            }
-        });
+    editClientModal.addEventListener('click', function(e) {
+        if (e.target === editClientModal) {
+            closeEditClientModal();
+        }
+    });
 
-        closeModalBtn.forEach(btn => {
-            btn.addEventListener('click', function() {
-                closeEditStockModal();
-                closeEditClientModal();
-            });
-        });
+    serviceTypeSelect.addEventListener('change', function() {
+        updateProfileOptions(this.value);
+    });
 
-        cancelEditBtn.addEventListener('click', closeEditStockModal);
-        cancelEditClientBtn.addEventListener('click', closeEditClientModal);
+    document.getElementById('editServiceType').addEventListener('change', function() {
+        updateEditProfileOptions(this.value);
+    });
 
-        // Cerrar modal al hacer clic fuera
-        editStockModal.addEventListener('click', function(e) {
-            if (e.target === editStockModal) {
-                closeEditStockModal();
-            }
-        });
+    refreshClientsBtn.addEventListener('click', loadClients);
+    refreshStockBtn.addEventListener('click', loadStock);
 
-        editClientModal.addEventListener('click', function(e) {
-            if (e.target === editClientModal) {
-                closeEditClientModal();
-            }
-        });
+    searchBtn.addEventListener('click', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+        searchClients(searchTerm);
+    });
 
-        serviceTypeSelect.addEventListener('change', function() {
-            updateProfileOptions(this.value);
-        });
+    stockSearchBtn.addEventListener('click', function() {
+        const searchTerm = stockSearchInput.value.toLowerCase();
+        searchStock(searchTerm);
+    });
 
-        document.getElementById('editServiceType').addEventListener('change', function() {
-            updateEditProfileOptions(this.value);
-        });
-
-        refreshClientsBtn.addEventListener('click', loadClients);
-        refreshStockBtn.addEventListener('click', loadStock);
-
-        searchBtn.addEventListener('click', function() {
-            const searchTerm = searchInput.value.toLowerCase();
+    // Búsqueda en tiempo real
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        if (searchTerm.length === 0 || searchTerm.length > 2) {
             searchClients(searchTerm);
-            
-            if (searchTerm) {
-                showMessage(`${clients.length} clientes encontrados`);
-            }
-        });
+        }
+    });
 
-        stockSearchBtn.addEventListener('click', function() {
-            const searchTerm = stockSearchInput.value.toLowerCase();
+    stockSearchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        if (searchTerm.length === 0 || searchTerm.length > 2) {
             searchStock(searchTerm);
-            
-            if (searchTerm) {
-                showMessage(`${stock.length} cuentas encontradas`);
-            }
-        });
+        }
+    });
 
-        // Búsqueda en tiempo real
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            if (searchTerm.length === 0 || searchTerm.length > 2) {
-                searchClients(searchTerm);
-            }
-        });
+    // Eventos de respaldo
+    exportDataBtn.addEventListener('click', exportAllData);
+    
+    importDataBtn.addEventListener('click', function() {
+        importFile.click();
+    });
+    
+    importFile.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            importData(e.target.files[0]);
+        }
+    });
+    
+    backupClientsBtn.addEventListener('click', backupClients);
+    backupStockBtn.addEventListener('click', backupStock);
 
-        stockSearchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            if (searchTerm.length === 0 || searchTerm.length > 2) {
-                searchStock(searchTerm);
-            }
-        });
-
-        // Eventos de respaldo
-        exportDataBtn.addEventListener('click', exportAllData);
-        
-        importDataBtn.addEventListener('click', function() {
-            importFile.click();
-        });
-        
-        importFile.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                importData(e.target.files[0]);
-            }
-        });
-        
-        backupClientsBtn.addEventListener('click', backupClients);
-        backupStockBtn.addEventListener('click', backupStock);
-
-        // Funciones globales para los botones
-        window.handleSendReminder = handleSendReminder;
-        window.handleMarkAsPaid = handleMarkAsPaid;
-        window.handleCancelSubscription = handleCancelSubscription;
-        window.handleAssignProfile = handleAssignProfile;
-        window.handleEditStock = handleEditStock;
-        window.handleEditClient = handleEditClient;
-        window.handleDeleteStock = handleDeleteStock;
-        window.downloadFile = downloadFile;
-    </script>
+    // Funciones globales para los botones
+    window.handleSendReminder = handleSendReminder;
+    window.handleMarkAsPaid = handleMarkAsPaid;
+    window.handleCancelSubscription = handleCancelSubscription;
+    window.handleAssignProfile = handleAssignProfile;
+    window.handleEditStock = handleEditStock;
+    window.handleEditClient = handleEditClient;
+    window.handleDeleteStock = handleDeleteStock;
+    window.downloadFile = downloadFile;
+</script>
 </body>
 </html>
