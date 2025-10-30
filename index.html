@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Configuración básica y charset -->
+      <!-- Configuración básica y charset -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
@@ -16,15 +16,15 @@
     <meta property="og:title" content="Harod's Tech - Gestión Completa">
     <meta property="og:description" content="Sistema profesional para gestión de clientes y stock de servicios streaming">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://harodtech.netlify.app">
-    <meta property="og:image" content="https://harodtech.netlify.app/icon-192x192.png">
+    <meta property="og:url" content="https://harodstech.com">
+    <meta property="og:image" content="https://harodstech.com/icon-192x192.png">
     <meta property="og:site_name" content="Harod's Tech">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Harod's Tech - Gestión Completa">
     <meta name="twitter:description" content="Sistema profesional para gestión de clientes y stock de servicios streaming">
-    <meta name="twitter:image" content="https://harodtech.netlify.app/icon-192x192.png">
+    <meta name="twitter:image" content="https://harodstech.com/icon-192x192.png">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -54,1372 +54,873 @@
     
     <!-- CSS y Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-:root {
-    --primary: #bb86fc;
-    --secondary: #03dac6;
-    --success: #00c853;
-    --warning: #ffab00;
-    --danger: #cf6679;
-    --netflix: #e50914;
-    --disney: #113ccf;
-    --hbo: #9467fe;
-    --prime: #00a8e1;
-    --crunchyroll: #f47521;
-    --spotify: #1db954;
-    --bg-primary: #121212;
-    --bg-secondary: #1e1e1e;
-    --bg-card: #2d2d2d;
-    --bg-hover: #383838;
-    --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --text-muted: #888888;
-    --border-color: #404040;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
-    --glow: 0 0 20px rgba(187, 134, 252, 0.3);
-    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0f0f0f 100%);
-    color: var(--text-primary);
-    line-height: 1.6;
-    overflow-x: hidden;
-    min-height: 100vh;
-    position: relative;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(187, 134, 252, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(3, 218, 198, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(207, 102, 121, 0.05) 0%, transparent 50%);
-    z-index: -1;
-    animation: backgroundShift 20s ease-in-out infinite;
-}
-
-@keyframes backgroundShift {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(180deg); }
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-/* Header con efecto neón */
-header {
-    background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(45, 45, 45, 0.95) 100%);
-    color: var(--text-primary);
-    padding: 25px 0;
-    text-align: center;
-    border-radius: 0 0 20px 20px;
-    box-shadow: var(--shadow);
-    margin-bottom: 30px;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-}
-
-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.2), transparent);
-    animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-.logo {
-    font-size: 2.8rem;
-    font-weight: 800;
-    margin-bottom: 10px;
-    position: relative;
-    display: inline-block;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 30px rgba(187, 134, 252, 0.5);
-    animation: logoGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes logoGlow {
-    from { text-shadow: 0 0 20px rgba(187, 134, 252, 0.5); }
-    to { text-shadow: 0 0 30px rgba(187, 134, 252, 0.8), 0 0 40px rgba(3, 218, 198, 0.4); }
-}
-
-.tagline {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    font-weight: 300;
-    letter-spacing: 1px;
-}
-
-/* Partículas animadas */
-.animated-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    overflow: hidden;
-}
-
-.particle {
-    position: absolute;
-    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: float 6s infinite ease-in-out;
-    opacity: 0.1;
-}
-
-@keyframes float {
-    0%, 100% { 
-        transform: translateY(0px) rotate(0deg) scale(1); 
-    }
-    33% { 
-        transform: translateY(-20px) rotate(120deg) scale(1.2); 
-    }
-    66% { 
-        transform: translateY(10px) rotate(240deg) scale(0.8); 
-    }
-}
-
-/* Selector de temas mejorado */
-.theme-selector {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.theme-btn {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--bg-primary);
-    border: none;
-    padding: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: var(--transition);
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--glow);
-}
-
-.theme-btn:hover {
-    transform: scale(1.1) rotate(180deg);
-    box-shadow: var(--shadow-hover);
-}
-
-.theme-options {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: var(--bg-card);
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    padding: 15px;
-    min-width: 180px;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.theme-option {
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 8px;
-    margin: 5px 0;
-    transition: var(--transition);
-    color: var(--text-primary);
-    border: 1px solid transparent;
-}
-
-.theme-option:hover {
-    background: var(--bg-hover);
-    border-color: var(--primary);
-    transform: translateX(5px);
-}
-
-/* Widgets modernos */
-.widgets {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.weather-widget, .clock-widget {
-    background: var(--bg-card);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    min-width: 200px;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.weather-widget::before, .clock-widget::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(187, 134, 252, 0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.weather-widget:hover::before, .clock-widget:hover::before {
-    left: 100%;
-}
-
-.weather-widget:hover, .clock-widget:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-}
-
-.weather-widget i {
-    font-size: 2rem;
-    color: var(--warning);
-    filter: drop-shadow(0 0 10px rgba(255, 171, 0, 0.3));
-}
-
-.clock-widget {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
-}
-
-#currentTime {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary);
-    text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
-}
-
-#currentDate {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* Tarjetas de estadísticas animadas */
-.stats-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-}
-
-.stat-card {
-    background: var(--bg-card);
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    text-align: center;
-    transition: var(--transition);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-.stat-card:hover::before {
-    transform: scaleX(1);
-}
-
-.stat-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-hover), var(--glow);
-}
-
-.stat-card i {
-    font-size: 2.5rem;
-    color: var(--secondary);
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 10px rgba(3, 218, 198, 0.3));
-    animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-}
-
-.stat-number {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: var(--text-primary);
-    margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-.stat-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 300;
-}
-
-/* Sección de login */
-.login-section {
-    background: var(--bg-card);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    max-width: 450px;
-    margin: 50px auto;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    transform: translateY(20px);
-    opacity: 0;
-    animation: fadeInUp 0.6s forwards;
-    position: relative;
-    overflow: hidden;
-}
-
-.login-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(transparent, rgba(187, 134, 252, 0.1), transparent 30%);
-    animation: rotate 4s linear infinite;
-}
-
-@keyframes rotate {
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.login-section h2 {
-    margin-bottom: 20px;
-    color: var(--primary);
-    font-size: 2rem;
-    position: relative;
-}
-
-.login-section input {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 20px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: var(--transition);
-    color: var(--text-primary);
-    position: relative;
-    z-index: 1;
-}
-
-.login-section input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
-    outline: none;
-    transform: scale(1.02);
-}
-
-.login-section button {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--bg-primary);
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-    font-weight: 600;
-    z-index: 1;
-}
-
-.login-section button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover), var(--glow);
-}
-
-/* Dashboard */
-.dashboard {
-    display: none;
-    opacity: 0;
-    animation: fadeIn 0.6s forwards;
-}
-
-@keyframes fadeIn {
-    to { opacity: 1; }
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.welcome-message {
-    font-size: 1.8rem;
-    color: var(--primary);
-    font-weight: 600;
-    text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
-}
-
-.logout-btn {
-    background: linear-gradient(135deg, var(--danger), #ff6b6b);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
-}
-
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(207, 102, 121, 0.4);
-}
-
-/* Tabs modernas */
-.tabs {
-    display: flex;
-    margin-bottom: 30px;
-    border-bottom: 2px solid var(--border-color);
-    flex-wrap: wrap;
-    overflow-x: auto;
-    gap: 5px;
-}
-
-.tab {
-    padding: 15px 25px;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: var(--transition);
-    white-space: nowrap;
-    position: relative;
-    color: var(--text-secondary);
-    font-weight: 500;
-    border-radius: 10px 10px 0 0;
-}
-
-.tab.active {
-    color: var(--primary);
-    background: rgba(187, 134, 252, 0.1);
-    border-bottom: 3px solid var(--primary);
-}
-
-.tab:hover:not(.active) {
-    color: var(--text-primary);
-    background: var(--bg-hover);
-    transform: translateY(-2px);
-}
-
-.tab-content {
-    display: none;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: var(--transition);
-}
-
-.tab-content.active {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeInContent 0.5s forwards;
-}
-
-@keyframes fadeInContent {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Formularios */
-.client-form, .stock-form {
-    background: var(--bg-card);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    margin-bottom: 30px;
-    transition: var(--transition);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    position: relative;
-    overflow: hidden;
-}
-
-.client-form::before, .stock-form::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(187, 134, 252, 0.05), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.client-form:hover::before, .stock-form:hover::before {
-    opacity: 1;
-}
-
-.client-form:hover, .stock-form:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-5px);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 12px 15px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: var(--transition);
-    color: var(--text-primary);
-}
-
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
-    outline: none;
-    transform: scale(1.02);
-}
-
-.form-row {
-    display: flex;
-    gap: 20px;
-}
-
-.form-row .form-group {
-    flex: 1;
-}
-
-/* Botones mejorados */
-.btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    min-width: 44px;
-    font-weight: 600;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.btn:hover::before {
-    left: 100%;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--bg-primary);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover), var(--glow);
-}
-
-.btn-success {
-    background: linear-gradient(135deg, var(--success), #00e676);
-    color: white;
-}
-
-.btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 200, 83, 0.4);
-}
-
-.btn-warning {
-    background: linear-gradient(135deg, var(--warning), #ffd600);
-    color: var(--bg-primary);
-}
-
-.btn-warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 171, 0, 0.4);
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, var(--danger), #ff6b6b);
-    color: white;
-}
-
-.btn-danger:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(207, 102, 121, 0.4);
-}
-
-.btn-neon {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    text-shadow: 0 0 5px currentColor;
-    box-shadow: 0 0 15px var(--primary), inset 0 0 15px var(--primary);
-    transition: all 0.3s ease;
-}
-
-.btn-neon:hover {
-    background: var(--primary);
-    color: var(--bg-primary);
-    box-shadow: 0 0 25px var(--primary), 0 0 50px var(--primary);
-    transform: translateY(-2px);
-}
-
-/* Listas y tarjetas */
-.clients-list, .stock-list {
-    background: var(--bg-card);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-}
-
-.client-item, .stock-item {
-    padding: 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.client-item::before, .stock-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-}
-
-.client-item:hover::before, .stock-item:hover::before {
-    transform: scaleY(1);
-}
-
-.client-item:hover, .stock-item:hover {
-    background: var(--bg-hover);
-    transform: translateX(5px);
-}
-
-.client-item:last-child, .stock-item:last-child {
-    border-bottom: none;
-}
-
-.client-info, .stock-info {
-    flex: 1;
-    min-width: 250px;
-}
-
-.client-name, .stock-name {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-}
-
-.client-details, .stock-details {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-.client-actions, .stock-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.status-overdue {
-    color: var(--danger);
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(207, 102, 121, 0.3);
-}
-
-.status-pending {
-    color: var(--warning);
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(255, 171, 0, 0.3);
-}
-
-.status-paid {
-    color: var(--success);
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(0, 200, 83, 0.3);
-}
-
-/* Barra de búsqueda */
-.search-bar {
-    margin-bottom: 25px;
-    display: flex;
-    gap: 15px;
-}
-
-.search-bar input {
-    flex: 1;
-    padding: 12px 20px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 1rem;
-    transition: var(--transition);
-    color: var(--text-primary);
-}
-
-.search-bar input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
-    outline: none;
-    transform: scale(1.02);
-}
-
-.search-bar button {
-    padding: 12px 20px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--bg-primary);
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
-}
-
-.search-bar button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover), var(--glow);
-}
-
-/* Grid de stock */
-.stock-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    margin-top: 25px;
-}
-
-.stock-card {
-    background: var(--bg-card);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    padding: 25px;
-    position: relative;
-    border-top: 5px solid;
-    transition: var(--transition);
-    transform: translateY(0);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-}
-
-.stock-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.stock-card:hover::before {
-    opacity: 1;
-}
-
-.stock-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-hover), var(--glow);
-}
-
-.stock-card.netflix {
-    border-color: var(--netflix);
-    background: linear-gradient(135deg, var(--bg-card), #1a0f0f);
-}
-
-.stock-card.disney {
-    border-color: var(--disney);
-    background: linear-gradient(135deg, var(--bg-card), #0f1525);
-}
-
-.stock-card.hbo {
-    border-color: var(--hbo);
-    background: linear-gradient(135deg, var(--bg-card), #1a1525);
-}
-
-.stock-card.prime {
-    border-color: var(--prime);
-    background: linear-gradient(135deg, var(--bg-card), #0f1a25);
-}
-
-.stock-card.crunchyroll {
-    border-color: var(--crunchyroll);
-    background: linear-gradient(135deg, var(--bg-card), #251a0f);
-}
-
-.stock-card.spotify {
-    border-color: var(--spotify);
-    background: linear-gradient(135deg, var(--bg-card), #0f251a);
-}
-
-.stock-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.stock-title {
-    font-weight: bold;
-    font-size: 1.3rem;
-    color: var(--text-primary);
-}
-
-.stock-count {
-    font-size: 1.6rem;
-    font-weight: bold;
-}
-
-.stock-email {
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.stock-profiles {
-    margin-bottom: 20px;
-}
-
-.profile-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border-color);
-    transition: var(--transition);
-}
-
-.profile-item:hover {
-    background: var(--bg-hover);
-    transform: translateX(5px);
-    border-radius: 5px;
-    padding-left: 10px;
-}
-
-.profile-item:last-child {
-    border-bottom: none;
-}
-
-.stock-actions-card {
-    display: flex;
-    gap: 10px;
-}
-
-.stock-actions-card button {
-    flex: 1;
-}
-
-.low-stock {
-    color: var(--danger);
-    text-shadow: 0 0 10px rgba(207, 102, 121, 0.3);
-}
-
-.medium-stock {
-    color: var(--warning);
-    text-shadow: 0 0 10px rgba(255, 171, 0, 0.3);
-}
-
-.high-stock {
-    color: var(--success);
-    text-shadow: 0 0 10px rgba(0, 200, 83, 0.3);
-}
-
-/* Mensajes */
-.loading {
-    text-align: center;
-    padding: 30px;
-    color: var(--secondary);
-    font-size: 1.1rem;
-}
-
-.error-message {
-    background: linear-gradient(135deg, rgba(207, 102, 121, 0.1), rgba(255, 107, 107, 0.1));
-    color: var(--danger);
-    padding: 15px 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--danger);
-    animation: shake 0.5s;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(207, 102, 121, 0.3);
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-
-.success-message {
-    background: linear-gradient(135deg, rgba(0, 200, 83, 0.1), rgba(0, 230, 118, 0.1));
-    color: var(--success);
-    padding: 15px 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--success);
-    animation: slideIn 0.5s;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 200, 83, 0.3);
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Modales */
-.edit-stock-modal, .edit-client-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s;
-    backdrop-filter: blur(5px);
-}
-
-.edit-stock-content, .edit-client-content {
-    background: var(--bg-card);
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    transform: scale(0.9);
-    animation: zoomIn 0.3s forwards;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-    position: relative;
-}
-
-@keyframes zoomIn {
-    to {
-        transform: scale(1);
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-secondary);
-    transition: var(--transition);
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-}
-
-.close-modal:hover {
-    color: var(--danger);
-    transform: rotate(90deg);
-    background: rgba(207, 102, 121, 0.1);
-}
-
-/* Menú móvil */
-.mobile-menu-btn {
-    display: none;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border: none;
-    font-size: 1.5rem;
-    color: var(--bg-primary);
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1001;
-    transition: var(--transition);
-    min-height: 44px;
-    min-width: 44px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-}
-
-.mobile-menu-btn:hover {
-    transform: scale(1.1) rotate(90deg);
-}
-
-.mobile-tabs {
-    display: none;
-    flex-direction: column;
-    background: var(--bg-card);
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 999;
-    animation: slideDown 0.3s ease-out;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-}
-
-.mobile-tabs.show {
-    display: flex;
-}
-
-.mobile-tab {
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border-color);
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: 44px;
-    color: var(--text-primary);
-    position: relative;
-    overflow: hidden;
-}
-
-.mobile-tab:last-child {
-    border-bottom: none;
-}
-
-.mobile-tab.active {
-    background: linear-gradient(135deg, rgba(187, 134, 252, 0.2), rgba(3, 218, 198, 0.1));
-    color: var(--primary);
-}
-
-.mobile-tab.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(to bottom, var(--primary), var(--secondary));
-}
-
-.mobile-tab:hover:not(.active) {
-    background: var(--bg-hover);
-    transform: translateX(5px);
-    padding-left: 25px;
-}
-
-.mobile-tab i {
-    width: 20px;
-    text-align: center;
-    font-size: 1.1rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
     
-    .logo {
-        font-size: 2.2rem;
-    }
-    
-    .stats-cards {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
-    
-    .search-bar {
-        flex-direction: column;
-    }
-    
-    .client-actions, .stock-actions {
-        flex-direction: column;
-    }
-    
-    .stock-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    .tabs {
-        display: none;
-    }
-}
+    <style>
+        :root {
+            --primary: #bb86fc;
+            --secondary: #03dac6;
+            --success: #00c853;
+            --warning: #ffab00;
+            --danger: #cf6679;
+            --netflix: #e50914;
+            --disney: #113ccf;
+            --hbo: #9467fe;
+            --prime: #00a8e1;
+            --crunchyroll: #f47521;
+            --spotify: #1db954;
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-card: #2d2d2d;
+            --bg-hover: #383838;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888888;
+            --border-color: #404040;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --glow: 0 0 20px rgba(187, 134, 252, 0.3);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
-    
-    .login-section {
-        padding: 25px;
-        margin: 20px auto;
-    }
-    
-    .client-form, .stock-form {
-        padding: 20px;
-    }
-    
-    .edit-stock-content, .edit-client-content {
-        padding: 20px;
-        margin: 10px;
-    }
-}
-/* Menú móvil */
-.mobile-menu-btn {
-    display: none;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border: none;
-    font-size: 1.5rem;
-    color: var(--bg-primary);
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1001;
-    transition: var(--transition);
-    min-height: 44px;
-    min-width: 44px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-.mobile-menu-btn:hover {
-    transform: scale(1.1);
-}
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
 
-.mobile-tabs {
-    display: none;
-    flex-direction: column;
-    background: var(--bg-card);
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 999;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
 
-.mobile-tabs.show {
-    display: flex;
-}
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(45, 45, 45, 0.95) 100%);
+            color: var(--text-primary);
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
 
-@media (max-width: 768px) {
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    .mobile-tabs {
-        display: none;
-    }
-    
-    .tabs {
-        display: none;
-    }
-}
-</style>
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(187, 134, 252, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Navbar con botones */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg-primary);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            box-shadow: var(--glow);
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        /* Sección de login */
+        .login-section {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 450px;
+            margin: 50px auto;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .login-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .login-section input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-section input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .login-section button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .login-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-message {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, var(--danger), #ff6b6b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(207, 102, 121, 0.4);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            overflow-x: auto;
+            gap: 5px;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            background: rgba(187, 134, 252, 0.1);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Formularios */
+        .client-form, .stock-form {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .client-form:hover, .stock-form:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Botones */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            min-width: 44px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00e676);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 200, 83, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #ffd600);
+            color: var(--bg-primary);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 171, 0, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #ff6b6b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(207, 102, 121, 0.4);
+        }
+
+        /* Listas y tarjetas */
+        .clients-list, .stock-list {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .client-item, .stock-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .client-item:hover, .stock-item:hover {
+            background: var(--bg-hover);
+            transform: translateX(5px);
+        }
+
+        .client-item:last-child, .stock-item:last-child {
+            border-bottom: none;
+        }
+
+        .client-info, .stock-info {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .client-name, .stock-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .client-details, .stock-details {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .client-actions, .stock-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .status-overdue {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: var(--warning);
+            font-weight: bold;
+        }
+
+        .status-paid {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Barra de búsqueda */
+        .search-bar {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--text-primary);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.2);
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        .search-bar button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .search-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        /* Grid de stock */
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            position: relative;
+            border-top: 5px solid;
+            transition: var(--transition);
+            transform: translateY(0);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-hover), var(--glow);
+        }
+
+        .stock-card.netflix {
+            border-color: var(--netflix);
+        }
+
+        .stock-card.disney {
+            border-color: var(--disney);
+        }
+
+        .stock-card.hbo {
+            border-color: var(--hbo);
+        }
+
+        .stock-card.prime {
+            border-color: var(--prime);
+        }
+
+        .stock-card.crunchyroll {
+            border-color: var(--crunchyroll);
+        }
+
+        .stock-card.spotify {
+            border-color: var(--spotify);
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stock-title {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .stock-count {
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        .stock-email {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stock-profiles {
+            margin-bottom: 20px;
+        }
+
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .profile-item:hover {
+            background: var(--bg-hover);
+            transform: translateX(5px);
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+
+        .stock-actions-card {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stock-actions-card button {
+            flex: 1;
+        }
+
+        .low-stock {
+            color: var(--danger);
+        }
+
+        .medium-stock {
+            color: var(--warning);
+        }
+
+        .high-stock {
+            color: var(--success);
+        }
+
+        /* Mensajes */
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, rgba(207, 102, 121, 0.1), rgba(255, 107, 107, 0.1));
+            color: var(--danger);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--danger);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(207, 102, 121, 0.3);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, rgba(0, 200, 83, 0.1), rgba(0, 230, 118, 0.1));
+            color: var(--success);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--success);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+        }
+
+        /* Modales */
+        .edit-stock-modal, .edit-client-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .edit-stock-content, .edit-client-content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+            background: rgba(207, 102, 121, 0.1);
+        }
+
+        /* Menú móvil */
+        .mobile-menu-btn {
+            display: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            font-size: 1.5rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            transition: var(--transition);
+            min-height: 44px;
+            min-width: 44px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .mobile-tabs {
+            display: none;
+            flex-direction: column;
+            background: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .mobile-tabs.show {
+            display: flex;
+        }
+
+        .mobile-tab {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 44px;
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-tab:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-tab.active {
+            background: linear-gradient(135deg, rgba(187, 134, 252, 0.2), rgba(3, 218, 198, 0.1));
+            color: var(--primary);
+        }
+
+        .mobile-tab:hover:not(.active) {
+            background: var(--bg-hover);
+            transform: translateX(5px);
+            padding-left: 25px;
+        }
+
+        .mobile-tab i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 16px;
+                padding: 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .client-actions, .stock-actions {
+                flex-direction: column;
+            }
+            
+            .stock-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .tabs {
+                display: none;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .welcome-message {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .login-section {
+                padding: 25px;
+                margin: 20px auto;
+            }
+            
+            .client-form, .stock-form {
+                padding: 20px;
+            }
+            
+            .edit-stock-content, .edit-client-content {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .nav-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
+        /* Mejoras para inputs en móviles */
+        input, select, textarea {
+            font-size: 16px !important; /* Previene zoom en iOS */
+        }
+        
+        /* Mejoras para botones táctiles */
+        button {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+    </style>
 </head>
 <body>
-    <!-- Fondo animado con partículas -->
-    <div class="animated-bg" id="animatedBg"></div>
-    
-    <!-- Selector de temas -->
-    <div class="theme-selector">
-        <button class="theme-btn" id="themeBtn">
-            <i class="fas fa-palette"></i>
-        </button>
-        <div class="theme-options" id="themeOptions">
-            <div class="theme-option" data-theme="default">Tema Azul</div>
-            <div class="theme-option" data-theme="dark">Tema Oscuro</div>
-            <div class="theme-option" data-theme="green">Tema Verde</div>
-            <div class="theme-option" data-theme="purple">Tema Púrpura</div>
-        </div>
-    </div>
-    
-    <!-- Reproductor de música 
-    <div class="music-player">
-        <div class="music-controls">
-            <button id="musicToggle" class="btn" style="background: transparent; color: white; padding: 5px;">
-                <i class="fas fa-play" id="musicIcon"></i>
-            </button>
-            <div class="music-info">
-                <span id="musicStatus">Música OFF</span>
-            </div>
-            <div class="volume-control">
-                <i class="fas fa-volume-down"></i>
-                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.1" value="0.5">
-            </div>
-        </div>
-        <audio id="backgroundMusic" loop>
-            Reemplaza con tu archivo de música 
-            <source src="https://assets.codepen.io/1468070/BackgroundMusic.mp3" type="audio/mpeg">
-            Tu navegador no soporta el elemento de audio.
-        </audio>
-    </div>
-    
-  Efectos de sonido 
-    <audio id="clickSound" preload="auto">
-        <source src="https://assets.codepen.io/1468070/Click.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="successSound" preload="auto">
-        <source src="https://assets.codepen.io/1468070/Success.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="errorSound" preload="auto">
-        <source src="https://assets.codepen.io/1468070/Error.mp3" type="audio/mpeg">
-    </audio>
--->
-    
     <header>
         <div class="container">
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1427,6 +928,25 @@ header::before {
             </button>
             <div class="logo">Harod's Tech</div>
             <div class="tagline">Gestión de Clientes y Stock</div>
+            
+            <!-- Navbar con botones -->
+            <div class="navbar">
+                <button class="nav-btn" data-tab="clients">
+                    <i class="fas fa-users"></i> Clientes
+                </button>
+                <button class="nav-btn" data-tab="addClient">
+                    <i class="fas fa-user-plus"></i> Agregar Cliente
+                </button>
+                <button class="nav-btn" data-tab="stock">
+                    <i class="fas fa-boxes"></i> Stock
+                </button>
+                <button class="nav-btn" data-tab="addStock">
+                    <i class="fas fa-plus-circle"></i> Agregar Stock
+                </button>
+                <button class="nav-btn" data-tab="backup">
+                    <i class="fas fa-database"></i> Respaldo
+                </button>
+            </div>
         </div>
     </header>
     
@@ -1446,47 +966,23 @@ header::before {
                 <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
             </div>
             
-            <!-- Widgets -->
-            <div class="widgets">
-                <div class="weather-widget">
-                    <i class="fas fa-sun"></i>
-                    <div>
-                        <div id="temperature">--°C</div>
-                        <div id="location">Tegucigalpa</div>
-                    </div>
-                </div>
-                <div class="clock-widget">
-                    <div id="currentTime">--:--:--</div>
-                    <div id="currentDate">-- --- ----</div>
-                </div>
-            </div>
-            
-            <!-- Tarjetas de estadísticas -->
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-number" id="totalClients">0</div>
-                    <div class="stat-label">Clientes Activos</div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-boxes"></i>
-                    <div class="stat-number" id="totalStock">0</div>
-                    <div class="stat-label">Cuentas en Stock</div>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div class="stat-number" id="pendingPayments">0</div>
-                    <div class="stat-label">Pagos Pendientes</div>
-                </div>
-            </div>
-            
             <!-- Menú móvil -->
             <div class="mobile-tabs" id="mobileTabs">
-                <div class="mobile-tab active" data-tab="clients">Lista de Clientes</div>
-                <div class="mobile-tab" data-tab="addClient">Agregar Cliente</div>
-                <div class="mobile-tab" data-tab="stock">Stock de Servicios</div>
-                <div class="mobile-tab" data-tab="addStock">Agregar Stock</div>
-                <div class="mobile-tab" data-tab="backup">Respaldo</div>
+                <div class="mobile-tab active" data-tab="clients">
+                    <i class="fas fa-users"></i> Lista de Clientes
+                </div>
+                <div class="mobile-tab" data-tab="addClient">
+                    <i class="fas fa-user-plus"></i> Agregar Cliente
+                </div>
+                <div class="mobile-tab" data-tab="stock">
+                    <i class="fas fa-boxes"></i> Stock de Servicios
+                </div>
+                <div class="mobile-tab" data-tab="addStock">
+                    <i class="fas fa-plus-circle"></i> Agregar Stock
+                </div>
+                <div class="mobile-tab" data-tab="backup">
+                    <i class="fas fa-database"></i> Respaldo
+                </div>
             </div>
             
             <!-- Menú de escritorio -->
@@ -1530,10 +1026,7 @@ header::before {
                             </div>
                             <div class="form-group">
                                 <label for="clientPhone">Número de Teléfono</label>
-                                <div class="phone-prefix">
-                                    <span>+504</span>
-                                    <input type="tel" id="clientPhone" placeholder="XXXXXXXX" maxlength="8" required>
-                                </div>
+                                <input type="tel" id="clientPhone" placeholder="+504XXXXXXXX" required>
                             </div>
                         </div>
                         
@@ -1542,13 +1035,22 @@ header::before {
                                 <label for="serviceType">Cuenta de Servicio</label>
                                 <select id="serviceType" required>
                                     <option value="">Selecciona una cuenta</option>
-                                    <!-- Las opciones se cargarán dinámicamente -->
+                                    <option value="Netflix">Netflix</option>
+                                    <option value="Disney+">Disney+</option>
+                                    <option value="HBO Max">HBO Max</option>
+                                    <option value="Prime Video">Prime Video</option>
+                                    <option value="Crunchyroll">Crunchyroll</option>
+                                    <option value="Spotify">Spotify</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="profileAssigned">Perfil Asignado</label>
                                 <select id="profileAssigned" required>
-                                    <option value="">Primero selecciona una cuenta</option>
+                                    <option value="">Selecciona un perfil</option>
+                                    <option value="Perfil 1">Perfil 1</option>
+                                    <option value="Perfil 2">Perfil 2</option>
+                                    <option value="Perfil 3">Perfil 3</option>
+                                    <option value="Perfil 4">Perfil 4</option>
                                 </select>
                             </div>
                         </div>
@@ -1583,7 +1085,7 @@ header::before {
                             <textarea id="clientNotes" rows="2" placeholder="Notas adicionales sobre el cliente..."></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-neon">
+                        <button type="submit" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Agregar Cliente
                         </button>
                     </form>
@@ -1664,7 +1166,7 @@ header::before {
                             <input type="text" id="profilesAvailable" placeholder="Ej: Perfil 1, Perfil 2, Perfil 3" required>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-neon">
+                        <button type="submit" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Agregar Cuenta
                         </button>
                     </form>
@@ -1782,10 +1284,7 @@ header::before {
                     </div>
                     <div class="form-group">
                         <label for="editClientPhone">Número de Teléfono</label>
-                        <div class="phone-prefix">
-                            <span>+504</span>
-                            <input type="tel" id="editClientPhone" placeholder="XXXXXXXX" maxlength="8" required>
-                        </div>
+                        <input type="tel" id="editClientPhone" placeholder="+504XXXXXXXX" required>
                     </div>
                 </div>
                 
@@ -1794,13 +1293,22 @@ header::before {
                         <label for="editServiceType">Cuenta de Servicio</label>
                         <select id="editServiceType" required>
                             <option value="">Selecciona una cuenta</option>
-                            <!-- Las opciones se cargarán dinámicamente -->
+                            <option value="Netflix">Netflix</option>
+                            <option value="Disney+">Disney+</option>
+                            <option value="HBO Max">HBO Max</option>
+                            <option value="Prime Video">Prime Video</option>
+                            <option value="Crunchyroll">Crunchyroll</option>
+                            <option value="Spotify">Spotify</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="editProfileAssigned">Perfil Asignado</label>
                         <select id="editProfileAssigned" required>
-                            <option value="">Primero selecciona una cuenta</option>
+                            <option value="">Selecciona un perfil</option>
+                            <option value="Perfil 1">Perfil 1</option>
+                            <option value="Perfil 2">Perfil 2</option>
+                            <option value="Perfil 3">Perfil 3</option>
+                            <option value="Perfil 4">Perfil 4</option>
                         </select>
                     </div>
                 </div>
@@ -1843,14 +1351,10 @@ header::before {
         </div>
     </div>
 
-   <script>
+<script>
     // Configuración
     const ACCESS_PASSWORD = "HarodTech2023";
     const SESSION_KEY = "harods_tech_session";
-    const DATA_FILES = {
-        clients: 'harods_tech_clientes',
-        stock: 'harods_tech_stock'
-    };
 
     // Elementos del DOM
     const loginSection = document.getElementById('loginSection');
@@ -1870,8 +1374,6 @@ header::before {
     const stockSearchBtn = document.getElementById('stockSearchBtn');
     const refreshClientsBtn = document.getElementById('refreshClientsBtn');
     const refreshStockBtn = document.getElementById('refreshStockBtn');
-    const serviceTypeSelect = document.getElementById('serviceType');
-    const profileAssignedSelect = document.getElementById('profileAssigned');
     const messageContainer = document.getElementById('messageContainer');
     const exportDataBtn = document.getElementById('exportDataBtn');
     const importDataBtn = document.getElementById('importDataBtn');
@@ -1879,6 +1381,7 @@ header::before {
     const backupClientsBtn = document.getElementById('backupClientsBtn');
     const backupStockBtn = document.getElementById('backupStockBtn');
     const fileList = document.getElementById('fileList');
+    const navBtns = document.querySelectorAll('.nav-btn');
     
     // Elementos del modal de edición
     const editStockModal = document.getElementById('editStockModal');
@@ -1891,26 +1394,16 @@ header::before {
     const editClientForm = document.getElementById('editClientForm');
     const cancelEditClientBtn = document.getElementById('cancelEditClientBtn');
     
-    // Nuevos elementos para las mejoras
-    const themeBtn = document.getElementById('themeBtn');
-    const themeOptions = document.getElementById('themeOptions');
-    const animatedBg = document.getElementById('animatedBg');
+    // Elementos móviles
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileTabsContainer = document.getElementById('mobileTabs');
     const mobileTabs = document.querySelectorAll('.mobile-tab');
-    const currentTimeElement = document.getElementById('currentTime');
-    const currentDateElement = document.getElementById('currentDate');
-    const totalClientsElement = document.getElementById('totalClients');
-    const totalStockElement = document.getElementById('totalStock');
-    const pendingPaymentsElement = document.getElementById('pendingPayments');
 
     // Estado de la aplicación
     let clients = [];
     let stock = [];
     let currentEditingStock = null;
     let currentEditingClient = null;
-    let originalClients = [];
-    let originalStock = [];
     let isMobileMenuOpen = false;
 
     // Sistema de Sesión
@@ -1953,39 +1446,11 @@ header::before {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
 
-    function formatPhoneNumber(phone) {
-        if (!phone) {
-            return '+504';
-        }
-        
-        if (phone.startsWith('+504')) {
-            return phone;
-        }
-        
-        if (phone.length === 8 && /^\d+$/.test(phone)) {
-            return `+504${phone}`;
-        }
-        return phone;
-    }
-
-    function getPhoneWithoutPrefix(phone) {
-        if (!phone) {
-            return '';
-        }
-        
-        return phone.replace(/^\+504/, '');
-    }
-
     // Sistema de Archivos (simulado con localStorage)
     class FileSystem {
         static saveToFile(filename, data) {
             try {
-                const fileData = {
-                    content: data,
-                    timestamp: new Date().toISOString(),
-                    size: JSON.stringify(data).length
-                };
-                localStorage.setItem(filename, JSON.stringify(fileData));
+                localStorage.setItem(filename, JSON.stringify(data));
                 return true;
             } catch (error) {
                 console.error('Error guardando archivo:', error);
@@ -1997,9 +1462,7 @@ header::before {
             try {
                 const fileData = localStorage.getItem(filename);
                 if (!fileData) return null;
-                
-                const parsed = JSON.parse(fileData);
-                return parsed.content;
+                return JSON.parse(fileData);
             } catch (error) {
                 console.error('Error cargando archivo:', error);
                 return null;
@@ -2024,18 +1487,18 @@ header::before {
                 const key = localStorage.key(i);
                 if (key.startsWith('harods_tech_')) {
                     try {
-                        const fileData = JSON.parse(localStorage.getItem(key));
+                        const fileData = localStorage.getItem(key);
                         files.push({
                             name: key,
-                            timestamp: fileData.timestamp,
-                            size: fileData.size
+                            timestamp: new Date().toISOString(),
+                            size: fileData.length
                         });
                     } catch (e) {
                         // Ignorar elementos que no son archivos válidos
                     }
                 }
             }
-            return files.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            return files;
         }
     }
 
@@ -2044,13 +1507,10 @@ header::before {
         try {
             clientsList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando clientes...</div>';
             
-            const data = FileSystem.loadFromFile(DATA_FILES.clients);
+            const data = FileSystem.loadFromFile('harods_tech_clientes');
             clients = data || [];
-            originalClients = [...clients];
             
             renderClients();
-            updateServiceOptions();
-            updateStats();
         } catch (error) {
             showMessage('Error cargando clientes: ' + error.message, 'error');
             clientsList.innerHTML = '<div class="error-message">Error al cargar los clientes</div>';
@@ -2058,7 +1518,7 @@ header::before {
     }
 
     async function saveClients() {
-        const success = FileSystem.saveToFile(DATA_FILES.clients, clients);
+        const success = FileSystem.saveToFile('harods_tech_clientes', clients);
         if (!success) {
             showMessage('Error guardando clientes', 'error');
         }
@@ -2067,16 +1527,9 @@ header::before {
 
     async function addClient(clientData) {
         try {
-            // Verificar si ya existe un cliente con el mismo teléfono
-            const existingClient = clients.find(c => c.phone === formatPhoneNumber(clientData.phone));
-            if (existingClient) {
-                throw new Error('Ya existe un cliente con este número de teléfono');
-            }
-
             const newClient = {
                 id: generateId(),
                 ...clientData,
-                phone: formatPhoneNumber(clientData.phone),
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
@@ -2101,16 +1554,9 @@ header::before {
             const index = clients.findIndex(c => c.id === clientId);
             if (index === -1) throw new Error('Cliente no encontrado');
             
-            // Verificar si el teléfono ya existe en otro cliente
-            const existingClient = clients.find(c => c.id !== clientId && c.phone === formatPhoneNumber(clientData.phone));
-            if (existingClient) {
-                throw new Error('Ya existe otro cliente con este número de teléfono');
-            }
-            
             clients[index] = {
                 ...clients[index],
                 ...clientData,
-                phone: formatPhoneNumber(clientData.phone),
                 updatedAt: new Date().toISOString()
             };
             
@@ -2148,13 +1594,10 @@ header::before {
         try {
             stockGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando stock...</div>';
             
-            const data = FileSystem.loadFromFile(DATA_FILES.stock);
+            const data = FileSystem.loadFromFile('harods_tech_stock');
             stock = data || [];
-            originalStock = [...stock];
             
             renderStock();
-            updateServiceOptions();
-            updateStats();
         } catch (error) {
             showMessage('Error cargando stock: ' + error.message, 'error');
             stockGrid.innerHTML = '<div class="error-message">Error al cargar el stock</div>';
@@ -2162,7 +1605,7 @@ header::before {
     }
 
     async function saveStock() {
-        const success = FileSystem.saveToFile(DATA_FILES.stock, stock);
+        const success = FileSystem.saveToFile('harods_tech_stock', stock);
         if (!success) {
             showMessage('Error guardando stock', 'error');
         }
@@ -2171,12 +1614,6 @@ header::before {
 
     async function addStock(stockData) {
         try {
-            // Verificar si ya existe una cuenta con el mismo nombre
-            const existingStock = stock.find(s => s.accountName === stockData.accountName && s.service === stockData.service);
-            if (existingStock) {
-                throw new Error('Ya existe una cuenta con este nombre para este servicio');
-            }
-
             const newStock = {
                 id: generateId(),
                 ...stockData,
@@ -2205,12 +1642,6 @@ header::before {
             const index = stock.findIndex(s => s.id === stockId);
             if (index === -1) throw new Error('Stock no encontrado');
             
-            // Verificar si el nombre ya existe en otra cuenta
-            const existingStock = stock.find(s => s.id !== stockId && s.accountName === stockData.accountName && s.service === stockData.service);
-            if (existingStock) {
-                throw new Error('Ya existe otra cuenta con este nombre para este servicio');
-            }
-            
             stock[index] = {
                 ...stock[index],
                 ...stockData,
@@ -2233,12 +1664,6 @@ header::before {
 
     async function deleteStock(stockId) {
         try {
-            // Verificar si hay clientes usando esta cuenta
-            const clientsUsingStock = clients.filter(c => c.stockId === stockId);
-            if (clientsUsingStock.length > 0) {
-                throw new Error(`No se puede eliminar esta cuenta porque ${clientsUsingStock.length} cliente(s) la están usando`);
-            }
-
             stock = stock.filter(s => s.id !== stockId);
             const success = await saveStock();
             
@@ -2250,50 +1675,6 @@ header::before {
             }
         } catch (error) {
             throw new Error('Error eliminando stock: ' + error.message);
-        }
-    }
-
-    async function assignProfile(stockId, profileName) {
-        try {
-            const stockItem = stock.find(s => s.id === stockId);
-            if (!stockItem) throw new Error('Cuenta no encontrada');
-            
-            const profileIndex = stockItem.profiles.indexOf(profileName);
-            if (profileIndex === -1) throw new Error('Perfil no disponible');
-            
-            // Remover perfil y reducir cantidad
-            stockItem.profiles.splice(profileIndex, 1);
-            stockItem.quantity -= 1;
-            stockItem.updatedAt = new Date().toISOString();
-            
-            const success = await saveStock();
-            if (success) {
-                showMessage('Perfil asignado exitosamente');
-                await loadStock();
-            } else {
-                throw new Error('Error guardando cambios');
-            }
-        } catch (error) {
-            throw new Error('Error asignando perfil: ' + error.message);
-        }
-    }
-
-    async function releaseProfile(stockId, profileName) {
-        try {
-            const stockItem = stock.find(s => s.id === stockId);
-            if (!stockItem) throw new Error('Cuenta no encontrada');
-            
-            // Agregar perfil y aumentar cantidad
-            stockItem.profiles.push(profileName);
-            stockItem.quantity += 1;
-            stockItem.updatedAt = new Date().toISOString();
-            
-            const success = await saveStock();
-            if (!success) {
-                throw new Error('Error guardando cambios');
-            }
-        } catch (error) {
-            throw new Error('Error liberando perfil: ' + error.message);
         }
     }
 
@@ -2319,7 +1700,7 @@ header::before {
                     <div class="client-name">${client.name}</div>
                     <div class="client-details">
                         <div><strong>Teléfono:</strong> ${client.phone}</div>
-                        <div><strong>Cuenta:</strong> ${client.accountName} - ${client.profile}</div>
+                        <div><strong>Cuenta:</strong> ${client.service} - ${client.profile}</div>
                         <div><strong>Compra:</strong> ${formatDate(client.purchaseDate)}</div>
                         <div><strong>Vence:</strong> ${formatDate(client.paymentDeadline)}</div>
                         <div><strong>Acceso:</strong> ${client.loginDetails}</div>
@@ -2407,61 +1788,6 @@ header::before {
         });
     }
 
-    function updateServiceOptions() {
-        serviceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
-        profileAssignedSelect.innerHTML = '<option value="">Primero selecciona una cuenta</option>';
-        
-        stock.forEach(item => {
-            if (item.quantity > 0) {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
-                serviceTypeSelect.appendChild(option);
-            }
-        });
-    }
-
-    function updateProfileOptions(stockId) {
-        profileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
-        
-        const stockItem = stock.find(s => s.id === stockId);
-        if (stockItem && stockItem.profiles.length > 0) {
-            stockItem.profiles.forEach(profile => {
-                const option = document.createElement('option');
-                option.value = profile;
-                option.textContent = profile;
-                profileAssignedSelect.appendChild(option);
-            });
-        }
-    }
-
-    function updateEditServiceOptions() {
-        const editServiceTypeSelect = document.getElementById('editServiceType');
-        editServiceTypeSelect.innerHTML = '<option value="">Selecciona una cuenta</option>';
-        
-        stock.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.accountName || item.service} (${item.quantity} disponibles)`;
-            editServiceTypeSelect.appendChild(option);
-        });
-    }
-
-    function updateEditProfileOptions(stockId) {
-        const editProfileAssignedSelect = document.getElementById('editProfileAssigned');
-        editProfileAssignedSelect.innerHTML = '<option value="">Selecciona un perfil</option>';
-        
-        const stockItem = stock.find(s => s.id === stockId);
-        if (stockItem && stockItem.profiles.length > 0) {
-            stockItem.profiles.forEach(profile => {
-                const option = document.createElement('option');
-                option.value = profile;
-                option.textContent = profile;
-                editProfileAssignedSelect.appendChild(option);
-            });
-        }
-    }
-
     // Funciones del Modal de Edición
     function openEditStockModal(stockId) {
         const stockItem = stock.find(s => s.id === stockId);
@@ -2501,31 +1827,17 @@ header::before {
 
         currentEditingClient = client;
         
-        // Actualizar opciones de servicios
-        updateEditServiceOptions();
-        
         // Llenar el formulario con los datos actuales
         document.getElementById('editClientId').value = client.id;
         document.getElementById('editClientName').value = client.name;
-        document.getElementById('editClientPhone').value = getPhoneWithoutPrefix(client.phone);
+        document.getElementById('editClientPhone').value = client.phone;
         document.getElementById('editPurchaseDate').value = client.purchaseDate;
         document.getElementById('editPaymentDeadline').value = client.paymentDeadline;
         document.getElementById('editLoginDetails').value = client.loginDetails;
         document.getElementById('editPaymentStatus').value = client.status;
         document.getElementById('editClientNotes').value = client.notes || '';
-        
-        // Establecer la cuenta de servicio y perfil actual
-        setTimeout(() => {
-            if (client.stockId) {
-                document.getElementById('editServiceType').value = client.stockId;
-                updateEditProfileOptions(client.stockId);
-                
-                // Establecer el perfil actual después de cargar las opciones
-                setTimeout(() => {
-                    document.getElementById('editProfileAssigned').value = client.profile;
-                }, 100);
-            }
-        }, 100);
+        document.getElementById('editServiceType').value = client.service;
+        document.getElementById('editProfileAssigned').value = client.profile;
         
         editClientModal.style.display = 'flex';
     }
@@ -2630,38 +1942,9 @@ header::before {
         }
     }
 
-    // Funciones de búsqueda
-    function searchClients(term) {
-        if (!term) {
-            clients = [...originalClients];
-        } else {
-            clients = originalClients.filter(client => 
-                client.name.toLowerCase().includes(term) || 
-                client.phone.includes(term) ||
-                (client.accountName && client.accountName.toLowerCase().includes(term)) ||
-                client.service.toLowerCase().includes(term)
-            );
-        }
-        renderClients();
-    }
-
-    function searchStock(term) {
-        if (!term) {
-            stock = [...originalStock];
-        } else {
-            stock = originalStock.filter(item => 
-                (item.accountName && item.accountName.toLowerCase().includes(term)) ||
-                item.service.toLowerCase().includes(term) ||
-                item.email.toLowerCase().includes(term)
-            );
-        }
-        renderStock();
-    }
-
     // ========== FUNCIONES DEL MENÚ MÓVIL ==========
     function initMobileMenu() {
         if (!mobileMenuBtn || !mobileTabsContainer) {
-            console.log('Elementos del menú móvil no encontrados');
             return;
         }
 
@@ -2670,7 +1953,6 @@ header::before {
             mobileTabsContainer.style.display = 'flex';
             isMobileMenuOpen = true;
             mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
-            document.body.style.overflow = 'hidden';
         }
 
         // Función para cerrar el menú
@@ -2678,7 +1960,6 @@ header::before {
             mobileTabsContainer.style.display = 'none';
             isMobileMenuOpen = false;
             mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            document.body.style.overflow = '';
         }
 
         // Función para alternar el menú
@@ -2751,100 +2032,6 @@ header::before {
         }
     }
 
-    // ========== FUNCIONES DE LOS WIDGETS ==========
-    function updateClock() {
-        const now = new Date();
-        
-        // Formatear hora
-        const time = now.toLocaleTimeString('es-HN', { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit'
-        });
-        
-        // Formatear fecha
-        const date = now.toLocaleDateString('es-HN', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-        
-        // Capitalizar primera letra
-        const formattedDate = date.charAt(0).toUpperCase() + date.slice(1);
-        
-        // Actualizar elementos en el DOM
-        if (currentTimeElement) currentTimeElement.textContent = time;
-        if (currentDateElement) currentDateElement.textContent = formattedDate;
-    }
-
-    function updateWeather() {
-        const now = new Date();
-        const hour = now.getHours();
-        
-        // Temperatura basada en la hora del día (simulada para Tegucigalpa)
-        let temp;
-        let weatherIcon = 'fa-sun';
-        let iconColor = 'var(--warning)';
-        
-        if (hour >= 5 && hour < 12) {
-            // Mañana (6am - 12pm)
-            temp = 22 + Math.floor(Math.random() * 3);
-            weatherIcon = 'fa-sun';
-            iconColor = 'var(--warning)';
-        } else if (hour >= 12 && hour < 15) {
-            // Mediodía (12pm - 3pm)
-            temp = 28 + Math.floor(Math.random() * 4);
-            weatherIcon = 'fa-sun';
-            iconColor = 'var(--warning)';
-        } else if (hour >= 15 && hour < 18) {
-            // Tarde (3pm - 6pm)
-            temp = 26 + Math.floor(Math.random() * 3);
-            weatherIcon = 'fa-cloud-sun';
-            iconColor = 'var(--text-secondary)';
-        } else if (hour >= 18 && hour < 21) {
-            // Atardecer (6pm - 9pm)
-            temp = 24 + Math.floor(Math.random() * 2);
-            weatherIcon = 'fa-cloud-moon';
-            iconColor = 'var(--secondary)';
-        } else {
-            // Noche (9pm - 5am)
-            temp = 20 + Math.floor(Math.random() * 3);
-            weatherIcon = 'fa-moon';
-            iconColor = 'var(--secondary)';
-        }
-        
-        // Actualizar elementos en el DOM
-        const tempElement = document.getElementById('temperature');
-        const locationElement = document.getElementById('location');
-        const weatherIconElement = document.querySelector('.weather-widget i');
-        
-        if (tempElement) tempElement.textContent = `${temp}°C`;
-        if (locationElement) locationElement.textContent = 'Tegucigalpa';
-        if (weatherIconElement) {
-            weatherIconElement.className = `fas ${weatherIcon}`;
-            weatherIconElement.style.color = iconColor;
-        }
-    }
-
-    function initWidgets() {
-        // Actualizar inmediatamente
-        updateClock();
-        updateWeather();
-        
-        // Actualizar reloj cada segundo
-        setInterval(updateClock, 1000);
-        
-        // Actualizar clima cada 5 minutos
-        setInterval(updateWeather, 5 * 60 * 1000);
-    }
-
-    function updateStats() {
-        if (totalClientsElement) totalClientsElement.textContent = clients.length;
-        if (totalStockElement) totalStockElement.textContent = stock.length;
-        if (pendingPaymentsElement) pendingPaymentsElement.textContent = clients.filter(c => c.status === 'pending').length;
-    }
-
     // ========== MANEJADORES DE EVENTOS ==========
     async function handleSendReminder(clientId) {
         try {
@@ -2883,14 +2070,16 @@ header::before {
     async function handleCancelSubscription(clientId) {
         const client = clients.find(c => c.id === clientId);
         
+        if (!client) {
+            showMessage('Cliente no encontrado', 'error');
+            return;
+        }
+        
         if (!confirm(`¿Estás seguro de cancelar la suscripción de ${client.name}?`)) {
             return;
         }
         
         try {
-            // Liberar el perfil en el stock
-            await releaseProfile(client.stockId, client.profile);
-            
             // Eliminar el cliente
             await deleteClient(clientId);
             
@@ -2905,16 +2094,13 @@ header::before {
 
     async function handleAssignProfile(stockId, profileName) {
         try {
-            await assignProfile(stockId, profileName);
-            
             // Cambiar a la pestaña de agregar cliente
             switchTab('addClient');
             
             // Rellenar automáticamente la cuenta y perfil
             const stockItem = stock.find(s => s.id === stockId);
             if (stockItem) {
-                document.getElementById('serviceType').value = stockId;
-                updateProfileOptions(stockId);
+                document.getElementById('serviceType').value = stockItem.service;
                 document.getElementById('profileAssigned').value = profileName;
                 
                 // Llenar automáticamente los detalles de acceso
@@ -2951,10 +2137,13 @@ header::before {
 
     // ========== INICIALIZACIÓN ==========
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Inicializando aplicación...');
+        
         // Verificar si hay sesión activa
         if (SessionManager.isLoggedIn()) {
             loginSection.style.display = 'none';
             dashboard.style.display = 'block';
+            showMessage('Sesión recuperada correctamente');
         } else {
             loginSection.style.display = 'block';
             dashboard.style.display = 'none';
@@ -2966,16 +2155,20 @@ header::before {
         nextMonth.setMonth(nextMonth.getMonth() + 1);
         const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
         
-        document.getElementById('purchaseDate').value = today;
-        document.getElementById('paymentDeadline').value = nextMonthFormatted;
+        if (document.getElementById('purchaseDate')) {
+            document.getElementById('purchaseDate').value = today;
+        }
+        if (document.getElementById('paymentDeadline')) {
+            document.getElementById('paymentDeadline').value = nextMonthFormatted;
+        }
         
         // Cargar datos iniciales
         loadClients();
         loadStock();
+        renderFileList();
         
         // Inicializar funcionalidades
         initMobileMenu();
-        initWidgets();
         
         // Event listeners para las pestañas de escritorio
         tabs.forEach(tab => {
@@ -2985,235 +2178,221 @@ header::before {
             });
         });
 
-        // Event listeners para temas
-        themeBtn.addEventListener('click', function() {
-            themeOptions.style.display = themeOptions.style.display === 'block' ? 'none' : 'block';
+        // Event listeners para los botones del navbar
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
         });
 
-        // Cerrar selector de temas al hacer clic fuera
-        document.addEventListener('click', function(e) {
-            if (!themeBtn.contains(e.target) && !themeOptions.contains(e.target)) {
-                themeOptions.style.display = 'none';
-            }
-        });
+        console.log('Aplicación inicializada correctamente');
     });
 
     // ========== EVENT LISTENERS PRINCIPALES ==========
-    loginBtn.addEventListener('click', function() {
-        if (passwordInput.value === ACCESS_PASSWORD) {
-            SessionManager.login();
-            loginSection.style.display = 'none';
-            dashboard.style.display = 'block';
-            showMessage('Sesión iniciada correctamente');
-        } else {
-            showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+            if (passwordInput.value === ACCESS_PASSWORD) {
+                SessionManager.login();
+                loginSection.style.display = 'none';
+                dashboard.style.display = 'block';
+                showMessage('Sesión iniciada correctamente');
+            } else {
+                showMessage('Contraseña incorrecta. Solo el propietario puede acceder.', 'error');
+                passwordInput.value = '';
+            }
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            SessionManager.logout();
+            dashboard.style.display = 'none';
+            loginSection.style.display = 'block';
             passwordInput.value = '';
-        }
-    });
+            showMessage('Sesión cerrada correctamente');
+        });
+    }
 
-    logoutBtn.addEventListener('click', function() {
-        SessionManager.logout();
-        dashboard.style.display = 'none';
-        loginSection.style.display = 'block';
-        passwordInput.value = '';
-        showMessage('Sesión cerrada correctamente');
-    });
+    if (addClientForm) {
+        addClientForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Enviando formulario de cliente...');
+            
+            const clientData = {
+                name: document.getElementById('clientName').value,
+                phone: document.getElementById('clientPhone').value,
+                service: document.getElementById('serviceType').value,
+                profile: document.getElementById('profileAssigned').value,
+                purchaseDate: document.getElementById('purchaseDate').value,
+                paymentDeadline: document.getElementById('paymentDeadline').value,
+                loginDetails: document.getElementById('loginDetails').value,
+                status: document.getElementById('paymentStatus').value,
+                notes: document.getElementById('clientNotes').value
+            };
+            
+            try {
+                await addClient(clientData);
+                addClientForm.reset();
+                
+                // Restablecer fechas
+                const today = new Date().toISOString().split('T')[0];
+                const nextMonth = new Date();
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
+                
+                document.getElementById('purchaseDate').value = today;
+                document.getElementById('paymentDeadline').value = nextMonthFormatted;
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+    }
 
-    addClientForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const stockId = document.getElementById('serviceType').value;
-        const stockItem = stock.find(s => s.id === stockId);
-        
-        if (!stockItem) {
-            showMessage('Por favor selecciona una cuenta válida', 'error');
-            return;
-        }
-        
-        const clientData = {
-            name: document.getElementById('clientName').value,
-            phone: document.getElementById('clientPhone').value,
-            service: stockItem.service,
-            accountName: stockItem.accountName || stockItem.service,
-            profile: document.getElementById('profileAssigned').value,
-            stockId: stockId,
-            purchaseDate: document.getElementById('purchaseDate').value,
-            paymentDeadline: document.getElementById('paymentDeadline').value,
-            loginDetails: document.getElementById('loginDetails').value,
-            status: document.getElementById('paymentStatus').value,
-            notes: document.getElementById('clientNotes').value
-        };
-        
-        try {
-            await addClient(clientData);
-            addClientForm.reset();
+    if (addStockForm) {
+        addStockForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Enviando formulario de stock...');
             
-            // Restablecer fechas
-            const today = new Date().toISOString().split('T')[0];
-            const nextMonth = new Date();
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-            const nextMonthFormatted = nextMonth.toISOString().split('T')[0];
+            const stockData = {
+                service: document.getElementById('serviceName').value,
+                accountName: document.getElementById('accountName').value,
+                quantity: parseInt(document.getElementById('stockQuantity').value),
+                total: parseInt(document.getElementById('totalCapacity').value),
+                email: document.getElementById('accountEmail').value,
+                password: document.getElementById('accountPassword').value,
+                profiles: document.getElementById('profilesAvailable').value,
+                price: parseFloat(document.getElementById('servicePrice').value)
+            };
             
-            document.getElementById('purchaseDate').value = today;
-            document.getElementById('paymentDeadline').value = nextMonthFormatted;
-            
-        } catch (error) {
-            showMessage(error.message, 'error');
-        }
-    });
-
-    addStockForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const stockData = {
-            service: document.getElementById('serviceName').value,
-            accountName: document.getElementById('accountName').value,
-            quantity: parseInt(document.getElementById('stockQuantity').value),
-            total: parseInt(document.getElementById('totalCapacity').value),
-            email: document.getElementById('accountEmail').value,
-            password: document.getElementById('accountPassword').value,
-            profiles: document.getElementById('profilesAvailable').value,
-            price: parseFloat(document.getElementById('servicePrice').value)
-        };
-        
-        try {
-            await addStock(stockData);
-            addStockForm.reset();
-        } catch (error) {
-            showMessage(error.message, 'error');
-        }
-    });
+            try {
+                await addStock(stockData);
+                addStockForm.reset();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+    }
 
     // Eventos del modal de edición
-    editStockForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const stockData = {
-            service: document.getElementById('editServiceName').value,
-            accountName: document.getElementById('editAccountName').value,
-            quantity: parseInt(document.getElementById('editStockQuantity').value),
-            total: parseInt(document.getElementById('editTotalCapacity').value),
-            email: document.getElementById('editAccountEmail').value,
-            password: document.getElementById('editAccountPassword').value,
-            profiles: document.getElementById('editProfilesAvailable').value,
-            price: parseFloat(document.getElementById('editServicePrice').value)
-        };
-        
-        try {
-            await updateStock(currentEditingStock.id, stockData);
-            closeEditStockModal();
-        } catch (error) {
-            showMessage(error.message, 'error');
-        }
-    });
-
-    editClientForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const stockId = document.getElementById('editServiceType').value;
-        const stockItem = stock.find(s => s.id === stockId);
-        
-        if (!stockItem) {
-            showMessage('Por favor selecciona una cuenta válida', 'error');
-            return;
-        }
-        
-        const clientData = {
-            name: document.getElementById('editClientName').value,
-            phone: document.getElementById('editClientPhone').value,
-            service: stockItem.service,
-            accountName: stockItem.accountName || stockItem.service,
-            profile: document.getElementById('editProfileAssigned').value,
-            stockId: stockId,
-            purchaseDate: document.getElementById('editPurchaseDate').value,
-            paymentDeadline: document.getElementById('editPaymentDeadline').value,
-            loginDetails: document.getElementById('editLoginDetails').value,
-            status: document.getElementById('editPaymentStatus').value,
-            notes: document.getElementById('editClientNotes').value
-        };
-        
-        try {
-            await updateClient(currentEditingClient.id, clientData);
-            closeEditClientModal();
-        } catch (error) {
-            showMessage(error.message, 'error');
-        }
-    });
-
-    closeModalBtn.forEach(btn => {
-        btn.addEventListener('click', function() {
-            closeEditStockModal();
-            closeEditClientModal();
+    if (editStockForm) {
+        editStockForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const stockData = {
+                service: document.getElementById('editServiceName').value,
+                accountName: document.getElementById('editAccountName').value,
+                quantity: parseInt(document.getElementById('editStockQuantity').value),
+                total: parseInt(document.getElementById('editTotalCapacity').value),
+                email: document.getElementById('editAccountEmail').value,
+                password: document.getElementById('editAccountPassword').value,
+                profiles: document.getElementById('editProfilesAvailable').value,
+                price: parseFloat(document.getElementById('editServicePrice').value)
+            };
+            
+            try {
+                await updateStock(currentEditingStock.id, stockData);
+                closeEditStockModal();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
         });
-    });
+    }
 
-    cancelEditBtn.addEventListener('click', closeEditStockModal);
-    cancelEditClientBtn.addEventListener('click', closeEditClientModal);
+    if (editClientForm) {
+        editClientForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const clientData = {
+                name: document.getElementById('editClientName').value,
+                phone: document.getElementById('editClientPhone').value,
+                service: document.getElementById('editServiceType').value,
+                profile: document.getElementById('editProfileAssigned').value,
+                purchaseDate: document.getElementById('editPurchaseDate').value,
+                paymentDeadline: document.getElementById('editPaymentDeadline').value,
+                loginDetails: document.getElementById('editLoginDetails').value,
+                status: document.getElementById('editPaymentStatus').value,
+                notes: document.getElementById('editClientNotes').value
+            };
+            
+            try {
+                await updateClient(currentEditingClient.id, clientData);
+                closeEditClientModal();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.forEach(btn => {
+            btn.addEventListener('click', function() {
+                closeEditStockModal();
+                closeEditClientModal();
+            });
+        });
+    }
+
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', closeEditStockModal);
+    }
+
+    if (cancelEditClientBtn) {
+        cancelEditClientBtn.addEventListener('click', closeEditClientModal);
+    }
 
     // Cerrar modal al hacer clic fuera
-    editStockModal.addEventListener('click', function(e) {
-        if (e.target === editStockModal) {
-            closeEditStockModal();
-        }
-    });
+    if (editStockModal) {
+        editStockModal.addEventListener('click', function(e) {
+            if (e.target === editStockModal) {
+                closeEditStockModal();
+            }
+        });
+    }
 
-    editClientModal.addEventListener('click', function(e) {
-        if (e.target === editClientModal) {
-            closeEditClientModal();
-        }
-    });
+    if (editClientModal) {
+        editClientModal.addEventListener('click', function(e) {
+            if (e.target === editClientModal) {
+                closeEditClientModal();
+            }
+        });
+    }
 
-    serviceTypeSelect.addEventListener('change', function() {
-        updateProfileOptions(this.value);
-    });
+    if (refreshClientsBtn) {
+        refreshClientsBtn.addEventListener('click', loadClients);
+    }
 
-    document.getElementById('editServiceType').addEventListener('change', function() {
-        updateEditProfileOptions(this.value);
-    });
-
-    refreshClientsBtn.addEventListener('click', loadClients);
-    refreshStockBtn.addEventListener('click', loadStock);
-
-    searchBtn.addEventListener('click', function() {
-        const searchTerm = searchInput.value.toLowerCase();
-        searchClients(searchTerm);
-    });
-
-    stockSearchBtn.addEventListener('click', function() {
-        const searchTerm = stockSearchInput.value.toLowerCase();
-        searchStock(searchTerm);
-    });
-
-    // Búsqueda en tiempo real
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        if (searchTerm.length === 0 || searchTerm.length > 2) {
-            searchClients(searchTerm);
-        }
-    });
-
-    stockSearchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        if (searchTerm.length === 0 || searchTerm.length > 2) {
-            searchStock(searchTerm);
-        }
-    });
+    if (refreshStockBtn) {
+        refreshStockBtn.addEventListener('click', loadStock);
+    }
 
     // Eventos de respaldo
-    exportDataBtn.addEventListener('click', exportAllData);
+    if (exportDataBtn) {
+        exportDataBtn.addEventListener('click', exportAllData);
+    }
     
-    importDataBtn.addEventListener('click', function() {
-        importFile.click();
-    });
+    if (importDataBtn) {
+        importDataBtn.addEventListener('click', function() {
+            importFile.click();
+        });
+    }
     
-    importFile.addEventListener('change', function(e) {
-        if (e.target.files.length > 0) {
-            importData(e.target.files[0]);
-        }
-    });
+    if (importFile) {
+        importFile.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                importData(e.target.files[0]);
+            }
+        });
+    }
     
-    backupClientsBtn.addEventListener('click', backupClients);
-    backupStockBtn.addEventListener('click', backupStock);
+    if (backupClientsBtn) {
+        backupClientsBtn.addEventListener('click', backupClients);
+    }
+    
+    if (backupStockBtn) {
+        backupStockBtn.addEventListener('click', backupStock);
+    }
 
     // Funciones globales para los botones
     window.handleSendReminder = handleSendReminder;
@@ -3226,4 +2405,4 @@ header::before {
     window.downloadFile = downloadFile;
 </script>
 </body>
-    </html>
+  </html>
